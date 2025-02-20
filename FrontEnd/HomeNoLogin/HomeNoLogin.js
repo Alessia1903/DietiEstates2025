@@ -29,18 +29,16 @@ function cerca() {
     const prezzoMin = document.getElementById("prezzoMin").value || "";
     const prezzoMax = document.getElementById("prezzoMax").value || "";
 
-    // Costruisce l'URL con i parametri di ricerca
-    const params = new URLSearchParams({
-        citta: citta,
-        contratto: contratto,
-        classeEnergetica: classeEnergetica,
-        numLocali: numLocali,
-        prezzoMin: prezzoMin,
-        prezzoMax: prezzoMax
-    });
+    // Salva i parametri di ricerca nella sessionStorage
+    sessionStorage.setItem("citta", citta);
+    sessionStorage.setItem("contratto", contratto);
+    sessionStorage.setItem("classeEnergetica", classeEnergetica);
+    sessionStorage.setItem("numLocali", numLocali);
+    sessionStorage.setItem("prezzoMin", prezzoMin);
+    sessionStorage.setItem("prezzoMax", prezzoMax);
 
-    // Naviga alla pagina dei risultati nella stessa scheda
-    window.location.href = `results.html?${params.toString()}`;
+    // Reindirizza alla pagina risultati
+    window.location.href = "../Risultati/Risultati.html";
 }
 
 // Seleziona gli elementi

@@ -18,6 +18,7 @@ body {
 .search-bar button { 
     background-color: #06D6A0; 
     color: #073B4C; 
+    font-weight: bold;
     border-radius: 5px; 
     padding: 10px 20px; 
 }
