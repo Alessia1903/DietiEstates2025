@@ -38,10 +38,20 @@ async function caricaRisultati() {
 
             if (risultatiGlobali.length === 0) {
                 document.getElementById("noResultsMessage").style.display = "block";
+                
+                // Nascondi il contenitore della ricerca e il link alla mappa
+                document.getElementById("salvaRicercaContainer").style.display = "none";
+                document.getElementById("mappaContainer").classList.add("hidden");
+            
                 return;
             }
 
+            // Mostra il pulsante "Salva ricerca" e il link alla mappa se ci sono risultati
+            document.getElementById("salvaRicercaContainer").style.display = "flex";
+            document.getElementById("mappaContainer").classList.remove("hidden");
+            
             aggiornaPaginazione(); // Mostra i primi risultati
+            
         } catch (error) {
             console.error("Errore nel recupero degli immobili:", error);
             document.getElementById("risultati").innerHTML = "<p>Errore nel caricamento degli annunci.</p>";
@@ -88,7 +98,7 @@ function mostraAnnunci() {
 
         div.addEventListener("click", () => {
             sessionStorage.setItem("idAnnuncio", immobile.idAnnuncio); 
-            window.location.href = "dettagli.html";
+            window.location.href = "../AnnuncioNoLog/AnnuncioNoLog.html";
         });
 
         container.appendChild(div);
@@ -162,6 +172,16 @@ function aggiornaPaginazione() {
     mostraAnnunci();
 }
 
+function apriMappa(event) {
+    event.preventDefault(); // Evita il comportamento predefinito del link
+
+    window.location.href = "../AccediUtente/AccediUtente.html";
+}
+
+function apriSalvaRicerca() {
+    window.location.href = "../AccediUtente/AccediUtente.html";
+}
+
 // Mostra il messaggio di nessun risultato
 function mostraMessaggioNessunRisultato() {
     document.getElementById("noResultsMessage").style.display = "block";
@@ -204,7 +224,7 @@ function cerca() {
     sessionStorage.setItem("prezzoMax", prezzoMax);
 
     // Reindirizza alla pagina risultati
-    window.location.href = "../Risultati/Risultati.html";
+    window.location.href = "../RisultatiNoLog/RisultatiNoLog.html";
 }
 
 // Rendi cliccabile il titolo, il sottotitolo e il logo per tornare alla homepage

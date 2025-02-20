@@ -55,6 +55,10 @@ body {
     text-align: center;
 }
 
+#salvaRicercaBtn {
+    border-color: #06D6A0 !important;
+}
+
 [data-svg-wrapper] {
     display: flex;
     justify-content: center;

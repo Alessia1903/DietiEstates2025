@@ -38,7 +38,7 @@ function cerca() {
     sessionStorage.setItem("prezzoMax", prezzoMax);
 
     // Reindirizza alla pagina risultati
-    window.location.href = "../Risultati/Risultati.html";
+    window.location.href = "../RisultatiNoLog/RisultatiNoLog.html";
 }
 
 // Seleziona gli elementi
