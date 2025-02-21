@@ -42,6 +42,7 @@ async function caricaRisultati() {
                 // Nascondi il contenitore della ricerca e il link alla mappa
                 document.getElementById("salvaRicercaContainer").style.display = "none";
                 document.getElementById("mappaContainer").classList.add("hidden");
+                document.getElementById("pagination").style.display = "none";
             
                 return;
             }
@@ -82,7 +83,7 @@ function mostraAnnunci() {
 
         const div = document.createElement("div");
         div.classList.add("annuncio");
-        div.dataset.id = immobile.idAnnuncio;
+        div.dataset.idAnnuncio = immobile.idAnnuncio;
 
         div.innerHTML = `
             <img src="${immobile.immagine || 'https://via.placeholder.com/100'}" alt="Immobile">
@@ -111,14 +112,22 @@ function aggiornaBottoniNavigazione() {
     const container = document.getElementById("risultati");
     let paginationDiv = document.getElementById("pagination");
 
+    // Se il div non esiste ancora, crealo
     if (!paginationDiv) {
         paginationDiv = document.createElement("div");
         paginationDiv.id = "pagination";
         paginationDiv.classList.add("flex", "justify-center", "gap-4");
-        paginationDiv.style.marginTop = "40px"; // Cambia il valore a seconda di quanto vuoi abbassarli
+        paginationDiv.style.marginTop = "40px"; 
 
-        container.appendChild(paginationDiv);
+        document.getElementById("risultati").appendChild(paginationDiv);
     }
+
+    if (risultatiGlobali.length === 0) {
+        if (paginationDiv) paginationDiv.remove();
+        return; // Esci dalla funzione, non generare nulla
+    } 
+
+    paginationDiv.style.display = "flex";
 
     paginationDiv.innerHTML = `
         <button onclick="paginaPrecedente()" ${paginaCorrente === 1 ? "disabled" : ""} 
@@ -228,12 +237,8 @@ function cerca() {
 }
 
 // Rendi cliccabile il titolo, il sottotitolo e il logo per tornare alla homepage
-const clickableElements = document.querySelectorAll('.custom-text-color, img');
-clickableElements.forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
-        window.location.href = "../HomeNoLogin/HomeNoLogin.html";
-    });
+document.getElementById("logo-container").addEventListener("click", function () {
+    window.location.href = "../HomeNoLogin/HomeNoLogin.html";
 });
 
 // Seleziona gli elementi

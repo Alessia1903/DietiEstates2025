@@ -1,0 +1,194 @@
+body {
+    font-family: 'Lexend', sans-serif;
+    background-color: #ffffff;
+    color: #073B4C;
+    margin: 0;
+    padding: 20px;
+}
+
+.custom-text-color {
+    color: #073B4C; 
+}
+
+img[alt="Logo DietiEstates"] {
+    max-height: 64px; /* Altezza massima */
+    width: auto; /* Mantiene le proporzioni */
+}
+
+.container {
+    max-width: 800px; /* Non superare gli 800px su schermi grandi */
+
+    background: white;
+    padding: 80px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.green-symbol {
+    color: #06D6A0;
+    font-weight: bold; 
+}
+
+.back-link-container {
+    margin-top: 40px !important; 
+}
+
+.back-link {
+    text-decoration: none;
+    color: inherit; 
+    font-size: 20px;
+    font-weight: bold;  
+}
+
+#annuncio-img {
+    max-width: 100%; /* Assicura che l'immagine non superi la larghezza del contenitore */
+    max-height: 400px; /* Imposta un'altezza massima */
+    width: auto; /* Mantiene le proporzioni */
+    height: auto;
+    object-fit: contain; /* Mantiene l'immagine visibile senza distorsioni */
+}
+
+.image-slider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    max-width: 600px; 
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.image-slider img {
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+}
+
+.prev-btn, .next-btn {
+    background: #073B4C;
+    border: none;
+    color: white;
+    font-size: 24px;
+    padding: 10px;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    border-radius: 50%;
+    width: 48px;  
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: opacity 0.3s ease, cursor 0.3s ease;
+}
+
+/* Quando il bottone è disabilitato */
+.prev-btn:disabled, .next-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+/* Posizionamento */
+.prev-btn { left: 10px; }  /* Più vicino al bordo */
+.next-btn { right: 10px; } /* Più vicino al bordo */
+
+/* Aggiunta per adattare lo stile agli SVG */
+.prev-btn svg, .next-btn svg {
+    width: 30px;
+    height: 30px;
+}
+
+h2 {
+    color: #073B4C;
+    font-weight: bolder; 
+    font-size: 36px;
+    text-transform: uppercase; 
+    text-align: center; 
+    margin-bottom: 20px; 
+    margin-top: 0 !important; 
+}
+
+.custom-text {
+    font-size: 36px !important;
+    margin-top: 0 !important;
+}
+
+#annuncio-titolo {
+    font-size: 32px; 
+    font-weight: bold; 
+    color: #333; 
+    margin-bottom: 10px;
+}
+
+#annuncio-descrizione {
+    font-size: 18px; 
+    font-weight: normal; 
+    color: #555;
+    line-height: 1.5; 
+    padding: 40px;
+}
+
+.info-box {
+    background: #ffffff;
+    border: 5px solid #073B4C; 
+    border-radius: 10px; 
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.info-box ul {
+    display: flex;
+    flex-wrap: wrap; /* Permette di andare su due righe */
+    gap: 10px 20px;
+    padding: 0;
+    list-style-type: none;
+}
+
+.info-box li {
+    width: calc(50% - 10px); /* Ogni elemento occupa metà della larghezza */
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    padding: 5px 0;
+}
+
+.visit-button {
+    background: #06D6A0;
+    color: #073B4C;
+    border: none;
+    padding: 12px;
+    font-weight: bold;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-weight: 600;
+}
+
+.visit-button:hover {
+    background: #04b889;
+}
+
+@media (max-width: 300px) {
+    .container {
+        padding: 0px;
+    }
+
+    .info-box{
+        padding: 0px;
+    }
+    
+    .prev-btn, .next-btn {
+        font-size: 18px;
+        padding: 8px;
+    }
+
+    #annuncio-img {
+        max-height: 250px; 
+    }
+}

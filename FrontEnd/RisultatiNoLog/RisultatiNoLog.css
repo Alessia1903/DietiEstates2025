@@ -45,14 +45,11 @@ body {
 }
 
 #noResultsMessage {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
+    display: flex; /* Usa Flexbox per l'allineamento */
+    justify-content: center; /* Centra orizzontalmente */
+    align-items: center; /* Centra verticalmente */
+    width: 100%; /* Assicurati che occupi tutta la larghezza disponibile */
+    height: 100%; /* Occupa tutta l'altezza del contenitore */
 }
 
 #salvaRicercaBtn {
