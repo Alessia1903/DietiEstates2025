@@ -9,10 +9,12 @@
     <link rel="stylesheet" href="LoginUtente.css">
 </head>
 <body class="flex flex-col items-center p-8" style="font-family: 'Lexend', sans-serif;">
+
     <!-- Logo e Titolo -->
     <div class="flex items-center justify-start mb-10 w-full pl-4">
-        <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true" alt="Logo DietiEstates" class="h-16 mr-4">
-        <div class="cursor-pointer">
+        <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true" 
+             alt="Logo DietiEstates" class="h-16 mr-4" id="homeRedirect">
+        <div class="cursor-pointer" id="homeRedirect">
             <h1 class="titolo text-4xl font-bold">DîetîEstates25</h1>
             <p class="sottoTitolo">La casa che vuoi, quando vuoi</p>
         </div>
@@ -21,30 +23,55 @@
     <!-- Contenitore flessibile per i riquadri -->
     <div class="flex flex-col md:flex-row gap-10 w-full max-w-4xl">
         <div class="info-box border-2 p-6 rounded-lg flex-1">
-            <h3 class="text-lg font-bold mb-4">Con il tuo account puoi:</h3>
-            <ul class="list-none p-0">
-                <li class="flex items-center mb-2">🔄 Accedere alla cronologia delle ricerche</li>
-                <li class="flex items-center mb-2">❤️ Ricevere notifiche sulle ricerche salvate</li>
-                <li class="flex items-center mb-2">📅 Prenotare visite per vedere gli immobili</li>
-                <li class="flex items-center">🏡 Trovare la casa dei tuoi sogni!</li>
-            </ul>
+            <h3 class="text-lg font-bold mb-12">Con il tuo account puoi:</h3>
+            <ul class="list-none p-0 space-y-12">
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/history.png?raw=true" 
+                         alt="Cronologia" class="w-6 h-6 mr-2">
+                    Accedere alla cronologia delle ricerche
+                </li>
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/favorite.png?raw=true" 
+                         alt="Preferiti" class="w-6 h-6 mr-2">
+                    Ricevere notifiche sulle ricerche salvate
+                </li>
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/event.png?raw=true" 
+                         alt="Prenotazioni" class="w-6 h-6 mr-2">
+                    Prenotare visite per vedere gli immobili
+                </li>
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/Group.png?raw=true" 
+                         alt="Casa" class="w-6 h-6 mr-2">
+                    Trovare la casa dei tuoi sogni!
+                </li>
+            </ul>            
         </div>
         
+        <!-- Form di Accesso -->
         <div class="login-box p-8 rounded-lg text-white flex flex-col items-center flex-1">
-            <input type="email" placeholder="Email" class="w-full p-2 my-2 border-none rounded-md">
-            <input type="password" placeholder="Password" class="w-full p-2 my-2 border-none rounded-md">
-            <button class="accesso px-6 py-2 mt-4 rounded-md text-lg">ACCEDI O REGISTRATI</button>
+            <form id="loginForm" class="w-full flex flex-col items-center">
+                <input type="email" id="email" placeholder="Email" class="w-full p-2 my-2 border-none rounded-md text-black">
+                <input type="password" id="password" placeholder="Password" class="w-full p-2 my-2 border-none rounded-md text-black">
+                <p id="error-message" class="error-message hidden">Errore: Email o password non valide.</p>
+
+                <button type="submit" class="accesso px-6 py-2 mt-6 rounded-md text-lg bg-blue-500 text-white">
+                    ACCEDI O REGISTRATI
+                </button>
+            </form>
+
             <div class="divider w-full text-center relative my-4">
                 <div class="border-b border-gray-400 w-full absolute top-1/2"></div>
-                <span class="divisore px-2 relative z-10">oppure</span>
+                <span class="divisore px-2 relative z-10 bg-white">oppure</span>
             </div>            
-            <div class="google-signin flex items-center bg-white text-black px-4 py-2 rounded-md cursor-pointer font-bold">
+            <button class="google-signin flex items-center bg-white text-black px-4 py-2 rounded-md cursor-pointer font-bold">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20" class="mr-2">
                 Sign in with Google
-            </div>
+            </button>
         </div>
     </div>
+
+    <!-- Collegamento al file JavaScript -->
+    <script src="LoginUtente.js"></script>
 </body>
 </html>
-
-
