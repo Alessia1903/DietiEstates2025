@@ -111,6 +111,7 @@ input[type="password"] {
     width: 150px;
     background-color: #06D6A0;
     color: #073B4C;
+    font-weight: bold;
     border: none;
     cursor: pointer;
 }
