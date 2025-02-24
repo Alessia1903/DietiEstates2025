@@ -115,6 +115,10 @@ input[type="password"] {
     cursor: pointer;
 }
 
+.btn-custom:hover {
+    background-color: #04b889;
+}
+
 .hidden {
     display: none;
 }
