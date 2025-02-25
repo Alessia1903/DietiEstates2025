@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>RisultatiNoLog</title>
+    <title>RegistrazioneAgenzia</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="RegistrazioneAgenzia.css">
@@ -64,6 +64,43 @@
 
     <button class="registrabutton mx-auto" onclick="Registra()">PROSEGUI</button>
     
+    <!-- Modale di Avviso -->
+    <div id="warningModal">
+        <div class="modal-outer">
+            <div class="modal-inner">
+                <div data-svg-wrapper>
+                    <svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.35 105H97.65C105.35 105 110.15 96.6499 106.3 89.9999L68.65 24.9499C64.8 18.2999 55.2 18.2999 51.35 24.9499L13.7 89.9999C9.85 96.6499 14.65 105 22.35 105ZM60 69.9999C57.25 69.9999 55 67.7499 55 64.9999V54.9999C55 52.2499 57.25 49.9999 60 49.9999C62.75 49.9999 65 52.2499 65 54.9999V64.9999C65 67.7499 62.75 69.9999 60 69.9999ZM65 89.9999H55V79.9999H65V89.9999Z" fill="#FFD943"/>
+                    </svg>
+                </div>
+                <p class="modal-text">Una volta registrata l’agenzia, i dati NON potranno essere modificati.</p>
+                <div class="modal-spacer"></div>
+                <div class="modal-buttons">
+                    <button id="cancelButton">INDIETRO</button>
+                    <button id="confirmWarningButton">PROSEGUI</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modale di Conferma -->
+    <div id="successModal">
+        <div class="modal-outer-success">
+            <div class="modal-inner-success">
+                <div data-svg-wrapper>
+                    <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M55 9.16675C29.7 9.16675 9.16663 29.7001 9.16663 55.0001C9.16663 80.3001 29.7 100.833 55 100.833C80.3 100.833 100.833 80.3001 100.833 55.0001C100.833 29.7001 80.3 9.16675 55 9.16675ZM42.5791 74.6626L26.125 58.2084C24.3375 56.4209 24.3375 53.5334 26.125 51.7459C27.9125 49.9584 30.8 49.9584 32.5875 51.7459L45.8333 64.9459L77.3666 33.4126C79.1541 31.6251 82.0416 31.6251 83.8291 33.4126C85.6166 35.2001 85.6166 38.0876 83.8291 39.8751L49.0416 74.6626C47.3 76.4501 44.3666 76.4501 42.5791 74.6626Z" fill="#4DC538"/>
+                    </svg>
+                </div>
+                <h2>Complimenti!</h2>
+                <p>L'agenzia è stata registrata con successo.</p>
+                <p><strong>Controlla la casella di posta elettronica</strong> per scoprire le credenziali di accesso.</p>
+                <div class="modal-spacer"></div>
+                <button id="confirmSuccessButton">PROSEGUI</button>
+            </div>
+        </div>
+    </div>
+
     <script src="RegistrazioneAgenzia.js"></script>
 </body>
 </html>
