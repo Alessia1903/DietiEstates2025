@@ -46,9 +46,9 @@ document.addEventListener("DOMContentLoaded", function () {
         const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return re.test(email);
     }
+});
 
-    // Rendi cliccabile il logo e il titolo per tornare alla homepage
-    document.getElementById("homeRedirect").addEventListener("click", function () {
-        window.location.href = "../HomeNoLogin/HomeNoLogin.html";
-    });
+// Rendi cliccabile il titolo, il sottotitolo e il logo per tornare alla homepage
+document.getElementById("logo-container").addEventListener("click", function () {
+    window.location.href = "../HomeNoLogin/HomeNoLogin.html";
 });

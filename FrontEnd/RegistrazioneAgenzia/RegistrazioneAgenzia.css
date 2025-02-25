@@ -9,6 +9,10 @@ body {
     padding: 20px;
 }
 
+.custom-text-color {
+    color: #073B4C; 
+}
+
 .container {
     width: 95%;
     max-width: 800px; 
