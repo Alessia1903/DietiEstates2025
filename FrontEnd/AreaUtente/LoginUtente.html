@@ -64,14 +64,22 @@
                 <div class="border-b border-gray-400 w-full absolute top-1/2"></div>
                 <span class="divisore px-2 relative z-10 bg-white">oppure</span>
             </div>            
-            <button class="google-signin flex items-center bg-white text-black px-4 py-2 rounded-md cursor-pointer font-bold">
+            <!-- Pulsante Google -->
+            <div id="g_id_onload"
+                data-client_id="TUA_CLIENT_ID"
+                data-context="signin"
+                data-ux_mode="popup"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
+            </div>
+            <div class="google-signin flex items-center bg-white text-black px-4 py-2 rounded-md cursor-pointer font-bold"
+                id="google-login">
                 <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20" class="mr-2">
                 Sign in with Google
-            </button>
+            </div>
         </div>
     </div>
-
-    <!-- Collegamento al file JavaScript -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <script src="LoginUtente.js"></script>
 </body>
 </html>
