@@ -1,0 +1,45 @@
+body { 
+    background-color: #ffffff; 
+}
+body {
+    font-family: 'Lexend', sans-serif;
+}
+
+.custom-text-color {
+    color: #073B4C; 
+}
+.container {
+    width: 50%;
+    margin: auto;
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.notification {
+    display: flex;
+    align-items: center;
+    background: #f0f0f0;
+    margin: 10px 0;
+    padding: 10px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+.notification i {
+    font-size: 24px;
+    margin-right: 15px;
+}
+.nav-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.nav-buttons button {
+    padding: 10px;
+    border: none;
+    background: #002f57;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+}
