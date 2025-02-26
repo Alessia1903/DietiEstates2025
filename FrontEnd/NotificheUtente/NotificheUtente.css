@@ -1,7 +1,12 @@
+body { 
+    background-color: #ffffff; 
+}
 body {
     font-family: 'Lexend', sans-serif;
-    background-color: #f8f8f8;
-    text-align: center;
+}
+
+.custom-text-color {
+    color: #073B4C; 
 }
 .container {
     width: 50%;
