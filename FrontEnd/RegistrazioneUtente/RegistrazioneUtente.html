@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione - DîetîEstates25</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="RegistrazioneUtente.css">
+</head>
+<body class="flex flex-col items-center p-8" style="font-family: 'Lexend', sans-serif;">
+
+    <!-- Logo e Titolo -->
+    <div class="flex items-center justify-start mb-2 w-full pl-4 cursor-pointer" id="logo-container">
+        <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true" 
+            alt="Logo DietiEstates" class="h-16 mr-2">
+        <div>
+            <h1 class="text-4xl font-bold custom-text-color">DîetîEstates25</h1>
+            <p class="custom-text-color">La casa che vuoi, quando vuoi</p>
+        </div>
+    </div>
+    
+    <!-- Contenitore flessibile per i riquadri -->
+    <div class="flex flex-col md:flex-row gap-10 w-full max-w-4xl">
+        <div class="info-box border-2 p-6 rounded-lg flex-1">
+            <h3 class="text-lg font-bold mb-12">Con il tuo account puoi:</h3>
+            <ul class="list-none p-0 space-y-12">
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/history.png?raw=true" 
+                         alt="Cronologia" class="w-6 h-6 mr-2">
+                    Accedere alla cronologia delle ricerche
+                </li>
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/favorite.png?raw=true" 
+                         alt="Preferiti" class="w-6 h-6 mr-2">
+                    Ricevere notifiche sulle ricerche salvate
+                </li>
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/event.png?raw=true" 
+                         alt="Prenotazioni" class="w-6 h-6 mr-2">
+                    Prenotare visite per vedere gli immobili
+                </li>
+                <li class="flex items-center">
+                    <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/Group.png?raw=true" 
+                         alt="Casa" class="w-6 h-6 mr-2">
+                    Trovare la casa dei tuoi sogni!
+                </li>
+            </ul>            
+        </div>
+        
+        <!-- Form di Registrazione -->
+        <div class="login-box p-8 rounded-lg text-white flex flex-col items-center flex-1">
+            <form id="loginForm" class="w-full flex flex-col items-center">
+                <p class="self-start text-lg font-semibold mb-2">Ancora un ultimo passo!</p>
+                <input type="text" id="nome" placeholder="Nome" class="w-full p-2 my-2 border border-gray-300 rounded-md text-black">
+                <input type="text" id="cognome" placeholder="Cognome" class="w-full p-2 my-2 border border-gray-300 rounded-md text-black">
+                <p id="error-message" class="error-message hidden text-red-500"></p>
+
+                <button type="submit" class="accesso px-6 py-2 mt-6 rounded-md text-lg bg-blue-500 text-white">
+                    REGISTRATI
+                </button>
+            </form>
+
+            <div class="divider w-full text-center relative my-4">
+                <div class="border-b border-gray-400 w-full absolute top-1/2"></div>
+                <span class="divisore px-2 relative z-10 bg-white">oppure</span>
+            </div>            
+
+            <!-- Pulsante Google -->
+            <div id="g_id_onload"
+                data-client_id="TUA_CLIENT_ID"
+                data-context="signin"
+                data-ux_mode="popup"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
+            </div>
+            <div class="google-signin flex items-center bg-white text-black px-4 py-2 rounded-md cursor-pointer font-bold"
+                id="google-login">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/c/c1/Google_%22G%22_logo.svg" width="20" class="mr-2">
+                Sign in with Google
+            </div>
+        </div>
+    </div>
+
+    <!-- Modale di Conferma -->
+    <div id="successModal">
+        <div class="modal-outer-success">
+            <div class="modal-inner-success">
+                <div data-svg-wrapper>
+                    <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M55 9.16675C29.7 9.16675 9.16663 29.7001 9.16663 55.0001C9.16663 80.3001 29.7 100.833 55 100.833C80.3 100.833 100.833 80.3001 100.833 55.0001C100.833 29.7001 80.3 9.16675 55 9.16675ZM42.5791 74.6626L26.125 58.2084C24.3375 56.4209 24.3375 53.5334 26.125 51.7459C27.9125 49.9584 30.8 49.9584 32.5875 51.7459L45.8333 64.9459L77.3666 33.4126C79.1541 31.6251 82.0416 31.6251 83.8291 33.4126C85.6166 35.2001 85.6166 38.0876 83.8291 39.8751L49.0416 74.6626C47.3 76.4501 44.3666 76.4501 42.5791 74.6626Z" fill="#4DC538"/>
+                    </svg>
+                </div>
+                <h2>Complimenti!</h2>
+                <p>L'agenzia è stata registrata con successo.</p>
+                <p><strong>Controlla la casella di posta elettronica</strong> per scoprire le credenziali di accesso.</p>
+                <div class="modal-spacer"></div>
+                <button id="confirmSuccessButton">PROSEGUI</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="RegistrazioneUtente.js"></script>
+</body>
+</html>
