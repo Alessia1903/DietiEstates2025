@@ -3,6 +3,8 @@ document.addEventListener("DOMContentLoaded", function () {
     const nomeInput = document.getElementById("nome");
     const cognomeInput = document.getElementById("cognome");
     const errorMessage = document.getElementById("error-message");
+    const successModal = document.getElementById("successModal");
+    const confirmSuccessButton = document.getElementById("confirmSuccessButton");
 
     loginForm.addEventListener("submit", async function (event) {
         event.preventDefault();
@@ -17,6 +19,18 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // Simulazione della risposta senza backend
+        /*setTimeout(() => {
+            const result = { status: "success", message: "Registrazione completata" };
+
+            if (result.status === "success") {
+            successModal.style.display = "flex";
+            } else {
+                errorMessage.textContent = result.message;
+                errorMessage.classList.remove("hidden");
+            }
+        }); */
+
         // Invio richiesta al backend
         try {
             const response = await fetch("http://localhost:8080/api/register", {
@@ -27,23 +41,9 @@ document.addEventListener("DOMContentLoaded", function () {
 
             const result = await response.json();
 
+            // Mostra il modale di conferma
             if (response.ok) {
-                // Mostra il modale di conferma
-                warningModal.style.display = "flex";
-    
-                confirmWarningButton.addEventListener("click", function () {
-                    warningModal.style.display = "none";
-                    successModal.style.display = "flex";
-                });
-    
-                cancelButton.addEventListener("click", function () {
-                    warningModal.style.display = "none";
-                });
-    
-                confirmSuccessButton.addEventListener("click", function () {
-                    window.location.href = "../AreaAgenzia/AreaAgenzia.html";
-                });
-    
+                successModal.style.display = "flex";
             } else if (response.status === 409) {
                 erroreMessaggio.innerText = "⚠ " + result.message;
                 erroreMessaggio.style.display = "block";
@@ -59,12 +59,17 @@ document.addEventListener("DOMContentLoaded", function () {
                 errorMessage.classList.add("hidden");
                 window.location.href = "Dashboard.html";
             }
-
+            
         } catch (error) {
             console.error("Errore di connessione:", error);
             errorMessage.textContent = "Errore di connessione. Riprova.";
             errorMessage.classList.remove("hidden");
         }
+    });
+
+    // **Aggiunta della funzione per il pulsante PROSEGUI**
+    confirmSuccessButton.addEventListener("click", function () {
+        window.location.href = "../HomeNoLogin/HomeNoLogin.html"; // Assicurati che il percorso sia corretto
     });
 
     // Gestione accesso con Google
@@ -78,4 +83,6 @@ document.addEventListener("DOMContentLoaded", function () {
         window.location.href = "../HomeNoLogin/HomeNoLogin.html";
     });
 });
+
+
 
