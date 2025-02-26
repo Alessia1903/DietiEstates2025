@@ -14,22 +14,31 @@ document.getElementById("loginForm").addEventListener("submit", async function (
 
     // Invio richiesta al backend
     try {
-        const response = await fetch("http://localhost:8080/api/login", {
+        const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Login", {
             method: "POST",
+            body: JSON.stringify({ email, password }),
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
         });
-
-        const result = await response.json();
-
-        if (result.status === "error") {
+        
+        if (response.ok) {
+            const data = await response.json();
+            localStorage.setItem("token", data.token);
+            localStorage.setItem("role", data.role);
+        
+            // Reindirizzamento in base al ruolo
+            const homePages = {
+            agente: "../HomeAgente/HomeAgente.html",
+            collaboratore: "../HomeCollaboratore/HomeCollaboratore.html",
+            admin: "../HomeAdmin/HomeAdmin.html",
+            };
+        
+            window.location.href = homePages[data.role] || "../HomeNoLogin/HomeNoLogin.html";
+        }else if (result.status === "error") {
             errorMessage.textContent = result.message;
             errorMessage.classList.remove("hidden");
-        } else {
-            errorMessage.classList.add("hidden");
-            window.location.href = "Dashboard.html";
+        }else {
+            alert("Login fallito");
         }
-
     } catch (error) {
         console.error("Errore di connessione:", error);
         errorMessage.textContent = "Errore di connessione. Riprova.";
