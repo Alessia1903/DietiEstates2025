@@ -97,6 +97,7 @@ function mostraAnnunci() {
             </div>
         `;
 
+
         div.addEventListener("click", () => {
             sessionStorage.setItem("idAnnuncio", immobile.idAnnuncio); 
             window.location.href = "../AnnuncioNoLog/AnnuncioNoLog.html";
@@ -130,7 +131,7 @@ function aggiornaBottoniNavigazione() {
     paginationDiv.style.display = "flex";
 
     paginationDiv.innerHTML = `
-        <button onclick="paginaPrecedente()" ${paginaCorrente === 1 ? "disabled" : ""} 
+        <button onclick="paginaPrecedente(); scrollToTop();" ${paginaCorrente === 1 ? "disabled" : ""} 
             class="w-12 h-12 flex items-center justify-center rounded-lg" 
             style="border: none; background: #073B4C; opacity: ${paginaCorrente === 1 ? '0.5' : '1'}; cursor: ${paginaCorrente === 1 ? 'default' : 'pointer'};">
             <svg width="30" height="30" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -145,7 +146,7 @@ function aggiornaBottoniNavigazione() {
             </svg>
         </button>
 
-        <button onclick="paginaSuccessiva()" ${paginaCorrente * annunciPerPagina >= risultatiGlobali.length ? "disabled" : ""} 
+        <button onclick="paginaSuccessiva(); scrollToTop();" ${paginaCorrente * annunciPerPagina >= risultatiGlobali.length ? "disabled" : ""} 
             class="w-12 h-12 flex items-center justify-center rounded-lg" 
             style="border: none; background: #073B4C; opacity: ${paginaCorrente * annunciPerPagina >= risultatiGlobali.length ? '0.5' : '1'}; cursor: ${paginaCorrente * annunciPerPagina >= risultatiGlobali.length ? 'default' : 'pointer'};">
             <svg width="30" height="30" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -287,4 +288,8 @@ function sincronizzaMin() {
     if (max <= min) {
         prezzoMin.value = (max - 10000>0) ? max - 10000 : 0;
     }
+}
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
 }

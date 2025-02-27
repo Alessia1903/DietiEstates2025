@@ -1,7 +1,5 @@
 body { 
     background-color: #ffffff; 
-}
-body {
     font-family: 'Lexend', sans-serif;
 }
 
@@ -9,58 +7,96 @@ body {
     color: #073B4C; 
 }
 
-#loadingAnimation {
-    transition: opacity 0.5s ease-in-out;
-}
-
-.search-bar { 
-    background-color: #073B4C; 
-    border-radius: 10px; 
-    padding: 30px; 
-}
-
-.search-bar input, .search-bar select { 
-    border-radius: 5px; 
-    padding: 10px; 
-}
-
-.search-bar button { 
-    background-color: #06D6A0; 
-    color: #073B4C; 
-    font-weight: bold;
-    border-radius: 5px; 
-    padding: 10px 20px; 
-}
-
-.input-error {
-    border: 5px solid #B3000F; 
-}
-
-.input-error::placeholder {
-    color: #B3000F; 
-}
-
 .hidden {
     display: none;
 }
 
-#noResultsMessage {
-    display: flex; /* Usa Flexbox per l'allineamento */
-    justify-content: center; /* Centra orizzontalmente */
-    align-items: center; /* Centra verticalmente */
-    width: 100%; /* Assicurati che occupi tutta la larghezza disponibile */
-    height: 100%; /* Occupa tutta l'altezza del contenitore */
-}
-
-#salvaRicercaBtn {
-    border-color: #06D6A0 !important;
-}
-
-[data-svg-wrapper] {
+.menu-item {
     display: flex;
+    flex-direction: row;
+    align-items: center;
+    cursor: pointer;
+    font-size: 14px; /* Testo più piccolo */
+    color: #323232;
+    transition: transform 0.2s;
+}
+
+.menu-item:hover {
+    transform: scale(1.1);
+}
+
+.menu-item svg {
+    width: 40px; /* Icone più piccole */
+    height: 40px;
+}
+
+.menu-item span {
+    margin-top: 4px;
+    font-size: 18px;
+}
+
+.header-container {
+    margin-bottom: 80px; 
+}
+
+.register-box{
+    border: 5px solid #06D6A0;
+    border-radius: 15px;
+    padding: 60px 40px;
+    width: 410px;
+    height: 270px;
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    width: 100%; /* Assicura che occupi tutto lo spazio disponibile */
+    background-color: white;
+    color: #073B4C;
+    transition: transform 0.3s;
+}
+
+.register-box:hover { 
+    transform: scale(1.05); 
+}
+
+.agency-icon-container {
+    position: relative;
+    width: 150px; /* Ridotto proporzionalmente */
+    height: 150px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.building-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Cerchio bianco ridotto */
+.circle {
+    position: absolute;
+    bottom: 15px; /* Regolato per centrare */
+    right: 15px;
+    width: 32px; /* Ridotto proporzionalmente */
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.small-plus-icon {
+    width: 60px;
+    height: 60px;
+}
+
+/* Icona "+"*/
+.plus-icon {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    z-index: 2;
 }
 
 .container {
