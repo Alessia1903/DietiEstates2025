@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         // Invio richiesta al backend
         try {
-            const response = await fetch("http://localhost:8080/api/login", {
+            const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Risposta1", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password })
@@ -30,8 +30,16 @@ document.addEventListener("DOMContentLoaded", function () {
             if (result.status === "error") {
                 errorMessage.textContent = result.message;
                 errorMessage.classList.remove("hidden");
+            } else if (result.status === "new_user") {
+                // Salva temporaneamente i dati di accesso
+                localStorage.setItem("newUserEmail", email);
+                localStorage.setItem("newUserPassword", password);
+            
+                // Reindirizza alla pagina di registrazione
+                window.location.href = "../RegistrazioneUtente/RegistrazioneUtente.html";
             } else {
                 errorMessage.classList.add("hidden");
+                localStorage.setItem("token", result.token);
                 window.location.href = "Dashboard.html";
             }
 
@@ -52,3 +60,19 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById("logo-container").addEventListener("click", function () {
     window.location.href = "../HomeNoLogin/HomeNoLogin.html";
 });
+
+/*
+{
+    "status": "new_user",
+    "message": "Email non registrata"
+}
+{
+    "status": "error",
+    "message": "Password errata"
+}
+{
+    "status": "success",
+    "message": "Login effettuato con successo",
+    "token": "eyJhbGciOiJIUzI1"  
+}
+*/
