@@ -11,13 +11,20 @@ body {
     display: none;
 }
 
+.top-right-icons {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-shrink: 0;
+}
+
 .menu-item {
     display: flex;
     flex-direction: row;
     align-items: center;
     cursor: pointer;
     font-size: 14px; /* Testo più piccolo */
-    color: #323232;
+    color: #073B4C;
     transition: transform 0.2s;
 }
 
@@ -145,6 +152,15 @@ body {
 }
 
 @media screen and (max-width: 768px) {
+    .hide-on-small span {
+        display: none;
+    }
+
+    .top-right-icons svg {
+        width: 30px;
+        height: 30px;
+    }
+
     .annuncio {
         flex-direction: column; /* Gli elementi vanno in colonna SOLO su schermi piccoli */
         align-items: flex-start;
