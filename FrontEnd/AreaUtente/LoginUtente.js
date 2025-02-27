@@ -40,7 +40,7 @@ document.addEventListener("DOMContentLoaded", function () {
             } else {
                 errorMessage.classList.add("hidden");
                 localStorage.setItem("token", result.token);
-                window.location.href = "Dashboard.html";
+                window.location.href = "../HomeLogin/HomeLogin.html";
             }
 
         } catch (error) {

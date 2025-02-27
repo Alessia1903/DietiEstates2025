@@ -71,7 +71,13 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 function Visita() {
-    window.location.href = "../AccediUtente/AccediUtente.html";
+    window.location.href = "../AreaUtente/LoginUtente.html";
+}
+
+function apriMappa(event) {
+    event.preventDefault(); // Evita il comportamento predefinito del link
+
+    window.location.href = "../AreaUtente/LoginUtente.html";
 }
 
 // Rendi cliccabile il titolo, il sottotitolo e il logo per tornare alla homepage
