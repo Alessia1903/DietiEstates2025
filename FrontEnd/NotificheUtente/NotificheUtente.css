@@ -2,6 +2,41 @@
     color: #073B4C;
 }
 
+/* Sezione Logo + Titolo */
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* Logo */
+.logo {
+    height: 64px;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Titolo */
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Sottotitolo */
+.subtitle {
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Contenitore icone a destra */
 .top-right-icons {
     display: flex;
     align-items: center;
@@ -9,33 +44,26 @@
     flex-shrink: 0;
 }
 
-.menu-item {
+/* Stile per ogni icona e testo */
+.icon-text {
     display: flex;
-    flex-direction: row;
     align-items: center;
+    gap: 8px;
     cursor: pointer;
-    font-size: 14px; /* Testo più piccolo */
+    font-size: 14px;
     color: #073B4C;
-    transition: transform 0.2s;
 }
 
-.menu-item:hover {
+.icon-text:hover {
     transform: scale(1.1);
 }
 
-.menu-item svg {
-    width: 40px; /* Icone più piccole */
-    height: 40px;
+/* Modifica delle icone */
+.icon-text i {
+    font-size: 1.8rem;
+    color: #073B4C;
 }
 
-.menu-item span {
-    margin-top: 4px;
-    font-size: 18px;
-}
-
-.header-container {
-    margin-bottom: 80px; 
-}
 
 /* Media query per schermi piccoli */
 @media (max-width: 800px) {

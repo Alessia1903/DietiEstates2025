@@ -3,9 +3,9 @@ const notifichePerPagina = 5;
 let risultatiGlobali = []; // Salviamo tutte le notifiche
 
 document.addEventListener("DOMContentLoaded", async () => {
-    const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
+    //const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
 
-    //const token = localStorage.getItem("token"); // Recupera il token salvato
+    const token = localStorage.getItem("token"); // Recupera il token salvato
   
     if (!token) {
       alert("Accesso non autorizzato. Effettua il login.");
@@ -80,7 +80,7 @@ function mostraNotifiche() {
 
         div.addEventListener("click", () => {
             sessionStorage.setItem("idNotifica", notifica.idNotifica); 
-            window.location.href = "../AnnuncioNoLog/AnnuncioNoLog.html";
+            window.location.href = "../AnnuncioLog/AnnuncioLog.html";
         });
 
         container.appendChild(div);
