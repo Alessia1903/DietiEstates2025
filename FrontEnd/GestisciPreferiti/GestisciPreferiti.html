@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Notifiche-DietiEstates25</title>
-    <link rel="stylesheet" href="NotificheUtente.css">
+    <title>GestisciPreferiti-DietiEstates25</title>
+    <link rel="stylesheet" href="GestisciPreferiti.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
@@ -72,30 +72,14 @@
     </div>    
     
     <!-- Risultati -->
-    <div class="w-full max-w-4xl mx-auto">
-        <div class="flex w-full mt-8 justify-between items-center">
-            <!-- Bottone "Gestisci Preferiti" (a destra) -->
-            <div id="salvaRicercaContainer" class="ml-auto">
-                <button id="salvaRicercaBtn" onclick="apriGestisciPreferiti()" 
-                    class="px-6 py-3 border-4 border-[#06D6A0] rounded-xl text-[#06D6A0] text-base font-lexend font-medium flex items-center justify-center">
-                    Gestisci Preferiti
-                    <svg class="ml-2 w-6 h-6" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <g clip-path="url(#clip0_27_389)">
-                            <path d="M32.3836 21.6333C32.4502 21.0999 32.5002 20.5666 32.5002 19.9999C32.5002 19.4333 32.4502 18.8999 32.3836 18.3666L35.9002 15.6166C36.2169 15.3666 36.3002 14.9166 36.1002 14.5499L32.7669 8.78325C32.5669 8.41659 32.1169 8.28325 31.7502 8.41659L27.6002 10.0833C26.7336 9.41659 25.8002 8.86659 24.7836 8.44992L24.1502 4.03325C24.1002 3.63325 23.7502 3.33325 23.3336 3.33325H16.6669C16.2502 3.33325 15.9002 3.63325 15.8502 4.03325L15.2169 8.44992C14.2002 8.86659 13.2669 9.43325 12.4002 10.0833L8.25022 8.41659C7.86689 8.26659 7.43355 8.41659 7.23355 8.78325L3.90022 14.5499C3.68355 14.9166 3.78355 15.3666 4.10022 15.6166L7.61689 18.3666C7.55022 18.8999 7.50022 19.4499 7.50022 19.9999C7.50022 20.5499 7.55022 21.0999 7.61689 21.6333L4.10022 24.3833C3.78355 24.6333 3.70022 25.0833 3.90022 25.4499L7.23355 31.2166C7.43355 31.5833 7.88355 31.7166 8.25022 31.5833L12.4002 29.9166C13.2669 30.5833 14.2002 31.1333 15.2169 31.5499L15.8502 35.9666C15.9002 36.3666 16.2502 36.6666 16.6669 36.6666H23.3336C23.7502 36.6666 24.1002 36.3666 24.1502 35.9666L24.7836 31.5499C25.8002 31.1333 26.7336 30.5666 27.6002 29.9166L31.7502 31.5833C32.1336 31.7333 32.5669 31.5833 32.7669 31.2166L36.1002 25.4499C36.3002 25.0833 36.2169 24.6333 35.9002 24.3833L32.3836 21.6333ZM20.0002 25.8333C16.7836 25.8333 14.1669 23.2166 14.1669 19.9999C14.1669 16.7833 16.7836 14.1666 20.0002 14.1666C23.2169 14.1666 25.8336 16.7833 25.8336 19.9999C25.8336 23.2166 23.2169 25.8333 20.0002 25.8333Z" fill="#073B4C"/>
-                        </g>
-                        <defs>
-                            <clipPath id="clip0_27_389">
-                                <rect width="40" height="40" fill="white"/>
-                            </clipPath>
-                        </defs>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        <div class="container mt-6 w-full max-w-4xl flex">    
-            <div id="risultati"></div>
-        </div>
-    </div>
+    <div id="search-container" class="bg-[#002B3D] p-4 rounded-lg"></div>
+
+    <button class="ml-4 bg-green-500 p-3 rounded-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6 text-white">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+    </button>
+
     
 
     <!-- Navigazione Risultati -->
@@ -113,6 +97,6 @@
         </button>
     </div>
 
-    <script src="NotificheUtente.js"></script>
+    <script src="GestisciPreferiti.js"></script>
 </body>
 </html>

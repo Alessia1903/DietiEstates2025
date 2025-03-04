@@ -3,9 +3,9 @@ const notifichePerPagina = 5;
 let risultatiGlobali = []; // Salviamo tutte le notifiche
 
 document.addEventListener("DOMContentLoaded", async () => {
-    //const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
-
-    const token = localStorage.getItem("token"); // Recupera il token salvato
+    
+    const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
+    //const token = localStorage.getItem("token"); // Recupera il token salvato
   
     if (!token) {
       alert("Accesso non autorizzato. Effettua il login.");
@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
   
       if (!response.ok) {
-        throw new Error("Errore nel recupero degli annunci");
+        throw new Error("Errore nel recupero delle notifiche");
       }
 
       risultatiGlobali = await response.json();
@@ -35,7 +35,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         aggiornaPaginazione(); // Mostra i primi risultati  
     } catch (error) {
       console.error("Errore:", error);
-      alert("Si è verificato un problema nel caricamento degli annunci.");
+      alert("Si è verificato un problema nel caricamento deglle notifiche.");
     }
 });
 
@@ -169,3 +169,7 @@ function scrollToTop() {
 document.getElementById("logo-title").addEventListener("click", function () {
     window.location.href = "../HomeLogin/HomeLogin.html";
 });
+
+function apriGestisciPreferiti() {
+    window.location.href = "../AreaUtente/LoginUtente.html";
+}
