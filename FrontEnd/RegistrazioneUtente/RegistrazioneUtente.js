@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const nome = nomeInput.value.trim();
         const cognome = cognomeInput.value.trim();
+        const email = localStorage.getItem("newUserEmail");
+        const password = localStorage.getItem("newUserPassword");
 
         // Verifica che i campi non siano vuoti
         if (nome === "" || cognome === "") {
@@ -19,7 +21,65 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-        // Simulazione della risposta senza backend
+        const userData = {
+            email: email,
+            password: password,
+            nome: nome,
+            cognome: cognome
+        };
+        
+        // Invio richiesta al backend
+        try {
+            const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Risposta1", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(userData)
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                errorMessage.classList.add("hidden");
+
+                localStorage.setItem("token", result.token);
+
+                successModal.style.display = "flex";
+
+                confirmSuccessButton.addEventListener("click", function () {
+                    window.location.href = "../HomeLogin/HomeLogin.html";
+                });
+            } else if (response.status === 409) {
+                errorMessage.innerText = "⚠ " + result.message;
+                errorMessage.style.display = "block";
+            } else if (result.status === "error"){
+                errorMessage.textContent = result.message;
+                errorMessage.classList.remove("hidden");
+            } else {
+                errorMessage.innerText = "❌ Errore imprevisto. Riprova più tardi.";
+                errorMessage.style.display = "block";
+            }
+            
+        } catch (error) {
+            console.error("Errore di connessione:", error);
+            errorMessage.textContent = "Errore di connessione. Riprova.";
+            errorMessage.classList.remove("hidden");
+        }
+    });
+
+    // Gestione accesso con Google
+    /* window.handleCredentialResponse = function (response) {
+        console.log("Google Credential Response:", response);
+        window.location.href = "Dashboard.html";
+    }; */
+});
+
+// Rendi cliccabile il logo per tornare alla homepage
+document.getElementById("logo-container").addEventListener("click", function () {
+    window.location.href = "../HomeNoLogin/HomeNoLogin.html";
+});
+
+
+// Simulazione della risposta senza backend
         /*setTimeout(() => {
             const result = { status: "success", message: "Registrazione completata" };
 
@@ -30,59 +90,3 @@ document.addEventListener("DOMContentLoaded", function () {
                 errorMessage.classList.remove("hidden");
             }
         }); */
-
-        // Invio richiesta al backend
-        try {
-            const response = await fetch("http://localhost:8080/api/register", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ nome, cognome })
-            });
-
-            const result = await response.json();
-
-            // Mostra il modale di conferma
-            if (response.ok) {
-                successModal.style.display = "flex";
-            } else if (response.status === 409) {
-                erroreMessaggio.innerText = "⚠ " + result.message;
-                erroreMessaggio.style.display = "block";
-            } else {
-                erroreMessaggio.innerText = "❌ Errore imprevisto. Riprova più tardi.";
-                erroreMessaggio.style.display = "block";
-            }
-
-            if (result.status === "error") {
-                errorMessage.textContent = result.message;
-                errorMessage.classList.remove("hidden");
-            } else {
-                errorMessage.classList.add("hidden");
-                window.location.href = "Dashboard.html";
-            }
-            
-        } catch (error) {
-            console.error("Errore di connessione:", error);
-            errorMessage.textContent = "Errore di connessione. Riprova.";
-            errorMessage.classList.remove("hidden");
-        }
-    });
-
-    // **Aggiunta della funzione per il pulsante PROSEGUI**
-    confirmSuccessButton.addEventListener("click", function () {
-        window.location.href = "../HomeNoLogin/HomeNoLogin.html"; // Assicurati che il percorso sia corretto
-    });
-
-    // Gestione accesso con Google
-    /* window.handleCredentialResponse = function (response) {
-        console.log("Google Credential Response:", response);
-        window.location.href = "Dashboard.html";
-    }; */
-
-    // Rendi cliccabile il logo per tornare alla homepage
-    document.getElementById("logo-container").addEventListener("click", function () {
-        window.location.href = "../HomeNoLogin/HomeNoLogin.html";
-    });
-});
-
-
-

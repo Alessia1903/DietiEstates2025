@@ -39,8 +39,8 @@ async function cerca() {
     };
 
     try {
-        // Effettua la richiesta al backend
-        const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Risposta1", {
+        // Li salvo nel backend per la cronologia
+        const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Risposta2", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -39,8 +39,8 @@ async function cerca() {
     };
 
     try {
-        // Effettua la richiesta al backend
-        const response = await fetch("http://localhost:8080/api/ricerca", {
+        // Li salvo nel backend per la cronologia
+        const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Risposta2", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -62,7 +62,7 @@ async function cerca() {
         sessionStorage.setItem("prezzoMax", prezzoMax);
 
         // Reindirizza alla pagina dei risultati
-        window.location.href = "../RisultatiLog/RisultatiLog.html";
+        window.location.href = "../RisultatiLogin/RisultatiLogin.html";
     } catch (error) {
         console.error("Errore:", error.message);
         alert("Errore durante la ricerca. Riprova.");
@@ -307,8 +307,88 @@ function apriMappa(event) {
     window.location.href = "../AreaUtente/LoginUtente.html";
 }
 
-function apriSalvaRicerca() {
-    window.location.href = "../AreaUtente/LoginUtente.html";
+const cuorePieno = `
+    <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_11_249)">
+            <path d="M22.25 33.55C20.9833 34.7 19.0333 34.7 17.7667 33.5333L17.5833 33.3667C8.83333 25.45 3.11666 20.2667 3.33333 13.8C3.43333 10.9667 4.88333 8.24999 7.23333 6.64999C11.6333 3.64999 17.0667 5.04999 20 8.48333C22.9333 5.04999 28.3667 3.63332 32.7667 6.64999C35.1167 8.24999 36.5667 10.9667 36.6667 13.8C36.9 20.2667 31.1667 25.45 22.4167 33.4L22.25 33.55Z" fill="#06D6A0"/>
+        </g>
+        <defs>
+            <clipPath id="clip0_11_249">
+                <rect width="40" height="40" fill="white"/>
+            </clipPath>
+        </defs>
+    </svg>
+`;
+
+const cuoreVuoto = `
+    <svg width="30" height="30" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g clip-path="url(#clip0_11_166)">
+            <path d="M32.7666 6.64999C28.3666 3.64999 22.9333 5.04999 20 8.48333C17.0666 5.04999 11.6333 3.63332 7.23328 6.64999C4.89995 8.24999 3.43328 10.95 3.33328 13.8C3.09995 20.2667 8.83328 25.45 17.5833 33.4L17.7499 33.55C19.0166 34.7 20.9666 34.7 22.2333 33.5333L22.4166 33.3667C31.1666 25.4333 36.8833 20.25 36.6666 13.7833C36.5666 10.95 35.1 8.24999 32.7666 6.64999ZM20.1666 30.9167L20 31.0833L19.8333 30.9167C11.8999 23.7333 6.66662 18.9833 6.66662 14.1667C6.66662 10.8333 9.16662 8.33333 12.4999 8.33333C15.0666 8.33333 17.5666 9.98333 18.4499 12.2667H21.5666C22.4333 9.98333 24.9333 8.33333 27.5 8.33333C30.8333 8.33333 33.3333 10.8333 33.3333 14.1667C33.3333 18.9833 28.1 23.7333 20.1666 30.9167Z" fill="#06D6A0"/>
+        </g>
+        <defs>
+            <clipPath id="clip0_11_166">
+                <rect width="40" height="40" fill="white"/>
+            </clipPath>
+        </defs>
+    </svg>
+`;
+
+let ricercaSalvata = false; // Stato iniziale
+
+async function toggleSalvaRicerca() {
+    const ricerca = {
+        citta: sessionStorage.getItem("citta") || "",
+        contratto: sessionStorage.getItem("contratto") || "",
+        classeEnergetica: sessionStorage.getItem("classeEnergetica") || "",
+        numLocali: sessionStorage.getItem("numLocali") || "",
+        prezzoMin: sessionStorage.getItem("prezzoMin") || "",
+        prezzoMax: sessionStorage.getItem("prezzoMax") || ""
+    };
+
+    const token = localStorage.getItem("token");
+
+    try {
+        let response;
+        if (!ricercaSalvata) {
+
+            document.getElementById("heartIcon").innerHTML = cuorePieno; // Cambia icona
+
+            // **Salva la ricerca (POST)**
+            response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Risposta2", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(ricerca)
+            });
+
+            if (!response.ok) throw new Error(`Errore nel salvataggio: ${response.status}`);
+
+            ricercaSalvata = true;
+
+        } else {
+
+            document.getElementById("heartIcon").innerHTML = cuoreVuoto; // Cambia icona
+
+            // **Elimina la ricerca salvata (DELETE)**
+            response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/RegistraAzienda", {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${token}`
+                },
+                body: JSON.stringify(ricerca) // Passa gli stessi dati per identificare la ricerca
+            });
+
+            if (!response.ok) throw new Error(`Errore nell'eliminazione: ${response.status}`);
+
+            ricercaSalvata = false;
+        }
+    } catch (error) {
+        console.error("Errore:", error);
+        alert("Errore durante l'operazione.");
+    }
 }
 
 // Mostra il messaggio di nessun risultato
