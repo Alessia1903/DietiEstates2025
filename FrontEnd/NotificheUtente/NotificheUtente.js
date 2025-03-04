@@ -171,5 +171,5 @@ document.getElementById("logo-title").addEventListener("click", function () {
 });
 
 function apriGestisciPreferiti() {
-    window.location.href = "../AreaUtente/LoginUtente.html";
+    window.location.href = "../GestisciPreferiti/GestisciPreferiti.html";
 }
