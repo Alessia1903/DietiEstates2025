@@ -1,0 +1,196 @@
+.accesso {
+    background-color: #06D6A0;
+    color: #073B4C;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    padding: 14px 25px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 30px;
+    transition: background 0.3s ease;
+}
+
+.accesso:hover {
+    background-color: #04b889;
+}
+
+.green-symbol {
+    color: #06D6A0;
+    font-weight: bold; 
+}
+
+.aggiungiAgente {
+    background-color: #073B4C;
+    justify-content: center;
+    border-radius: 20px;
+}
+
+.container-role {
+    display: flex;
+    justify-content: space-between;
+    width: 90%;
+    padding: 20px;
+}
+
+.new-agent-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 120px;
+    height: 120px;
+}
+
+.def-role {
+    max-width: 850px;
+    padding: 20px;
+    border: 2px solid #06D6A0;
+    border-radius: 20px;
+    font-size: 16px;
+    background-color: #ffffff;
+    text-align: justify;
+    word-wrap: break-word;
+}
+
+
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* Logo */
+.logo {
+    height: 64px;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Titolo */
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Sottotitolo */
+.subtitle {
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+}
+
+/* Contenitore icone a destra */
+.top-right-icons {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-shrink: 0;
+}
+
+/* Stile per ogni icona e testo */
+.icon-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #073B4C;
+}
+
+.icon-text:hover {
+    transform: scale(1.1);
+}
+
+/* Modifica delle icone */
+.icon-text i {
+    font-size: 1.8rem;
+    color: #073B4C;
+}
+
+
+/* Media query per schermi piccoli */
+@media (max-width: 800px) {
+    .logo {
+        height: 48px;
+    }
+
+    .title {
+        font-size: 2rem;
+        max-width: 60vw;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+
+    .top-right-icons {
+        gap: 10px;
+    }
+
+    .top-right-icons svg {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Nasconde il testo su schermi piccoli */
+@media (max-width: 600px) {
+    .hide-on-small span {
+        display: none;
+    }
+
+    .logo {
+        height: 40px;
+    }
+
+    .title {
+        font-size: 1.6rem;
+        max-width: 50vw;
+    }
+
+    .subtitle {
+        font-size: 0.8rem;
+    }
+
+    .top-right-icons svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .hide-text {
+        display: none;
+    }
+}
+
+
+body { 
+    background-color: #ffffff; 
+    font-family: 'Lexend', sans-serif;
+}
+
+.custom-text-color {
+    color: #073B4C; 
+}
+
+.hidden {
+    display: none;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    flex-wrap: nowrap; /* Impedisce che gli elementi vadano sotto */
+    min-width: 0; /* Evita sovrapposizioni */
+}
+
+

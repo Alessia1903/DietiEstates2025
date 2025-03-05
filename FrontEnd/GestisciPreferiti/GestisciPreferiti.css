@@ -10,6 +10,11 @@
     color: #073B4C;
 }
 
+.green-symbol {
+    color: #06D6A0;
+    font-weight: bold; 
+}
+
 /* Sezione Logo + Titolo */
 .logo-title {
     display: flex;
@@ -279,4 +284,25 @@
 
 #cancelButton:hover, #confirmWarningButton:hover {
     background-color: #FF5A4C;
+}
+
+/* Responsività per schermi piccoli */
+@media screen and (max-width: 600px) {
+    .modal-outer {
+        width: 90%;
+    }
+
+    .modal-content {
+        width: 95%; /* Adatta la larghezza */
+        max-width: 350px; /* Limita la dimensione massima */
+    }
+
+    .modal-buttons {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-buttons button {
+        width: 100%; /* Bottoni a tutta larghezza su schermi piccoli */
+    }
 }
