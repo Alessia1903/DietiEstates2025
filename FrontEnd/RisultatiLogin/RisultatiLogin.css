@@ -52,6 +52,7 @@ body {
     font-size: 1rem;
     transition: all 0.3s ease;
     white-space: nowrap;
+    margin-top: -5px;
 }
 
 /* Contenitore icone a destra */
