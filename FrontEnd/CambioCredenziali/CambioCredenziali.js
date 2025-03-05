@@ -4,21 +4,22 @@ document.getElementById("logo-title").addEventListener("click", function () {
 });
 
 async function Registra() {
-
     const newPassword = document.getElementById("newPassword").value;
     const confirmPassword = document.getElementById("confirmPassword").value;
     const errorMessage = document.getElementById("error-message");
+    const successModal = document.getElementById("successModal");
+    const confirmSuccessButton = document.getElementById("confirmSuccessButton");
 
     if (newPassword !== confirmPassword) {
         errorMessage.textContent = "Le password non coincidono";
         errorMessage.classList.remove("hidden");
         return;
-    } else {
-        errorMessage.classList.add("hidden");
-    }
+    } 
+    
+    errorMessage.classList.add("hidden");
 
     try {
-        const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/ChangePassword", {
+        const response = await fetch("https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Login", {
             method: "POST",
             headers: { 
                 "Content-Type": "application/json",
@@ -29,7 +30,7 @@ async function Registra() {
 
         if (response.ok) {
             errorMessage.classList.add("hidden");
-            alert("Password cambiata con successo!");
+            successModal.style.display = "flex";
 
             // Recupero il ruolo dell'utente salvato in localStorage
             const userRole = localStorage.getItem("role");
@@ -41,14 +42,17 @@ async function Registra() {
                 admin: "../HomeAdmin/HomeAdmin.html",
             };
 
-            // Reindirizza alla homepage corrispondente
-            window.location.href = homePages[userRole] || "../HomeNoLogin/HomeNoLogin.html";
+            confirmSuccessButton.addEventListener("click", function () {
+                window.location.href = homePages[userRole] || "../HomeNoLogin/HomeNoLogin.html";
+            });
+
         } else {
-            errorMessage.textContent = "Errore nel salvare la password, ritenta";
+            const responseData = await response.json();
+            errorMessage.textContent = responseData.message || "Errore nel salvare la password, ritenta";
             errorMessage.classList.remove("hidden");
         }
     } catch (error) {
         console.error("Errore di connessione:", error);
         alert("Errore di connessione. Riprova.");
     }
-};
+}

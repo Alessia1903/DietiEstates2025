@@ -48,6 +48,7 @@ body {
     transition: all 0.3s ease;
     white-space: nowrap;
     margin-top: -5px;
+    color: #073B4C;
 }
 
 /* Contenitore icone a destra */
@@ -191,5 +192,9 @@ body {
 }
 
 .custom-text-color {
+    color: #073B4C; 
+}
+
+p.mt-4.font-semibold {
     color: #073B4C; 
 }
