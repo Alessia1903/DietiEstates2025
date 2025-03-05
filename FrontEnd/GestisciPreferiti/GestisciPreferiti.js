@@ -4,6 +4,7 @@ let risultatiGlobali = []; // Salviamo tutti i preferiti
 let filtri = []; // Dati per i filtri
 
 document.addEventListener("DOMContentLoaded", async () => {
+
     const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
     //const token = localStorage.getItem("token"); // Recupera il token salvato
 
@@ -45,6 +46,8 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 });
 
+
+
 function aggiornaPaginazione() {
     paginaCorrente = 1; // Resetta alla prima pagina quando carichiamo nuovi dati
     mostraPreferiti();
@@ -54,20 +57,18 @@ function mostraPreferiti() {
     const container = document.getElementById("search-container");
     container.innerHTML = ""; // Pulisce i vecchi risultati
 
-    // Calcola l'inizio e la fine dell'array da visualizzare in base alla pagina corrente
     const inizio = (paginaCorrente - 1) * preferitiPerPagina;
     const fine = inizio + preferitiPerPagina;
-
     const preferitiDaMostrare = filtri.slice(inizio, fine);
 
-    // Mostra i preferiti della pagina corrente
     preferitiDaMostrare.forEach(filtro => {
-        // Crea un nuovo contenitore verde per ogni preferito
-        const preferitoContainer = document.createElement("div");
-        preferitoContainer.classList.add("bg-dark-green", "w-full", "h-auto", "px-4", "py-4", "rounded-lg", "mb-4", "relative");  // Aggiunto "relative" per il posizionamento del pulsante
-        preferitoContainer.dataset.idFiltro = filtro.id;
+        const rowWrapper = document.createElement("div");
+        rowWrapper.classList.add("flex", "items-center", "w-full", "mb-4");
 
-        // All'interno di questo contenitore verde, aggiungi il contenuto specifico
+        const preferitoContainer = document.createElement("div");
+        preferitoContainer.classList.add("bg-dark-blue", "p-4", "rounded-lg", "flex-1");
+        preferitoContainer.setAttribute("data-id-filtro", filtro.id); // FIX
+
         preferitoContainer.innerHTML = `
             <div class="filter-info mb-4">
                 <div class="info-item bg-white p-2 rounded-lg">
@@ -93,35 +94,18 @@ function mostraPreferiti() {
             </div>
         `;
 
-        // Crea un contenitore esterno per il pulsante, fuori dal contenitore principale
-        const deleteButtonContainer = document.createElement("div");
-        deleteButtonContainer.classList.add("absolute", "top-0", "right-0", "mr-4", "mt-4");  // Posizionato fuori a destra
-
-        // Aggiungi il pulsante di eliminazione al nuovo contenitore esterno
         const deleteButton = document.createElement("button");
-        deleteButton.classList.add("delete-btn", "bg-light-green", "text-white", "w-12", "h-12", "rounded-md");
-        deleteButton.setAttribute("onclick", `eliminaFiltro(${filtro.id})`);
+        deleteButton.classList.add("bg-light-green", "p-3", "rounded-lg", "ml-4");
         deleteButton.innerHTML = `
-            <svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 60 60" fill="none">
-                <g clip-path="url(#clip0_27_595)">
-                    <path d="M15 47.5C15 50.25 17.25 52.5 20 52.5H40C42.75 52.5 45 50.25 45 47.5V22.5C45 19.75 42.75 17.5 40 17.5H20C17.25 17.5 15 19.75 15 22.5V47.5ZM45 10H38.75L36.975 8.225C36.525 7.775 35.875 7.5 35.225 7.5H24.775C24.125 7.5 23.475 7.775 23.025 8.225L21.25 10H15C13.625 10 12.5 11.125 12.5 12.5C12.5 13.875 13.625 15 15 15H45C46.375 15 47.5 13.875 47.5 12.5C47.5 11.125 46.375 10 45 10Z" fill="#073B4C"/>
-                </g>
-                <defs>
-                    <clipPath id="clip0_27_595">
-                        <rect width="60" height="60" fill="white"/>
-                    </clipPath>
-                </defs>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M6 19C6 20.1 6.9 21 8 21H16C17.1 21 18 20.1 18 19V7H6V19ZM19 4H15.5L14.71 3.29C14.53 3.11 14.28 3 14 3H10C9.72 3 9.47 3.11 9.29 3.29L8.5 4H5C4.45 4 4 4.45 4 5C4 5.55 4.45 6 5 6H19C19.55 6 20 5.55 20 5C20 4.45 19.55 4 19 4Z" fill="#073B4C"/>
             </svg>
         `;
+        deleteButton.addEventListener("click", () => eliminaFiltro(filtro.id)); 
 
-        // Aggiungi il pulsante al contenitore del pulsante
-        deleteButtonContainer.appendChild(deleteButton);
-
-        // Aggiungi il pulsante esterno al contenitore principale del preferito
-        preferitoContainer.appendChild(deleteButtonContainer);
-
-        // Aggiungi il preferito container al contenitore principale
-        container.appendChild(preferitoContainer);
+        rowWrapper.appendChild(preferitoContainer);
+        rowWrapper.appendChild(deleteButton);
+        container.appendChild(rowWrapper);
     });
 
     aggiornaBottoniNavigazione();
@@ -129,36 +113,44 @@ function mostraPreferiti() {
 
 
 
-
-
 function eliminaFiltro(id) {
-    // Invia una richiesta al backend per eliminare il preferito con il dato id
-    fetch(`/api/elimina-preferito/${id}`, {
-        method: 'DELETE', // Metodo per eliminare
-        headers: {
-            'Content-Type': 'application/json', // Tipo di contenuto JSON
-        },
-    })
-    .then(response => {
-        if (response.ok) {
-            // Se la risposta è positiva, rimuovi il contenitore del preferito dalla pagina
-            const preferitoContainer = document.querySelector(`[data-id-filtro="${id}"]`);
-            if (preferitoContainer) {
-                preferitoContainer.remove();
-            }
-            // Mostra un messaggio di successo
-            alert('Preferito eliminato con successo!');
-        } else {
-            // Se ci sono errori, mostra un messaggio di errore
-            alert('Errore durante l\'eliminazione del preferito!');
-        }
-    })
-    .catch(error => {
-        // Gestisci gli errori della richiesta
-        console.error('Errore nella richiesta di eliminazione:', error);
-        alert('Errore durante la richiesta di eliminazione!');
+    const warningModal = document.getElementById("warningModal");
+    const confirmWarningButton = document.getElementById("confirmWarningButton");
+    const cancelButton = document.getElementById("cancelButton");
+
+    // Mostra il modale di conferma
+    warningModal.style.display = "flex";
+    confirmWarningButton.addEventListener("click", function () {
+        warningModal.style.display = "none";
+        try{
+            fetch(`https://cd5480b0-66c3-4d3f-8864-98af937fa5de.mock.pstmn.io/impostazioni/${id}`, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    warningModal.style.display = "none";
+                } else {
+                    alert('Errore durante l\'eliminazione del preferito!');
+                }
+            })
+        }catch(error){
+            console.error('Errore nella richiesta di eliminazione:', error);
+            alert('Errore durante la richiesta di eliminazione!');
+        };
+        
     });
+
+    cancelButton.addEventListener("click", function () {
+        warningModal.style.display = "none";
+    });
+    
+    
 }
+
+
 
 
 

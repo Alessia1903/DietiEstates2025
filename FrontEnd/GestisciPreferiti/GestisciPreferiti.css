@@ -1,9 +1,9 @@
-.bg-dark-green {
-    background-color: #073B4C; /* O il colore verde scuro che preferisci */
+.bg-dark-blue {
+    background-color: #073B4C; 
 }
 
 .bg-light-green {
-    background-color: #06D6A0; /* Verde chiaro per il pulsante */
+    background-color: #06D6A0; 
 }
 
 .custom-text-color {
@@ -149,53 +149,9 @@
     gap: 20px;
 }
 
-.notifica {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    padding: 15px;
-    margin: 15px 0;
-    border: 1px solid #ddd;
-    width: 100%;
-    gap: 15px;
-    cursor: pointer;
-    transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-    min-width: 300px;
-}
-
-.notifica:hover {
-    transform: scale(1.02);
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
-}
-
-
-
-/* Responsive per schermi piccoli */
-@media screen and (max-width: 768px) {
-    .notifica {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .top-info {
-        flex-direction: row;
-        align-items: flex-start;
-        width: 100%;
-        justify-content: space-between;
-        gap: 5px;
-    }
-
-    .prezzo, .dettagli, h3, .descrizione {
-        width: 100%;
-        text-align: left;
-    }
-}
-
 /* Paginazione */
 .pagination-container {
+    margin-top: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -223,4 +179,104 @@
 .pagination-button svg {
     width: 30px;
     height: 30px;
+}
+
+/* Stile del modale */
+.modal {
+    display: none; /* Inizialmente nascosto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+#warningModal { 
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-outer {
+    background: #FF5A4C;
+    padding: 15px; /* Uniforme su tutti i lati */
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-inner {
+    background: #FFF;
+    padding: 40px;
+    width: 600px; /* Dimensione fissa per uniformità */
+    text-align: center;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Icona di avviso */
+.modal-content svg {
+    display: block; 
+    margin: 0 auto; 
+}
+
+/* Testo del Modale */
+.modal-text {
+    font-size: 20px;
+    color: #333;
+    margin-top: 15px;
+    text-align: center; /* Assicura il testo centrato */
+}
+
+/* Spazio extra tra testo e bottoni */
+.modal-spacer {
+    height: 20px; 
+}
+
+/* Pulsanti Modale*/
+.modal-buttons {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    gap: 10px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    font-size: 18px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 45%;
+}
+
+#cancelButton {
+    background: #FF5A4C;
+    color: black;
+    font-weight: bold;
+}
+
+#confirmWarningButton {
+    background: white;
+    border: 4px solid #FF5A4C;
+    color: black;
+    font-weight: bold;
+}
+
+#cancelButton:hover, #confirmWarningButton:hover {
+    background-color: #FF5A4C;
 }
