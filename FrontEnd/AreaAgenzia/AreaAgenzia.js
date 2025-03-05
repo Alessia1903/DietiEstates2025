@@ -19,31 +19,29 @@ document.getElementById("loginForm").addEventListener("submit", async function (
             body: JSON.stringify({ email, password }),
             headers: { "Content-Type": "application/json" },
         });
-        
+    
         if (response.ok) {
             const data = await response.json();
             localStorage.setItem("token", data.token);
             localStorage.setItem("role", data.role);
-        
-            // Reindirizzamento in base al ruolo
-            const homePages = {
-            agente: "../HomeAgente/HomeAgente.html",
-            collaboratore: "../HomeCollaboratore/HomeCollaboratore.html",
-            admin: "../HomeAdmin/HomeAdmin.html",
-            };
-        
-            window.location.href = homePages[data.role] || "../HomeNoLogin/HomeNoLogin.html";
-        }else if (result.status === "error") {
-            errorMessage.textContent = result.message;
-            errorMessage.classList.remove("hidden");
-        }else {
+    
+            if (data.firstLogin) {
+                window.location.href = "../CambioCredenziali/CambioCredenziali.html"; // Reindirizza alla pagina di cambio password
+            } else {
+                const homePages = {
+                    agente: "../HomeAgente/HomeAgente.html",
+                    collaboratore: "../HomeCollaboratore/HomeCollaboratore.html",
+                    admin: "../HomeAdmin/HomeAdmin.html",
+                };
+                window.location.href = homePages[data.role] || "../HomeNoLogin/HomeNoLogin.html";
+            }
+        } else {
             alert("Login fallito");
         }
     } catch (error) {
         console.error("Errore di connessione:", error);
-        errorMessage.textContent = "Errore di connessione. Riprova.";
-        errorMessage.classList.remove("hidden");
-    }
+        alert("Errore di connessione. Riprova.");
+    }    
 });
 
 function validateEmail(email) {
