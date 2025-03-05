@@ -54,6 +54,7 @@ function aggiornaPaginazione() {
 }
 
 function mostraCronologia() {
+
     const container = document.getElementById("search-container");
     container.innerHTML = ""; // Pulisce i vecchi risultati
 
@@ -75,11 +76,11 @@ function mostraCronologia() {
                     <span class="text-sm text-dark-green">${filtro.citta}</span>
                 </div>
                 <!-- Aggiunta del pulsante di ricerca alla destra -->
-                <button class="search-btn p-2 bg-light-blue text-dark-green" onclick="cercaCitta('${filtro.id}')">CERCA</button>
+                <button class="search-btn p-2 bg-light-blue text-dark-green" onclick="cerca('${filtro.citta}', '${filtro.contratto}', '${filtro.classeEnergetica}', ${filtro.numLocali}, ${filtro.prezzoMin}, ${filtro.prezzoMax})">CERCA</button>
             </div>
             <div class="filter-details flex flex-wrap gap-4 mt-4 w-full"> 
                 <div class="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
-                    <span class="text-sm text-dark-green">${filtro.contratto}</span>
+                    <span class="text-sm text-dark-green">${filtro.contratto.charAt(0).toUpperCase() + filtro.contratto.slice(1)}</span>
                 </div>
                 <div class="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
                     <span class="text-sm text-dark-green">${filtro.classeEnergetica}</span>
@@ -105,10 +106,17 @@ function mostraCronologia() {
     aggiornaBottoniNavigazione();
 }
 
-// Funzione per la ricerca
-function cercaCitta(citta) {
-    alert("Ricerca per la città: " + citta);
-    // Qui puoi implementare la logica per cercare per città
+function cerca(citta, contratto, classeEnergetica, numLocali, prezzoMin, prezzoMax) {
+    // Salva i parametri di ricerca nella sessionStorage
+    sessionStorage.setItem("citta", citta);
+    sessionStorage.setItem("contratto", contratto);
+    sessionStorage.setItem("classeEnergetica", classeEnergetica);
+    sessionStorage.setItem("numLocali", numLocali);
+    sessionStorage.setItem("prezzoMin", prezzoMin);
+    sessionStorage.setItem("prezzoMax", prezzoMax);
+
+    // Reindirizza alla pagina risultati
+    window.location.href = "../RisultatiLogin/RisultatiLogin.html";
 }
 
 
@@ -167,6 +175,7 @@ function paginaPrecedente() {
 function scrollToTop() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
 
 
 // Rendi cliccabile il titolo, il sottotitolo e il logo per tornare alla homepage

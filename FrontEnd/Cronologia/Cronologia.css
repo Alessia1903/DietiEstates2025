@@ -183,7 +183,7 @@
 
 /* Stile per il pulsante di ricerca */
 .search-btn {
-    padding: 20px; 
+    padding: 0px; 
     background-color: #06D6A0; 
     color: #073B4C; 
     border: none; 
@@ -198,4 +198,11 @@
 /* Colore di sfondo quando si passa sopra il pulsante */
 .search-btn:hover {
     background-color: #04B889;
+}
+
+@media (max-width: 600px) {
+    .search-btn{
+        font-size: 8px;
+        width: 15%;
+    }
 }
