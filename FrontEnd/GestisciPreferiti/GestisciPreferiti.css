@@ -1,9 +1,13 @@
-.custom-text-color {
-    color: #073B4C;
+.bg-dark-green {
+    background-color: #073B4C; /* O il colore verde scuro che preferisci */
 }
 
-#salvaRicercaBtn {
-    border-color: #06D6A0 !important;
+.bg-light-green {
+    background-color: #06D6A0; /* Verde chiaro per il pulsante */
+}
+
+.custom-text-color {
+    color: #073B4C;
 }
 
 /* Sezione Logo + Titolo */
