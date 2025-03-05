@@ -18,32 +18,81 @@ body {
     flex-shrink: 0;
 }
 
-.menu-item {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    cursor: pointer;
-    font-size: 14px; /* Testo più piccolo */
-    color: #073B4C;
-    transition: transform 0.2s;
-}
-
-.menu-item:hover {
-    transform: scale(1.1);
-}
-
-.menu-item svg {
-    width: 40px; /* Icone più piccole */
-    height: 40px;
-}
-
-.menu-item span {
-    margin-top: 4px;
-    font-size: 18px;
+.hidden {
+    display: none;
 }
 
 .header-container {
-    margin-bottom: 80px; 
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    flex-wrap: nowrap; /* Impedisce che gli elementi vadano sotto */
+    min-width: 0; /* Evita sovrapposizioni */
+}
+
+/* Sezione Logo + Titolo */
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-shrink: 1;
+    min-width: 0;
+    overflow: hidden;
+}
+
+/* Logo */
+.logo {
+    height: 64px;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+/* Titolo */
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Sottotitolo */
+.subtitle {
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    margin-top: -5px;
+}
+
+/* Contenitore icone a destra */
+.top-right-icons {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+    flex-shrink: 0;
+}
+
+/* Stile per ogni icona e testo */
+.icon-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    color: #073B4C;
+}
+
+.icon-text:hover {
+    transform: scale(1.1);
+}
+
+/* Modifica delle icone */
+.icon-text i {
+    font-size: 1.8rem;
+    color: #073B4C;
 }
 
 .register-box{
@@ -61,6 +110,7 @@ body {
     background-color: white;
     color: #073B4C;
     transition: transform 0.3s;
+    margin-top: 30px;
 }
 
 .register-box:hover { 
@@ -151,41 +201,6 @@ body {
     box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-@media screen and (max-width: 768px) {
-    .hide-on-small span {
-        display: none;
-    }
-
-    .top-right-icons svg {
-        width: 30px;
-        height: 30px;
-    }
-
-    .annuncio {
-        flex-direction: column; /* Gli elementi vanno in colonna SOLO su schermi piccoli */
-        align-items: flex-start;
-    }
-
-    .annuncio img {
-        width: 100%; /* L'immagine si adatta alla larghezza */
-        height: auto;
-        margin-bottom: 10px;
-    }
-
-    .top-info {
-        flex-direction: row; /* Dispone prezzo e dettagli uno sotto l'altro */
-        align-items: flex-start;
-        width: 100%;
-        justify-content: space-between;
-        gap: 5px;
-    }
-
-    .prezzo, .dettagli, h3, .descrizione {
-        width: 100%;
-        text-align: left;
-    }
-}
-
 .annuncio img {
     width: 150px !important; /* Imposta una dimensione fissa */
     height: 150px !important;
@@ -271,4 +286,100 @@ h3 {
 .pagination-button svg {
     width: 30px;
     height: 30px;
+}
+
+@media (max-width: 900px) {
+    .logo {
+        height: 48px;
+    }
+
+    .title {
+        font-size: 2rem;
+        max-width: 60vw;
+    }
+
+    .subtitle {
+        font-size: 0.9rem;
+    }
+
+    .top-right-icons {
+        gap: 10px;
+    }
+
+    .top-right-icons svg {
+        width: 40px;
+        height: 40px;
+    }
+}
+
+/* Nasconde il testo su schermi piccoli */
+@media (max-width: 800px) {
+    .hide-on-small span {
+        display: none;
+    }
+
+    .register-box{
+        width: 90%;
+    }
+}
+
+/* Modifica per schermi molto piccoli */
+@media (max-width: 500px) {
+    .logo {
+        height: 27px;
+    }
+
+    .title {
+        font-size: 1.0rem;
+        max-width: 40vw;
+    }
+
+    .subtitle {
+        font-size: 0.5rem;
+    }
+
+    /* Nasconde il testo "Cronologia" e "Notifiche", lasciando solo le icone */
+    .hide-text {
+        display: none;
+    }
+
+    .top-right-icons svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .register-box{
+        width: 90%;
+    }
+}
+
+@media screen and (max-width: 768px) {
+
+    .annuncio {
+        flex-direction: column; /* Gli elementi vanno in colonna SOLO su schermi piccoli */
+        align-items: flex-start;
+    }
+
+    .annuncio img {
+        width: 100%; /* L'immagine si adatta alla larghezza */
+        height: auto;
+        margin-bottom: 10px;
+    }
+
+    .top-info {
+        flex-direction: row; /* Dispone prezzo e dettagli uno sotto l'altro */
+        align-items: flex-start;
+        width: 100%;
+        justify-content: space-between;
+        gap: 5px;
+    }
+
+    .prezzo, .dettagli, h3, .descrizione {
+        width: 100%;
+        text-align: left;
+    }
+
+    .register-box{
+        width: 90%;
+    }
 }

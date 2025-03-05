@@ -57,7 +57,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 // Rendi cliccabile il titolo, il sottotitolo e il logo per tornare alla homepage
-document.getElementById("logo-container").addEventListener("click", function () {
+document.getElementById("logo-title").addEventListener("click", function () {
     window.location.href = "../HomeNoLogin/HomeNoLogin.html";
 });
 

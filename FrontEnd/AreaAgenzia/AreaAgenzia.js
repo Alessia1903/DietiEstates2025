@@ -49,12 +49,7 @@ function validateEmail(email) {
     return re.test(email);
 }
 
-
 // Rendi cliccabile il titolo, il sottotitolo e il logo per tornare alla homepage
-const clickableElements = document.querySelectorAll('.custom-text-color, img');
-clickableElements.forEach(el => {
-    el.style.cursor = 'pointer';
-    el.addEventListener('click', () => {
-        window.location.href = "../HomeNoLogin/HomeNoLogin.html";
-    });
+document.getElementById("logo-title").addEventListener("click", function () {
+    window.location.href = "../HomeNoLogin/HomeNoLogin.html";
 });
