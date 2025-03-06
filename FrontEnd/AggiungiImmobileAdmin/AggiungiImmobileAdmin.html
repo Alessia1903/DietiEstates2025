@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AggiungiImmobileAdmin-DietiEstates25</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="AggiungiImmobileAdmin.css">
+</head>
+<body class="flex flex-col items-center p-8" style="font-family: 'Lexend', sans-serif;">
+    <!-- Barra superiore -->
+    <div class="header-container">
+        <!-- Logo e Titolo -->
+        <div class="logo-title" id="logo-title">
+            <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true" 
+                 alt="Logo DietiEstates" class="logo">
+            <div class="cursor-pointer">
+                <h1 class="title custom-text-color">DîetîEstates25</h1>
+                <p class="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
+            </div>
+        </div>
+    
+        <!-- Sezioni Icone -->
+        <div class="top-right-icons">
+            <!-- Notifiche -->
+            <div class="icon-text hide-on-small" onclick="window.location.href = '../Cartella/Notifiche.html';">
+                <svg width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M41.6667 8.33325H8.33335C6.04169 8.33325 4.16669 10.2083 4.16669 12.4999V37.4999C4.16669 39.7916 6.04169 41.6666 8.33335 41.6666H41.6667C43.9584 41.6666 45.8334 39.7916 45.8334 37.4999V12.4999C45.8334 10.2083 43.9584 8.33325 41.6667 8.33325ZM40.8334 17.1874L27.2084 25.7083C25.8542 26.5624 24.1459 26.5624 22.7917 25.7083L9.16669 17.1874C8.64585 16.8541 8.33335 16.2916 8.33335 15.6874C8.33335 14.2916 9.85419 13.4583 11.0417 14.1874L25 22.9166L38.9584 14.1874C40.1459 13.4583 41.6667 14.2916 41.6667 15.6874C41.6667 16.2916 41.3542 16.8541 40.8334 17.1874Z" fill="#073B4C"/>
+                </svg>
+                <span>Notifiche</span>
+            </div>
+
+            <!-- Dipendenti -->
+            <div class="icon-text hide-on-small" onclick="window.location.href = '../Cartella/Dipendenti.html';">
+                <svg width="40" height="20" viewBox="0 0 50 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 14.5625C28.3958 14.5625 31.3958 15.375 33.8333 16.4375C36.0833 17.4375 37.5 19.6875 37.5 22.125V23.4167C37.5 24.5625 36.5625 25.5 35.4167 25.5H14.5833C13.4375 25.5 12.5 24.5625 12.5 23.4167V22.1458C12.5 19.6875 13.9167 17.4375 16.1667 16.4583C18.6042 15.375 21.6042 14.5625 25 14.5625ZM8.33333 15.0833C10.625 15.0833 12.5 13.2083 12.5 10.9167C12.5 8.625 10.625 6.75 8.33333 6.75C6.04167 6.75 4.16667 8.625 4.16667 10.9167C4.16667 13.2083 6.04167 15.0833 8.33333 15.0833ZM10.6875 17.375C9.91667 17.25 9.14583 17.1667 8.33333 17.1667C6.27083 17.1667 4.3125 17.6042 2.54167 18.375C1 19.0417 0 20.5417 0 22.2292V23.4167C0 24.5625 0.9375 25.5 2.08333 25.5H9.375V22.1458C9.375 20.4167 9.85417 18.7917 10.6875 17.375ZM41.6667 15.0833C43.9583 15.0833 45.8333 13.2083 45.8333 10.9167C45.8333 8.625 43.9583 6.75 41.6667 6.75C39.375 6.75 37.5 8.625 37.5 10.9167C37.5 13.2083 39.375 15.0833 41.6667 15.0833ZM50 22.2292C50 20.5417 49 19.0417 47.4583 18.375C45.6875 17.6042 43.7292 17.1667 41.6667 17.1667C40.8542 17.1667 40.0833 17.25 39.3125 17.375C40.1458 18.7917 40.625 20.4167 40.625 22.1458V25.5H47.9167C49.0625 25.5 50 24.5625 50 23.4167V22.2292ZM25 0.5C28.4583 0.5 31.25 3.29167 31.25 6.75C31.25 10.2083 28.4583 13 25 13C21.5417 13 18.75 10.2083 18.75 6.75C18.75 3.29167 21.5417 0.5 25 0.5Z" fill="#073B4C"/>
+                </svg>
+                <span>Dipendenti</span>
+            </div>
+    
+            <!-- Icona Utente -->
+            <div class="icon-text" onclick="window.location.href = '../Cartella/Account.html';">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_20_523)">
+                        <path d="M30 5C16.2 5 5 16.2 5 30C5 43.8 16.2 55 30 55C43.8 55 55 43.8 55 30C55 16.2 43.8 5 30 5ZM30 12.5C34.15 12.5 37.5 15.85 37.5 20C37.5 24.15 34.15 27.5 30 27.5C25.85 27.5 22.5 24.15 22.5 20C22.5 15.85 25.85 12.5 30 12.5ZM30 48C23.75 48 18.225 44.8 15 39.95C15.075 34.975 25 32.25 30 32.25C34.975 32.25 44.925 34.975 45 39.95C41.775 44.8 36.25 48 30 48Z" fill="#073B4C"/>
+                    </g>
+                </svg>
+            </div>    
+        </div>
+    </div>
+
+    <div class="flex justify-start w-full mb-4 pl-8 mt-8">
+        <a href="../HomeAdmin/HomeAdmin.html" class="back-link">
+            <span class="green-symbol">&lt;</span> Aggiungi un nuovo Immobile
+        </a> 
+    </div>
+
+    <div class="container-info">
+        <div class="upload-box">
+            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
+                <g clip-path="url(#clip0_20_281)">
+                    <path d="M131.375 31.25H118.75V18.625C118.75 15.25 116 12.5 112.625 12.5H112.438C109 12.5 106.25 15.25 106.25 18.625V31.25H93.6875C90.3125 31.25 87.5625 34 87.5 37.375V37.5625C87.5 41 90.25 43.75 93.6875 43.75H106.25V56.3125C106.25 59.6875 109 62.5 112.438 62.4375H112.625C116 62.4375 118.75 59.6875 118.75 56.3125V43.75H131.375C134.75 43.75 137.5 41 137.5 37.625V37.375C137.5 34 134.75 31.25 131.375 31.25ZM100 56.3125V50H93.6875C90.375 50 87.25 48.6875 84.875 46.375C82.5625 44 81.25 40.875 81.25 37.375C81.25 35.125 81.875 33.0625 82.9375 31.25H31.25C24.375 31.25 18.75 36.875 18.75 43.75V118.75C18.75 125.625 24.375 131.25 31.25 131.25H106.25C113.125 131.25 118.75 125.625 118.75 118.75V67C116.875 68.0625 114.75 68.75 112.375 68.75C105.562 68.6875 100 63.125 100 56.3125ZM99.75 118.75H37.5C34.9375 118.75 33.4375 115.813 35 113.75L47.375 97.3125C48.6875 95.5625 51.25 95.6875 52.5 97.4375L62.5 112.5L78.8125 90.75C80.0625 89.125 82.5 89.0625 83.75 90.6875L102.188 113.688C103.812 115.75 102.375 118.75 99.75 118.75Z" fill="#073B4C"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0_20_281">
+                        <rect width="150" height="150" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+            <label for="file-upload" class="upload-label">Carica delle Foto</label>
+            <input type="file" id="file-upload" hidden>
+        </div>        
+        
+        <form id="real-estate-form">
+            <fieldset>
+                <legend>Dati Immobile</legend>
+                <label>Città: <input type="text" id="city" required></label>
+                <label>Comune: <input type="text" id="town" required></label>
+                <label>Indirizzo: <input type="text" id="address" required></label>
+                <label>Numero Civico: <input type="number" id="civic-number" required></label>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Caratteristiche</legend>
+                <label>Piano: <input type="text" id="floor" required></label>
+                <label>Totale Piani Edificio: <input type="number" id="total-floors" required></label>
+                <label>Superficie Commerciale (m²): <input type="number" id="surface" required></label>
+                <div class="ascensore">
+                    <label>Ascensore:</label>
+                    <label class="switch">
+                        <input type="checkbox" id="elevator">
+                        <span class="slider"></span>
+                    </label> 
+                </div>
+                <label>Numero di Stanze: <input type="number" id="rooms" required></label>
+                <label>Classe Energetica: <select id="energy-class" required>
+                    <option value="">Seleziona</option>
+                    <option value="A4">A4</option>
+                    <option value="A3">A3</option>
+                    <option value="A2">A2</option>
+                    <option value="A1">A1</option>
+                    <option value="B">B</option>
+                    <option value="C">C</option>
+                    <option value="D">D</option>
+                    <option value="E">E</option>
+                    <option value="F">F</option>
+                    <option value="G">G</option></select></label>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Opzioni</legend>
+                <div class="options-grid">
+                    <div class="column">
+                        <p><strong>Arredamento:</strong></p>
+                        <label><input type="radio" name="arredamento" required> Arredato</label>
+                        <label><input type="radio" name="arredamento" required> Non Arredato</label>
+                        <label><input type="radio" name="arredamento" required> Parzialmente Arredato</label>
+                    </div>
+                    <div class="column">
+                        <p><strong>Riscaldamento:</strong></p>
+                        <label><input type="radio" name="riscaldamento" required> Autonomo</label>
+                        <label><input type="radio" name="riscaldamento" required> Centralizzato</label>
+                        <label><input type="radio" name="riscaldamento" required> Assente</label>
+                    </div>
+                    <div class="column">
+                        <p><strong>Stato dell'Immobile:</strong></p>
+                        <label><input type="radio" name="stato" required> In Costruzione</label>
+                        <label><input type="radio" name="stato" required> Ristrutturato</label>
+                        <label><input type="radio" name="stato" required> Da Ristrutturare</label>
+                    </div>
+                    <div class="column">
+                        <p><strong>Tipo di Contratto:</strong></p>
+                        <label><input type="radio" name="contratto" required> Vendita</label>
+                        <label><input type="radio" name="contratto" required> Affitto</label>
+                    </div>
+                </div>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Descrizione</legend>
+                <textarea id="description" placeholder="Inserisci una descrizione" required></textarea>
+            </fieldset>
+            
+            <fieldset>
+                <legend>Prezzo</legend>
+                <label>Prezzo: <input type="number" id="price" required></label>
+            </fieldset>
+            
+            <div id="erroreMessaggio" class="hidden error-message"></div>
+        </form>
+    </div>
+    <button type="submit" class="accesso px-6 py-2 mt-6 rounded-md" onclick="Registra()"> PROSEGUI </button>
+        
+    </button>
+
+    <script src="AggiungiImmobileAdmin.js"></script>
+</body>
+</html>
