@@ -61,7 +61,7 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 630px) {
     .container-info {
         width: 90%;
         padding: 15px;
@@ -78,7 +78,8 @@ input:checked + .slider:before {
     }
 
     fieldset {
-        padding: 10px;
+        padding: 15px;
+        width: 90%;
     }
 
     input[type="text"],
@@ -89,36 +90,15 @@ input:checked + .slider:before {
     }
 }
 
-@media screen and (max-width: 480px) {
-    .container {
-        width: 95%;
+@media screen and (max-width: 370px) {
+    .container-info {
+        width: 100%;
         padding: 10px;
     }
 
-    .upload-box {
-        width: 100%;
-        padding: 15px;
-    }
-
-    .upload-box svg {
-        width: 60px;
-        height: 60px;
-    }
-
-    .upload-label {
-        font-size: 14px;
-    }
-
     fieldset {
-        padding: 8px;
-    }
-
-    legend {
-        font-size: 14px;
-    }
-
-    label {
-        font-size: 14px;
+        padding: 10px;
+        width: 100%; 
     }
 
     input[type="text"],
@@ -126,7 +106,16 @@ input:checked + .slider:before {
     select,
     textarea {
         padding: 5px;
-        font-size: 14px;
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    .upload-box {
+        width: 100%;
+        padding: 10px;
     }
 }
 
@@ -195,9 +184,10 @@ fieldset {
     margin-bottom: 15px;
     padding: 15px;
     width: 100%; 
+    max-width: 100%;  
     color: #073B4C;
+    box-sizing: border-box; 
 }
-
 legend {
     font-weight: bold;
     color: #073B4C;
