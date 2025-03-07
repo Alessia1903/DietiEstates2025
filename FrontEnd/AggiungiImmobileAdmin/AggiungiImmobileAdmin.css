@@ -63,8 +63,12 @@ input:checked + .slider:before {
 
 @media screen and (max-width: 630px) {
     .container-info {
-        width: 90%;
+        width: 98%;
         padding: 15px;
+    }
+
+    .form-container{
+        width: 100%;
     }
 
     .options-grid {
@@ -93,7 +97,7 @@ input:checked + .slider:before {
 @media screen and (max-width: 370px) {
     .container-info {
         width: 100%;
-        padding: 10px;
+        padding: 5px;
     }
 
     fieldset {
@@ -116,6 +120,10 @@ input:checked + .slider:before {
     .upload-box {
         width: 100%;
         padding: 10px;
+    }
+
+    .form-container{
+        width: 100%;
     }
 }
 

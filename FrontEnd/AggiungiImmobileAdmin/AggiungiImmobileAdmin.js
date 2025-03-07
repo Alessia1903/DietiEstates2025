@@ -24,15 +24,24 @@ document.addEventListener("DOMContentLoaded", function () {
         Registra();
     });
 
-    const fileInput = document.getElementById("file-upload");
-    const fileNameDisplay = document.getElementById("file-name-display");
-    
-    fileInput.addEventListener("change", function () {
-        if (fileInput.files.length > 0) {
-            fileNameDisplay.innerText = fileInput.files[0].name;
-        } else {
-            fileNameDisplay.innerText = "";
-        }
+    const fileInput = document.getElementById('file-upload');
+    const fileNameDisplay = document.getElementById('file-name-display');
+    let selectedFiles = [];  // Array per tenere traccia dei file selezionati
+
+    // Aggiungi un listener per l'evento 'change' che si attiva quando si selezionano file
+    fileInput.addEventListener('change', function() {
+        const files = fileInput.files;  // Ottieni i file selezionati
+        // Aggiungi i nuovi file all'array `selectedFiles`
+        selectedFiles = [...selectedFiles, ...files];
+
+        // Crea un array con i nomi dei file
+        let fileNames = [];
+        selectedFiles.forEach(file => {
+            fileNames.push(file.name);
+        });
+
+        // Visualizza i nomi dei file separati da virgola
+        fileNameDisplay.textContent = "File selezionati: " + fileNames.join(", ");
     });
 });
 
@@ -100,7 +109,7 @@ async function Registra() {
     });
 
     try {
-        let response = await fetch("https://tuo-backend.com/api/immobili", {
+        let response = await fetch("https://cd5480b0-66c3-4d3f-8864-98af937fa5de.mock.pstmn.io/login", {
             method: "POST",
             body: formData
         });
