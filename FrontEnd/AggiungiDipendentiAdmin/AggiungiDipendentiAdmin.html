@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AggiungiDipendenti-DietiEstates25</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="AggiungiDipendentiAdmin.css">
+</head>
+<body class="flex flex-col items-center p-8" style="font-family: 'Lexend', sans-serif;">
+    <!-- Barra superiore -->
+    <div class="header-container">
+        <!-- Logo e Titolo -->
+        <div class="logo-title" id="logo-title">
+            <img src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true" 
+                 alt="Logo DietiEstates" class="logo">
+            <div class="cursor-pointer">
+                <h1 class="title custom-text-color">DîetîEstates25</h1>
+                <p class="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
+            </div>
+        </div>
+    
+        <!-- Sezioni Icone -->
+        <div class="top-right-icons">
+            <!-- Notifiche -->
+            <div class="icon-text hide-on-small" onclick="window.location.href = '../Cartella/Notifiche.html';">
+                <svg width="40" height="40" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M41.6667 8.33325H8.33335C6.04169 8.33325 4.16669 10.2083 4.16669 12.4999V37.4999C4.16669 39.7916 6.04169 41.6666 8.33335 41.6666H41.6667C43.9584 41.6666 45.8334 39.7916 45.8334 37.4999V12.4999C45.8334 10.2083 43.9584 8.33325 41.6667 8.33325ZM40.8334 17.1874L27.2084 25.7083C25.8542 26.5624 24.1459 26.5624 22.7917 25.7083L9.16669 17.1874C8.64585 16.8541 8.33335 16.2916 8.33335 15.6874C8.33335 14.2916 9.85419 13.4583 11.0417 14.1874L25 22.9166L38.9584 14.1874C40.1459 13.4583 41.6667 14.2916 41.6667 15.6874C41.6667 16.2916 41.3542 16.8541 40.8334 17.1874Z" fill="#073B4C"/>
+                </svg>
+                <span>Notifiche</span>
+            </div>
+
+            <!-- Dipendenti -->
+            <div class="icon-text hide-on-small" onclick="window.location.href = '../Cartella/Dipendenti.html';">
+                <svg width="40" height="20" viewBox="0 0 50 26" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M25 14.5625C28.3958 14.5625 31.3958 15.375 33.8333 16.4375C36.0833 17.4375 37.5 19.6875 37.5 22.125V23.4167C37.5 24.5625 36.5625 25.5 35.4167 25.5H14.5833C13.4375 25.5 12.5 24.5625 12.5 23.4167V22.1458C12.5 19.6875 13.9167 17.4375 16.1667 16.4583C18.6042 15.375 21.6042 14.5625 25 14.5625ZM8.33333 15.0833C10.625 15.0833 12.5 13.2083 12.5 10.9167C12.5 8.625 10.625 6.75 8.33333 6.75C6.04167 6.75 4.16667 8.625 4.16667 10.9167C4.16667 13.2083 6.04167 15.0833 8.33333 15.0833ZM10.6875 17.375C9.91667 17.25 9.14583 17.1667 8.33333 17.1667C6.27083 17.1667 4.3125 17.6042 2.54167 18.375C1 19.0417 0 20.5417 0 22.2292V23.4167C0 24.5625 0.9375 25.5 2.08333 25.5H9.375V22.1458C9.375 20.4167 9.85417 18.7917 10.6875 17.375ZM41.6667 15.0833C43.9583 15.0833 45.8333 13.2083 45.8333 10.9167C45.8333 8.625 43.9583 6.75 41.6667 6.75C39.375 6.75 37.5 8.625 37.5 10.9167C37.5 13.2083 39.375 15.0833 41.6667 15.0833ZM50 22.2292C50 20.5417 49 19.0417 47.4583 18.375C45.6875 17.6042 43.7292 17.1667 41.6667 17.1667C40.8542 17.1667 40.0833 17.25 39.3125 17.375C40.1458 18.7917 40.625 20.4167 40.625 22.1458V25.5H47.9167C49.0625 25.5 50 24.5625 50 23.4167V22.2292ZM25 0.5C28.4583 0.5 31.25 3.29167 31.25 6.75C31.25 10.2083 28.4583 13 25 13C21.5417 13 18.75 10.2083 18.75 6.75C18.75 3.29167 21.5417 0.5 25 0.5Z" fill="#073B4C"/>
+                </svg>
+                <span>Dipendenti</span>
+            </div>
+    
+            <!-- Icona Utente -->
+            <div class="icon-text" onclick="window.location.href = '../Cartella/Account.html';">
+                <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <g clip-path="url(#clip0_20_523)">
+                        <path d="M30 5C16.2 5 5 16.2 5 30C5 43.8 16.2 55 30 55C43.8 55 55 43.8 55 30C55 16.2 43.8 5 30 5ZM30 12.5C34.15 12.5 37.5 15.85 37.5 20C37.5 24.15 34.15 27.5 30 27.5C25.85 27.5 22.5 24.15 22.5 20C22.5 15.85 25.85 12.5 30 12.5ZM30 48C23.75 48 18.225 44.8 15 39.95C15.075 34.975 25 32.25 30 32.25C34.975 32.25 44.925 34.975 45 39.95C41.775 44.8 36.25 48 30 48Z" fill="#073B4C"/>
+                    </g>
+                </svg>
+            </div>    
+        </div>
+    </div>
+
+    <!-- Freccia Indietro -->
+    <div class="flex justify-start w-full mb-4 pl-8 mt-8">
+        <a href="../HomeAdmin/HomeAdmin.html" class="back-link">
+            <span class="green-symbol">&lt;</span> Aggiungi un nuovo Dipendente
+        </a> 
+    </div>
+
+    <!-- Amministratore -->
+    <div class="container-role">
+        <div class="role-left">
+            <div class="new-agent-icon">
+                <div class="icon-wrapper">
+                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <g clip-path="url(#clip0_23_327)">
+                            <path d="M59.901 59.9008C70.9328 59.9008 79.868 50.9656 79.868 39.9338C79.868 28.902 70.9328 19.9668 59.901 19.9668C48.8693 19.9668 39.934 28.902 39.934 39.9338C39.934 50.9656 48.8693 59.9008 59.901 59.9008ZM59.901 69.8843C46.5731 69.8843 19.967 76.5732 19.967 89.8513V94.843C19.967 97.5885 22.2133 99.8348 24.9588 99.8348H94.8433C97.5887 99.8348 99.835 97.5885 99.835 94.843V89.8513C99.835 76.5732 73.229 69.8843 59.901 69.8843Z" fill="#073B4C"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_23_327">
+                                <rect width="119.802" height="119.802" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+                    <svg class="overlay-icon" xmlns="http://www.w3.org/2000/svg" width="27" height="44" viewBox="0 0 22 41" fill="none">
+                        <path d="M21.4167 17.729V2.24984C21.4167 1.104 20.4792 0.166504 19.3334 0.166504H2.66671C1.52087 0.166504 0.583374 1.104 0.583374 2.24984V17.729C0.583374 18.4582 0.958374 19.1457 1.60421 19.5207L10.3125 24.7498L8.25004 29.6248L3.62504 30.0207C2.66671 30.104 2.29171 31.2498 3.00004 31.854L6.52088 34.8957L5.45837 39.4373C5.25004 40.3332 6.22921 41.0415 7.02087 40.5623L11 38.1457L14.9792 40.5415C15.7709 41.0207 16.75 40.3123 16.5417 39.4165L15.4792 34.8748L19 31.8332C19.6875 31.229 19.3334 30.0832 18.3959 29.9998L13.7709 29.604L11.7084 24.729L20.4167 19.4998C21.0417 19.1457 21.4167 18.479 21.4167 17.729ZM13.0834 21.479L11 22.729L8.91671 21.479V2.24984H13.0834V21.479Z" fill="#06D6A0"/>
+                    </svg>
+                </div>
+            </div>            
+            <div class="agent-imm">
+                AMMINISTRATORE
+            </div>
+        </div>
+        <div class="def-role">
+            Un Amministratore può svolgere qualsiasi mansione operativa, ma può creare altri account di supporto all’amministrazione, che siano collaboratori di vario genere o semplici agenti immobiliari.
+        </div>
+    </div>
+
+    <!-- Collaboratore -->
+    <div class="container-role">
+        <div class="role-left">
+            <div class="new-agent-icon">
+                <div class="icon-wrapper">
+                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <g clip-path="url(#clip0_23_327)">
+                            <path d="M59.901 59.9008C70.9328 59.9008 79.868 50.9656 79.868 39.9338C79.868 28.902 70.9328 19.9668 59.901 19.9668C48.8693 19.9668 39.934 28.902 39.934 39.9338C39.934 50.9656 48.8693 59.9008 59.901 59.9008ZM59.901 69.8843C46.5731 69.8843 19.967 76.5732 19.967 89.8513V94.843C19.967 97.5885 22.2133 99.8348 24.9588 99.8348H94.8433C97.5887 99.8348 99.835 97.5885 99.835 94.843V89.8513C99.835 76.5732 73.229 69.8843 59.901 69.8843Z" fill="#073B4C"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_23_327">
+                                <rect width="119.802" height="119.802" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+
+                    <svg class="overlay-icon" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
+                        <path d="M41.6666 12.5002H25L22.0625 9.56266C21.2708 8.771 20.2083 8.3335 19.1041 8.3335H8.33329C6.04163 8.3335 4.18746 10.2085 4.18746 12.5002L4.16663 37.5002C4.16663 39.7918 6.04163 41.6668 8.33329 41.6668H41.6666C43.9583 41.6668 45.8333 39.7918 45.8333 37.5002V16.6668C45.8333 14.3752 43.9583 12.5002 41.6666 12.5002ZM29.1666 33.3335H12.5V29.1668H29.1666V33.3335ZM37.5 25.0002H12.5V20.8335H37.5V25.0002Z" fill="#06D6A0"/>
+                      </svg>
+                </div>
+                
+            </div>
+            <div class="agent-imm">
+                COLLABORATORE
+            </div>
+        </div>
+        <div class="def-role">
+            Un Collaboratore può svolgere qualsiasi mansione operativa, ma può anche creare altri account per nuovi agenti immobiliari.
+        </div>
+    </div>
+
+    <!-- Agente Immobiliare -->
+    <div class="container-role">
+        <div class="role-left">
+            <div class="new-agent-icon">
+                <div class="icon-wrapper">
+                    <svg class="main-icon" xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120" fill="none">
+                        <g clip-path="url(#clip0_23_327)">
+                            <path d="M59.901 59.9008C70.9328 59.9008 79.868 50.9656 79.868 39.9338C79.868 28.902 70.9328 19.9668 59.901 19.9668C48.8693 19.9668 39.934 28.902 39.934 39.9338C39.934 50.9656 48.8693 59.9008 59.901 59.9008ZM59.901 69.8843C46.5731 69.8843 19.967 76.5732 19.967 89.8513V94.843C19.967 97.5885 22.2133 99.8348 24.9588 99.8348H94.8433C97.5887 99.8348 99.835 97.5885 99.835 94.843V89.8513C99.835 76.5732 73.229 69.8843 59.901 69.8843Z" fill="#073B4C"/>
+                        </g>
+                        <defs>
+                            <clipPath id="clip0_23_327">
+                                <rect width="119.802" height="119.802" fill="white"/>
+                            </clipPath>
+                        </defs>
+                    </svg>
+    
+                    <svg class="overlay-icon" xmlns="http://www.w3.org/2000/svg" width="50" height="50" viewBox="0 0 50 50" fill="none">
+                        <g clip-path="url(#clip0_23_465)">
+                          <path d="M25 14.5833V10.4167C25 8.125 23.125 6.25 20.8333 6.25H8.33329C6.04163 6.25 4.16663 8.125 4.16663 10.4167V39.5833C4.16663 41.875 6.04163 43.75 8.33329 43.75H41.6666C43.9583 43.75 45.8333 41.875 45.8333 39.5833V18.75C45.8333 16.4583 43.9583 14.5833 41.6666 14.5833H25ZM12.5 39.5833H8.33329V35.4167H12.5V39.5833ZM12.5 31.25H8.33329V27.0833H12.5V31.25ZM12.5 22.9167H8.33329V18.75H12.5V22.9167ZM12.5 14.5833H8.33329V10.4167H12.5V14.5833ZM20.8333 39.5833H16.6666V35.4167H20.8333V39.5833ZM20.8333 31.25H16.6666V27.0833H20.8333V31.25ZM20.8333 22.9167H16.6666V18.75H20.8333V22.9167ZM20.8333 14.5833H16.6666V10.4167H20.8333V14.5833ZM39.5833 39.5833H25V35.4167H29.1666V31.25H25V27.0833H29.1666V22.9167H25V18.75H39.5833C40.7291 18.75 41.6666 19.6875 41.6666 20.8333V37.5C41.6666 38.6458 40.7291 39.5833 39.5833 39.5833ZM37.5 22.9167H33.3333V27.0833H37.5V22.9167ZM37.5 31.25H33.3333V35.4167H37.5V31.25Z" fill="#06D6A0"/>
+                        </g>
+                        <defs>
+                          <clipPath id="clip0_23_465">
+                            <rect width="50" height="50" fill="white"/>
+                          </clipPath>
+                        </defs>
+                      </svg>
+                </div>
+            </div>
+            <div class="agent-imm">
+                AGENTE IMMOBILIARE
+            </div>
+        </div>
+        <div class="def-role">
+            Un Agente Immobiliare può svolgere qualsiasi mansione operativa e non può creare altri account.
+        </div>
+    </div>
+
+    <div class="buttons">
+        <button class="custom-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <g clip-path="url(#clip0_20_728)">
+                    <path d="M20 3.3335C10.8 3.3335 3.33337 10.8002 3.33337 20.0002C3.33337 29.2002 10.8 36.6668 20 36.6668C29.2 36.6668 36.6667 29.2002 36.6667 20.0002C36.6667 10.8002 29.2 3.3335 20 3.3335ZM26.6667 21.6668H21.6667V26.6668C21.6667 27.5835 20.9167 28.3335 20 28.3335C19.0834 28.3335 18.3334 27.5835 18.3334 26.6668V21.6668H13.3334C12.4167 21.6668 11.6667 20.9168 11.6667 20.0002C11.6667 19.0835 12.4167 18.3335 13.3334 18.3335H18.3334V13.3335C18.3334 12.4168 19.0834 11.6668 20 11.6668C20.9167 11.6668 21.6667 12.4168 21.6667 13.3335V18.3335H26.6667C27.5834 18.3335 28.3334 19.0835 28.3334 20.0002C28.3334 20.9168 27.5834 21.6668 26.6667 21.6668Z" fill="#073B4C"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0_20_728">
+                        <rect width="40" height="40" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+            <span>COLLABORATORE</span>
+        </button>      
+    
+        <button class="custom-button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+                <g clip-path="url(#clip0_20_728)">
+                    <path d="M20 3.3335C10.8 3.3335 3.33337 10.8002 3.33337 20.0002C3.33337 29.2002 10.8 36.6668 20 36.6668C29.2 36.6668 36.6667 29.2002 36.6667 20.0002C36.6667 10.8002 29.2 3.3335 20 3.3335ZM26.6667 21.6668H21.6667V26.6668C21.6667 27.5835 20.9167 28.3335 20 28.3335C19.0834 28.3335 18.3334 27.5835 18.3334 26.6668V21.6668H13.3334C12.4167 21.6668 11.6667 20.9168 11.6667 20.0002C11.6667 19.0835 12.4167 18.3335 13.3334 18.3335H18.3334V13.3335C18.3334 12.4168 19.0834 11.6668 20 11.6668C20.9167 11.6668 21.6667 12.4168 21.6667 13.3335V18.3335H26.6667C27.5834 18.3335 28.3334 19.0835 28.3334 20.0002C28.3334 20.9168 27.5834 21.6668 26.6667 21.6668Z" fill="#073B4C"/>
+                </g>
+                <defs>
+                    <clipPath id="clip0_20_728">
+                        <rect width="40" height="40" fill="white"/>
+                    </clipPath>
+                </defs>
+            </svg>
+            <span>AGENTE IMMOBILIARE</span>
+        </button>  
+    </div>  
+    
+    <script src="AggiungiDipendentiAdmin.js"></script>
+</body>
+</html>
