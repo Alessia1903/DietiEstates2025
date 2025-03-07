@@ -61,64 +61,6 @@ input:checked + .slider:before {
     transform: translateX(26px);
 }
 
-@media screen and (max-width: 630px) {
-    .container-info {
-        width: 90%;
-        padding: 15px;
-    }
-
-    .options-grid {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .column {
-        min-width: 100%;
-        text-align: left;
-    }
-
-    fieldset {
-        padding: 15px;
-        width: 90%;
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
-        padding: 6px;
-    }
-}
-
-@media screen and (max-width: 370px) {
-    .container-info {
-        width: 100%;
-        padding: 10px;
-    }
-
-    fieldset {
-        padding: 10px;
-        width: 100%; 
-    }
-
-    input[type="text"],
-    input[type="number"],
-    select,
-    textarea {
-        padding: 5px;
-        font-size: 12px;
-    }
-
-    label {
-        font-size: 12px;
-    }
-
-    .upload-box {
-        width: 100%;
-        padding: 10px;
-    }
-}
-
 .upload-box {
     display: flex;
     flex-direction: column;
@@ -234,6 +176,64 @@ input[type="checkbox"] {
 
 .accesso:hover {
     background-color: #04b889;
+}
+
+@media screen and (max-width: 630px) {
+    .container-info {
+        width: 90%;
+        padding: 15px;
+    }
+
+    .options-grid {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .column {
+        min-width: 100%;
+        text-align: left;
+    }
+
+    fieldset {
+        padding: 15px;
+        width: 90%;
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        padding: 6px;
+    }
+}
+
+@media screen and (max-width: 370px) {
+    .container-info {
+        width: 100%;
+        padding: 10px;
+    }
+
+    fieldset {
+        padding: 10px;
+        width: 100%; 
+    }
+
+    input[type="text"],
+    input[type="number"],
+    select,
+    textarea {
+        padding: 5px;
+        font-size: 12px;
+    }
+
+    label {
+        font-size: 12px;
+    }
+
+    .upload-box {
+        width: 100%;
+        padding: 10px;
+    }
 }
 
 .green-symbol {
@@ -358,6 +358,37 @@ input[type="checkbox"] {
     }
 }
 
+@media (max-width: 400px) {
+    .hide-on-small span {
+        display: none;
+    }
+
+    .logo {
+        height: 30px;
+    }
+
+    .logo-title{
+        gap: 1px;
+    }
+
+    .title {
+        font-size: 1.2rem;
+        max-width: 50vw;
+    }
+
+    .subtitle {
+        font-size: 0.5rem;
+    }
+
+    .top-right-icons svg {
+        width: 30px;
+        height: 30px;
+    }
+
+    .hide-text {
+        display: none;
+    }
+}
 
 body { 
     background-color: #ffffff; 

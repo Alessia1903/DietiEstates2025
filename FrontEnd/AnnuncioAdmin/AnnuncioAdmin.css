@@ -129,8 +129,12 @@ body {
         max-width: 40vw;
     }
 
+    .logo-title{
+        gap: 1px;
+    }
+
     .subtitle {
-        font-size: 0.7rem;
+        font-size: 0.5rem;
     }
 
     /* Nasconde il testo "Cronologia" e "Notifiche", lasciando solo le icone */
@@ -141,6 +145,13 @@ body {
     .top-right-icons svg {
         width: 30px;
         height: 30px;
+    }
+
+    .imgContainer{
+        width: 50%;
+        justify-items: center;
+        justify-content: center;
+        align-items: center;
     }
 }
 
@@ -160,13 +171,6 @@ body {
 
 .back-link-container {
     margin-top: 40px !important; 
-}
-
-.back-link {
-    text-decoration: none;
-    color: inherit; 
-    font-size: 20px;
-    font-weight: bold;  
 }
 
 #annuncio-img {
