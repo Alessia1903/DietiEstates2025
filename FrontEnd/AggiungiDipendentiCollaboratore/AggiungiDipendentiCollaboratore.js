@@ -3,10 +3,6 @@ document.getElementById("logo-title").addEventListener("click", function () {
     window.location.href = "../HomeAdmin/HomeAdmin.html";
 })
 
-function NewCollaboratore(){
-    window.location.href = "../AggiungiCollaboratore/AggiungiCollaboratore.html";
-}
-
 function NewAgente(){
     window.location.href = "../AggiungiAgente/AggiungiAgente.html";
 }

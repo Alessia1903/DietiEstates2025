@@ -6,7 +6,7 @@
     <title>AggiungiDipendenti-DietiEstates25</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="AggiungiDipendentiAdmin.css">
+    <link rel="stylesheet" href="AggiungiDipendentiCollaboratore.css">
 </head>
 <body class="flex flex-col items-center p-8" style="font-family: 'Lexend', sans-serif;">
     <!-- Barra superiore -->
@@ -152,38 +152,22 @@
         <div class="def-role">
             Un Agente Immobiliare può svolgere qualsiasi mansione operativa e non può creare altri account.
         </div>
-    </div>
-
-    <div class="buttons">
-        <button class="custom-button" onclick="NewCollaboratore()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <g clip-path="url(#clip0_20_728)">
-                    <path d="M20 3.3335C10.8 3.3335 3.33337 10.8002 3.33337 20.0002C3.33337 29.2002 10.8 36.6668 20 36.6668C29.2 36.6668 36.6667 29.2002 36.6667 20.0002C36.6667 10.8002 29.2 3.3335 20 3.3335ZM26.6667 21.6668H21.6667V26.6668C21.6667 27.5835 20.9167 28.3335 20 28.3335C19.0834 28.3335 18.3334 27.5835 18.3334 26.6668V21.6668H13.3334C12.4167 21.6668 11.6667 20.9168 11.6667 20.0002C11.6667 19.0835 12.4167 18.3335 13.3334 18.3335H18.3334V13.3335C18.3334 12.4168 19.0834 11.6668 20 11.6668C20.9167 11.6668 21.6667 12.4168 21.6667 13.3335V18.3335H26.6667C27.5834 18.3335 28.3334 19.0835 28.3334 20.0002C28.3334 20.9168 27.5834 21.6668 26.6667 21.6668Z" fill="#073B4C"/>
-                </g>
-                <defs>
-                    <clipPath id="clip0_20_728">
-                        <rect width="40" height="40" fill="white"/>
-                    </clipPath>
-                </defs>
-            </svg>
-            <span>COLLABORATORE</span>
-        </button>      
+    </div>     
     
-        <button class="custom-button" onclick="NewAgente()">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
-                <g clip-path="url(#clip0_20_728)">
-                    <path d="M20 3.3335C10.8 3.3335 3.33337 10.8002 3.33337 20.0002C3.33337 29.2002 10.8 36.6668 20 36.6668C29.2 36.6668 36.6667 29.2002 36.6667 20.0002C36.6667 10.8002 29.2 3.3335 20 3.3335ZM26.6667 21.6668H21.6667V26.6668C21.6667 27.5835 20.9167 28.3335 20 28.3335C19.0834 28.3335 18.3334 27.5835 18.3334 26.6668V21.6668H13.3334C12.4167 21.6668 11.6667 20.9168 11.6667 20.0002C11.6667 19.0835 12.4167 18.3335 13.3334 18.3335H18.3334V13.3335C18.3334 12.4168 19.0834 11.6668 20 11.6668C20.9167 11.6668 21.6667 12.4168 21.6667 13.3335V18.3335H26.6667C27.5834 18.3335 28.3334 19.0835 28.3334 20.0002C28.3334 20.9168 27.5834 21.6668 26.6667 21.6668Z" fill="#073B4C"/>
-                </g>
-                <defs>
-                    <clipPath id="clip0_20_728">
-                        <rect width="40" height="40" fill="white"/>
-                    </clipPath>
-                </defs>
-            </svg>
-            <span>AGENTE IMMOBILIARE</span>
-        </button>  
-    </div>  
+    <button class="custom-button" onclick="NewAgente()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 40 40" fill="none">
+            <g clip-path="url(#clip0_20_728)">
+                <path d="M20 3.3335C10.8 3.3335 3.33337 10.8002 3.33337 20.0002C3.33337 29.2002 10.8 36.6668 20 36.6668C29.2 36.6668 36.6667 29.2002 36.6667 20.0002C36.6667 10.8002 29.2 3.3335 20 3.3335ZM26.6667 21.6668H21.6667V26.6668C21.6667 27.5835 20.9167 28.3335 20 28.3335C19.0834 28.3335 18.3334 27.5835 18.3334 26.6668V21.6668H13.3334C12.4167 21.6668 11.6667 20.9168 11.6667 20.0002C11.6667 19.0835 12.4167 18.3335 13.3334 18.3335H18.3334V13.3335C18.3334 12.4168 19.0834 11.6668 20 11.6668C20.9167 11.6668 21.6667 12.4168 21.6667 13.3335V18.3335H26.6667C27.5834 18.3335 28.3334 19.0835 28.3334 20.0002C28.3334 20.9168 27.5834 21.6668 26.6667 21.6668Z" fill="#073B4C"/>
+            </g>
+            <defs>
+                <clipPath id="clip0_20_728">
+                    <rect width="40" height="40" fill="white"/>
+                </clipPath>
+            </defs>
+        </svg>
+        <span>AGENTE IMMOBILIARE</span>
+    </button>  
     
-    <script src="AggiungiDipendentiAdmin.js"></script>
+    <script src="AggiungiDipendentiCollaboratore.js"></script>
 </body>
 </html>
