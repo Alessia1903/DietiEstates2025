@@ -3,6 +3,26 @@ document.getElementById("logo-title").addEventListener("click", function () {
     window.location.href = "../HomeAdmin/HomeAdmin.html";
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+    const targetPages = { 
+        collaboratore: "../AggiungiDipendentiCollaboratore/AggiungiDipendentiCollaboratore.html",
+        admin: "../AggiungiDipendentiAdmin/AggiungiDipendentiAdmin.html"
+    };
+
+    const userRole = localStorage.getItem("role"); // Recupera il ruolo dell'utente
+    const targetPage = targetPages[userRole] || "../HomeNoLogin/HomeNoLogin.html"; // Imposta la destinazione
+
+    // Aggiunge l'evento di click per entrambi gli elementi
+    document.getElementById("dipendenti-link-text").addEventListener("click", function (event) {
+        event.preventDefault(); // Evita che l'`<a>` segua il link #
+        window.location.href = targetPage;
+    });
+
+    document.getElementById("dipendenti-link-icon").addEventListener("click", function () {
+        window.location.href = targetPage;
+    });
+});
+
 async function Registra() {
     const warningModal = document.getElementById("warningModal");
     const successModal = document.getElementById("successModal");
