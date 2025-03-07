@@ -69,87 +69,263 @@
                 </defs>
             </svg>
             <label for="file-upload" class="upload-label">Carica delle Foto</label>
-            <input type="file" id="file-upload" hidden>
+            <input type="file" id="file-upload" hidden multiple>
         </div>  
-        <p id="file-name-display" class="text-center mt-4 text-gray-600"></p>      
         
-        <form id="real-estate-form">
-            <fieldset>
-                <legend>Dati Immobile</legend>
-                <label>Città: <input type="text" id="city" required></label>
-                <label>Comune: <input type="text" id="town" required></label>
-                <label>Indirizzo: <input type="text" id="address" required></label>
-                <label>Numero Civico: <input type="number" id="civic-number" required></label>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Caratteristiche</legend>
-                <label>Piano: <input type="text" id="floor" required></label>
-                <label>Totale Piani Edificio: <input type="number" id="total-floors" required></label>
-                <label>Superficie Commerciale (m²): <input type="number" id="surface" required></label>
-                <div class="ascensore">
-                    <label>Ascensore:</label>
-                    <label class="switch">
-                        <input type="checkbox" id="elevator">
-                        <span class="slider"></span>
-                    </label> 
-                </div>
-                <label>Numero di Stanze: <input type="number" id="rooms" required></label>
-                <label>Classe Energetica: <select id="energy-class" required>
-                    <option value="">Seleziona</option>
-                    <option value="A4">A4</option>
-                    <option value="A3">A3</option>
-                    <option value="A2">A2</option>
-                    <option value="A1">A1</option>
-                    <option value="B">B</option>
-                    <option value="C">C</option>
-                    <option value="D">D</option>
-                    <option value="E">E</option>
-                    <option value="F">F</option>
-                    <option value="G">G</option></select></label>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Opzioni</legend>
-                <div class="options-grid">
-                    <div class="column">
-                        <p><strong>Arredamento:</strong></p>
-                        <label><input type="radio" name="arredamento" required> Arredato</label>
-                        <label><input type="radio" name="arredamento" required> Non Arredato</label>
-                        <label><input type="radio" name="arredamento" required> Parzialmente Arredato</label>
+        <p id="file-name-display" class="text-center mt-4 text-gray-600"></p>    
+        
+        <div class="form-container">
+            <form id="real-estate-form">
+                <fieldset>
+                    <legend>Dati Immobile</legend>
+                    <label>Comune:
+                        <select id="city" required>
+                            <option value="">Seleziona</option>
+                            <option value="Acireale">Acireale</option>
+                            <option value="Aci Catena">Aci Catena</option>
+                            <option value="Agliana">Agliana</option>
+                            <option value="Agropoli">Agropoli</option>
+                            <option value="Alba">Alba</option>
+                            <option value="Alcamo">Alcamo</option>
+                            <option value="Alezio">Alezio</option>
+                            <option value="Alessandria">Alessandria</option>
+                            <option value="Alessandria del Carretto">Alessandria del Carretto</option>
+                            <option value="Alfano">Alfano</option>
+                            <option value="Andria">Andria</option>
+                            <option value="Angri">Angri</option>
+                            <option value="Ancona">Ancona</option>
+                            <option value="Arzachena">Arzachena</option>
+                            <option value="Asti">Asti</option>
+                            <option value="Avola">Avola</option>
+                            <option value="Bari">Bari</option>
+                            <option value="Barletta">Barletta</option>
+                            <option value="Battipaglia">Battipaglia</option>
+                            <option value="Belluno">Belluno</option>
+                            <option value="Benevento">Benevento</option>
+                            <option value="Bergamo">Bergamo</option>
+                            <option value="Bologna">Bologna</option>
+                            <option value="Bolzano">Bolzano</option>
+                            <option value="Brindisi">Brindisi</option>
+                            <option value="Cagliari">Cagliari</option>
+                            <option value="Caltanissetta">Caltanissetta</option>
+                            <option value="Campobasso">Campobasso</option>
+                            <option value="Catania">Catania</option>
+                            <option value="Catanzaro">Catanzaro</option>
+                            <option value="Civitavecchia">Civitavecchia</option>
+                            <option value="Como">Como</option>
+                            <option value="Cosenza">Cosenza</option>
+                            <option value="Crotone">Crotone</option>
+                            <option value="Ferrara">Ferrara</option>
+                            <option value="Firenze">Firenze</option>
+                            <option value="Foggia">Foggia</option>
+                            <option value="Genova">Genova</option>
+                            <option value="Grosseto">Grosseto</option>
+                            <option value="Imperia">Imperia</option>
+                            <option value="L'Aquila">L'Aquila</option>
+                            <option value="La Spezia">La Spezia</option>
+                            <option value="Lecce">Lecce</option>
+                            <option value="Livorno">Livorno</option>
+                            <option value="Lucca">Lucca</option>
+                            <option value="Macerata">Macerata</option>
+                            <option value="Mantova">Mantova</option>
+                            <option value="Milano">Milano</option>
+                            <option value="Modena">Modena</option>
+                            <option value="Napoli">Napoli</option>
+                            <option value="Novara">Novara</option>
+                            <option value="Olbia">Olbia</option>
+                            <option value="Oristano">Oristano</option>
+                            <option value="Padova">Padova</option>
+                            <option value="Palermo">Palermo</option>
+                            <option value="Parma">Parma</option>
+                            <option value="Pavia">Pavia</option>
+                            <option value="Perugia">Perugia</option>
+                            <option value="Pesaro">Pesaro</option>
+                            <option value="Pescara">Pescara</option>
+                            <option value="Piacenza">Piacenza</option>
+                            <option value="Pisa">Pisa</option>
+                            <option value="Ragusa">Ragusa</option>
+                            <option value="Reggio Calabria">Reggio Calabria</option>
+                            <option value="Reggio Emilia">Reggio Emilia</option>
+                            <option value="Rimini">Rimini</option>
+                            <option value="Roma">Roma</option>
+                            <option value="Salerno">Salerno</option>
+                            <option value="Sassari">Sassari</option>
+                            <option value="Savona">Savona</option>
+                            <option value="Siena">Siena</option>
+                            <option value="Taranto">Taranto</option>
+                            <option value="Torino">Torino</option>
+                            <option value="Trento">Trento</option>
+                            <option value="Trieste">Trieste</option>
+                            <option value="Udine">Udine</option>
+                            <option value="Venezia">Venezia</option>
+                            <option value="Verona">Verona</option>
+                            <option value="Vibo Valentia">Vibo Valentia</option>
+                            <option value="Vicenza">Vicenza</option>
+                            <option value="Viterbo">Viterbo</option>
+                        </select>
+                    </label>
+                    
+                    <label>Comune:
+                        <select id="town" required>
+                            <option value="">Seleziona</option>
+                            <option value="Acireale">Acireale</option>
+                            <option value="Aci Catena">Aci Catena</option>
+                            <option value="Agliana">Agliana</option>
+                            <option value="Agropoli">Agropoli</option>
+                            <option value="Alba">Alba</option>
+                            <option value="Alcamo">Alcamo</option>
+                            <option value="Alezio">Alezio</option>
+                            <option value="Alessandria">Alessandria</option>
+                            <option value="Alessandria del Carretto">Alessandria del Carretto</option>
+                            <option value="Alfano">Alfano</option>
+                            <option value="Andria">Andria</option>
+                            <option value="Angri">Angri</option>
+                            <option value="Ancona">Ancona</option>
+                            <option value="Arzachena">Arzachena</option>
+                            <option value="Asti">Asti</option>
+                            <option value="Avola">Avola</option>
+                            <option value="Bari">Bari</option>
+                            <option value="Barletta">Barletta</option>
+                            <option value="Battipaglia">Battipaglia</option>
+                            <option value="Belluno">Belluno</option>
+                            <option value="Benevento">Benevento</option>
+                            <option value="Bergamo">Bergamo</option>
+                            <option value="Bologna">Bologna</option>
+                            <option value="Bolzano">Bolzano</option>
+                            <option value="Brindisi">Brindisi</option>
+                            <option value="Cagliari">Cagliari</option>
+                            <option value="Caltanissetta">Caltanissetta</option>
+                            <option value="Campobasso">Campobasso</option>
+                            <option value="Catania">Catania</option>
+                            <option value="Catanzaro">Catanzaro</option>
+                            <option value="Civitavecchia">Civitavecchia</option>
+                            <option value="Como">Como</option>
+                            <option value="Cosenza">Cosenza</option>
+                            <option value="Crotone">Crotone</option>
+                            <option value="Ferrara">Ferrara</option>
+                            <option value="Firenze">Firenze</option>
+                            <option value="Foggia">Foggia</option>
+                            <option value="Genova">Genova</option>
+                            <option value="Grosseto">Grosseto</option>
+                            <option value="Imperia">Imperia</option>
+                            <option value="L'Aquila">L'Aquila</option>
+                            <option value="La Spezia">La Spezia</option>
+                            <option value="Lecce">Lecce</option>
+                            <option value="Livorno">Livorno</option>
+                            <option value="Lucca">Lucca</option>
+                            <option value="Macerata">Macerata</option>
+                            <option value="Mantova">Mantova</option>
+                            <option value="Milano">Milano</option>
+                            <option value="Modena">Modena</option>
+                            <option value="Napoli">Napoli</option>
+                            <option value="Novara">Novara</option>
+                            <option value="Olbia">Olbia</option>
+                            <option value="Oristano">Oristano</option>
+                            <option value="Padova">Padova</option>
+                            <option value="Palermo">Palermo</option>
+                            <option value="Parma">Parma</option>
+                            <option value="Pavia">Pavia</option>
+                            <option value="Perugia">Perugia</option>
+                            <option value="Pesaro">Pesaro</option>
+                            <option value="Pescara">Pescara</option>
+                            <option value="Piacenza">Piacenza</option>
+                            <option value="Pisa">Pisa</option>
+                            <option value="Ragusa">Ragusa</option>
+                            <option value="Reggio Calabria">Reggio Calabria</option>
+                            <option value="Reggio Emilia">Reggio Emilia</option>
+                            <option value="Rimini">Rimini</option>
+                            <option value="Roma">Roma</option>
+                            <option value="Salerno">Salerno</option>
+                            <option value="Sassari">Sassari</option>
+                            <option value="Savona">Savona</option>
+                            <option value="Siena">Siena</option>
+                            <option value="Taranto">Taranto</option>
+                            <option value="Torino">Torino</option>
+                            <option value="Trento">Trento</option>
+                            <option value="Trieste">Trieste</option>
+                            <option value="Udine">Udine</option>
+                            <option value="Venezia">Venezia</option>
+                            <option value="Verona">Verona</option>
+                            <option value="Vibo Valentia">Vibo Valentia</option>
+                            <option value="Vicenza">Vicenza</option>
+                            <option value="Viterbo">Viterbo</option>
+                        </select>
+                    </label>
+                    
+                    <label>Indirizzo: <input type="text" id="address" required></label>
+                    <label>Numero Civico: <input type="number" id="civic-number" min="0" required></label>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Caratteristiche</legend>
+                    <label>Piano: <input type="text" id="floor" required></label>
+                    <label>Totale Piani Edificio: <input type="number" id="total-floors" min="0" required></label>
+                    <label>Superficie Commerciale (m²): <input type="number" id="surface" min="0" required></label>
+                    <div class="ascensore">
+                        <label>Ascensore:</label>
+                        <label class="switch">
+                            <input type="checkbox" id="elevator">
+                            <span class="slider"></span>
+                        </label> 
                     </div>
-                    <div class="column">
-                        <p><strong>Riscaldamento:</strong></p>
-                        <label><input type="radio" name="riscaldamento" required> Autonomo</label>
-                        <label><input type="radio" name="riscaldamento" required> Centralizzato</label>
-                        <label><input type="radio" name="riscaldamento" required> Assente</label>
+                    <label>Numero di Stanze: <input type="number" id="rooms" min="0" required></label>
+                    <label>Classe Energetica: <select id="energy-class" required>
+                        <option value="">Seleziona</option>
+                        <option value="A4">A4</option>
+                        <option value="A3">A3</option>
+                        <option value="A2">A2</option>
+                        <option value="A1">A1</option>
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                        <option value="D">D</option>
+                        <option value="E">E</option>
+                        <option value="F">F</option>
+                        <option value="G">G</option></select>
+                    </label>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Opzioni</legend>
+                    <div class="options-grid">
+                        <div class="column">
+                            <p><strong>Arredamento:</strong></p>
+                            <label><input type="radio" name="arredamento" required> Arredato</label>
+                            <label><input type="radio" name="arredamento" required> Non Arredato</label>
+                            <label><input type="radio" name="arredamento" required> Parzialmente Arredato</label>
+                        </div>
+                        <div class="column">
+                            <p><strong>Riscaldamento:</strong></p>
+                            <label><input type="radio" name="riscaldamento" required> Autonomo</label>
+                            <label><input type="radio" name="riscaldamento" required> Centralizzato</label>
+                            <label><input type="radio" name="riscaldamento" required> Assente</label>
+                        </div>
+                        <div class="column">
+                            <p><strong>Stato dell'Immobile:</strong></p>
+                            <label><input type="radio" name="stato" required> In Costruzione</label>
+                            <label><input type="radio" name="stato" required> Ristrutturato</label>
+                            <label><input type="radio" name="stato" required> Da Ristrutturare</label>
+                        </div>
+                        <div class="column">
+                            <p><strong>Tipo di Contratto:</strong></p>
+                            <label><input type="radio" name="contratto" required> Vendita</label>
+                            <label><input type="radio" name="contratto" required> Affitto</label>
+                        </div>
                     </div>
-                    <div class="column">
-                        <p><strong>Stato dell'Immobile:</strong></p>
-                        <label><input type="radio" name="stato" required> In Costruzione</label>
-                        <label><input type="radio" name="stato" required> Ristrutturato</label>
-                        <label><input type="radio" name="stato" required> Da Ristrutturare</label>
-                    </div>
-                    <div class="column">
-                        <p><strong>Tipo di Contratto:</strong></p>
-                        <label><input type="radio" name="contratto" required> Vendita</label>
-                        <label><input type="radio" name="contratto" required> Affitto</label>
-                    </div>
-                </div>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Descrizione</legend>
-                <textarea id="description" placeholder="Inserisci una descrizione" required></textarea>
-            </fieldset>
-            
-            <fieldset>
-                <legend>Prezzo</legend>
-                <label>Prezzo: <input type="number" id="price" required></label>
-            </fieldset>
-            
-            <div id="erroreMessaggio" class="hidden error-message"></div>
-        </form>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Descrizione</legend>
+                    <textarea id="description" placeholder="Inserisci una descrizione" required></textarea>
+                </fieldset>
+                
+                <fieldset>
+                    <legend>Prezzo</legend>
+                    <label>Prezzo: <input type="number" id="price" min="0" required></label>
+                </fieldset>
+                
+                <div id="erroreMessaggio" class="hidden error-message"></div>
+            </form>
+        </div>
     </div>
     <button type="submit" class="accesso px-6 py-2 mt-6 rounded-md" onclick="Registra()"> PROSEGUI </button>
     
