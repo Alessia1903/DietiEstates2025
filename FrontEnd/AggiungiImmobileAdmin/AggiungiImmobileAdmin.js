@@ -11,23 +11,22 @@ document.addEventListener("DOMContentLoaded", function () {
 
     const fileInput = document.getElementById('file-upload');
     const fileNameDisplay = document.getElementById('file-name-display');
+    let selectedFiles = [];  // Array per tenere traccia dei file selezionati
 
-    // Aggiungi un listener per quando l'utente seleziona dei file
+    // Aggiungi un listener per l'evento 'change' che si attiva quando si selezionano file
     fileInput.addEventListener('change', function() {
-        const files = fileInput.files;  // Ottieni tutti i file selezionati
-        let fileNames = [];  // Array per memorizzare i nomi dei file
+        const files = fileInput.files;  // Ottieni i file selezionati
+        // Aggiungi i nuovi file all'array `selectedFiles`
+        selectedFiles = [...selectedFiles, ...files];
 
-        // Per ogni file selezionato, aggiungi il suo nome all'array
-        for (let i = 0; i < files.length; i++) {
-            fileNames.push(files[i].name);
-        }
+        // Crea un array con i nomi dei file
+        let fileNames = [];
+        selectedFiles.forEach(file => {
+            fileNames.push(file.name);
+        });
 
         // Visualizza i nomi dei file separati da virgola
-        if (fileNames.length > 0) {
-            fileNameDisplay.textContent = "File selezionati: " + fileNames.join(", ");
-        } else {
-            fileNameDisplay.textContent = "";  // Se non ci sono file, mostra una stringa vuota
-        }
+        fileNameDisplay.textContent = "File selezionati: " + fileNames.join(", ");
     });
 });
 
