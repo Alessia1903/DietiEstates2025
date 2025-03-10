@@ -30,7 +30,7 @@ document.getElementById("loginForm").addEventListener("submit", async function (
             } else {
                 const homePages = {
                     agente: "../HomeAgente/HomeAgente.html",
-                    collaboratore: "../HomeCollaboratore/HomeCollaboratore.html",
+                    collaboratore: "../HomeAdmin/HomeAdmin.html",
                     admin: "../HomeAdmin/HomeAdmin.html",
                 };
                 window.location.href = homePages[data.role] || "../HomeNoLogin/HomeNoLogin.html";
