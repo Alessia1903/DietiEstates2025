@@ -37,7 +37,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   
     try {
-      const response = await fetch("https://cd5480b0-66c3-4d3f-8864-98af937fa5de.mock.pstmn.io/login", {
+      const response = await fetch("https://8e6dd234-c612-45f8-aa98-6c9b4407fbc1.mock.pstmn.io/2", {
         method: "GET",
         headers: {
           "Authorization": token, // Invia il token per l'autenticazione
@@ -113,24 +113,18 @@ function mostraNotifiche() {
  
 function getIcona(messaggio) {
     switch (messaggio) {
-        case "Nuovo annuncio in linea con le tue preferenze":
-            return `<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 120 120" fill="none">
-                <path d="M50 95V70h20v25c0 2.75 2.25 5 5 5h15c2.75 0 5-2.25 5-5V60h8.5c2.3 0 3.4-2.85 1.65-4.35L63.35 18c-1.9-1.7-4.8-1.7-6.7 0L14.85 55.65C13.15 57.15 14.2 60 16.5 60H25v35c0 2.75 2.25 5 5 5h15c2.75 0 5-2.25 5-5z" fill="#073B4C"/>
-            </svg>`;
-        case "La tua richiesta di visita è stata accettata":
+        case "Nuova richiesta di visita!":
             return `<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 120 120" fill="none">
                 <path d="M80 65H65c-2.75 0-5 2.25-5 5v15c0 2.75 2.25 5 5 5h15c2.75 0 5-2.25 5-5V70c0-2.75-2.25-5-5-5zm0-50v5H40v-5c0-2.75-2.25-5-5-5s-5 2.25-5 5v5h-5c-5.55 0-10 4.5-10 10v70c0 5.5 4.45 10 10 10h70c5.5 0 10-4.5 10-10V30c0-5.5-4.5-10-10-10h-5v-5c0-2.75-2.25-5-5-5s-5 2.25-5 5zm10 85H30c-2.75 0-5-2.25-5-5V45h70v50c0 2.75-2.25 5-5 5z" fill="#073B4C"/>
             </svg>`;
-        case "La tua richiesta di visita non è stata accettata":
+        case "La visita è stata annullata":
             return `<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60" viewBox="0 0 120 120" fill="none">
                 <path d="M60 10C32.35 10 10 32.35 10 60c0 27.65 22.35 50 50 50s50-22.35 50-50c0-27.65-22.35-50-50-50zM81.5 81.5c-1.95 1.95-5.1 1.95-7.05 0L60 67.05 45.55 81.5c-1.95 1.95-5.1 1.95-7.05 0-1.95-1.95-1.95-5.1 0-7.05L52.95 60 38.5 45.55c-1.95-1.95-1.95-5.1 0-7.05 1.95-1.95 5.1-1.95 7.05 0L60 52.95 74.45 38.5c1.95-1.95 5.1-1.95 7.05 0 1.95 1.95 1.95 5.1 0 7.05L67.05 60l14.45 14.45c1.9 1.9 1.9 5.1 0 7.05z" fill="#073B4C"/>
             </svg>`;
         default:
             return "";
     }
-    
 }
-
     
 function aggiornaBottoniNavigazione() {
     let paginationDiv = document.getElementById("pagination");
