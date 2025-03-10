@@ -33,6 +33,10 @@ document.addEventListener("DOMContentLoaded", async function () {
         document.getElementById("stato-immobile").textContent = annuncio.stato;
         document.getElementById("ascensore").textContent = annuncio.ascensore ? "Sì" : "No";
 
+        // Salviamo le coordinate per usarle nella mappa
+        latitudineAnnuncio = annuncio.latitudine;
+        longitudineAnnuncio = annuncio.longitudine; 
+
         let imgIndex = 0;
         const imgElement = document.getElementById("annuncio-img");
         const prevBtn = document.getElementById("prev-btn");
@@ -83,8 +87,44 @@ function Visita() {
     });
 }
 
-function apriMappa(event) {
-    event.preventDefault(); // Evita il comportamento predefinito del link
+let mappa = null; // Variabile globale per la mappa
 
-    window.location.href = "../AreaUtente/LoginUtente.html";
+function mostraMappa() {
+    if (!latitudineAnnuncio || !longitudineAnnuncio) {
+        alert("Coordinate non disponibili per questo annuncio.");
+        return;
+    }
+
+    // Mostriamo il modal della mappa
+    document.getElementById("mappaModal").style.display = "flex";
+
+    // Se la mappa non è stata inizializzata, la creiamo
+    if (!mappa) {
+        mappa = L.map("mappa").setView([latitudineAnnuncio, longitudineAnnuncio], 15); // Centro sulla posizione
+
+        // Aggiungiamo il layer di OpenStreetMap
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(mappa);
+    } else {
+        // Se la mappa esiste già, la riposizioniamo
+        mappa.setView([latitudineAnnuncio, longitudineAnnuncio], 15);
+    }
+
+    // Rimuoviamo eventuali marker esistenti
+    mappa.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+            mappa.removeLayer(layer);
+        }
+    });
+
+    // Aggiungiamo un nuovo marker per l'annuncio
+    L.marker([latitudineAnnuncio, longitudineAnnuncio])
+        .addTo(mappa)
+        .bindPopup("Siamo qui!").openPopup();
+}
+
+// Funzione per chiudere la mappa
+function chiudiMappa() {
+    document.getElementById("mappaModal").style.display = "none";
 }

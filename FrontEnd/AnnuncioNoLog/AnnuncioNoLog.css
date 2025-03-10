@@ -72,13 +72,6 @@ body {
     margin-top: 40px !important; 
 }
 
-.back-link {
-    text-decoration: none;
-    color: inherit; 
-    font-size: 20px;
-    font-weight: bold;  
-}
-
 #annuncio-img {
     max-width: 100%; /* Assicura che l'immagine non superi la larghezza del contenitore */
     max-height: 400px; /* Imposta un'altezza massima */

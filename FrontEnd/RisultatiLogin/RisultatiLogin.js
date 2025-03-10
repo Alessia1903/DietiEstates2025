@@ -400,3 +400,60 @@ function mostraMessaggioNessunRisultato() {
 function mostraMessaggioNessunRisultato() {
     document.getElementById("noResultsMessage").classList.remove("hidden");
 }
+
+let mappa; // Variabile globale per la mappa
+
+function mostraMappa(event) {
+    event.preventDefault(); // Evita il comportamento predefinito del link
+
+    document.getElementById("mappaModal").style.display = "flex"; // Mostra il modal
+
+    if (!mappa) {
+        // Inizializza la mappa solo la prima volta
+        mappa = L.map("mappa").setView([41.9028, 12.4964], 6); // Centro in Italia
+
+        // Aggiungi il layer di OpenStreetMap
+        L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(mappa);
+    }
+
+    // Pulisce i marker precedenti
+    mappa.eachLayer(layer => {
+        if (layer instanceof L.Marker) {
+            mappa.removeLayer(layer);
+        }
+    });
+
+    // Aggiunge i marker degli immobili
+    risultatiGlobali.forEach(immobile => {
+        if (immobile.latitudine && immobile.longitudine) {
+            let marker = L.marker([immobile.latitudine, immobile.longitudine]).addTo(mappa)
+                .bindPopup(`
+                    <strong>${immobile.indirizzo}</strong><br>
+                    ${immobile.citta}, ${immobile.prezzo}€<br>
+                    <a href="#" onclick="visualizzaAnnuncio(${immobile.idAnnuncio})">Visualizza dettagli</a>
+                `);
+        }
+    });
+
+    // Fit mappa ai marker
+    let group = new L.featureGroup(risultatiGlobali.map(immobile => {
+        return immobile.latitudine && immobile.longitudine ? L.marker([immobile.latitudine, immobile.longitudine]) : null;
+    }).filter(marker => marker !== null));
+
+    if (group.getLayers().length > 0) {
+        mappa.fitBounds(group.getBounds());
+    }
+}
+
+function visualizzaAnnuncio(idAnnuncio) {
+
+    sessionStorage.setItem("idAnnuncio", idAnnuncio); 
+    window.location.href = "../AnnuncioLogin/AnnuncioLogin.html";
+}
+
+// Funzione per chiudere il modal
+function chiudiMappa() {
+    document.getElementById("mappaModal").style.display = "none"; // Nasconde il modal
+}

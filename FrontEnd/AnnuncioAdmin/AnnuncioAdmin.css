@@ -133,8 +133,16 @@ body {
         gap: 1px;
     }
 
+    .logo-title{
+        gap: 0px;
+    }
+
+    .header-container {
+        width: 110%;
+    }
+
     .subtitle {
-        font-size: 0.5rem;
+        font-size: 0.6rem;
     }
 
     /* Nasconde il testo "Cronologia" e "Notifiche", lasciando solo le icone */
@@ -167,10 +175,6 @@ body {
 .green-symbol {
     color: #06D6A0;
     font-weight: bold; 
-}
-
-.back-link-container {
-    margin-top: 40px !important; 
 }
 
 #annuncio-img {
@@ -333,5 +337,95 @@ li {
 
     #annuncio-img {
         max-height: 250px; 
+    }
+}
+
+/* Stile per il Modal */
+.mappa-modal {
+    display: none; /* Nascondi il modal di default */
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Sfondo semitrasparente */
+    justify-content: center;
+    align-items: center;
+}
+
+/* Contenuto del modal */
+.modal-contenuto {
+    background-color: white;
+    padding: 20px;
+    border-radius: 5px;
+    width: 70%; /* Modifica la larghezza come desideri */
+    height: 80%; /* Modifica l'altezza come desideri */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-contenuto button {
+    align-self: flex-end; /* Posiziona il pulsante a destra */
+    background: #06D6A0;
+    color: #073B4C;
+    padding: 12px;
+    border-radius: 5px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    margin-bottom: 10px; /* Distanza dal bordo superiore */
+}
+
+.modal-contenuto button:hover {
+    background: #04b889;
+}
+
+/* Stile per la mappa */
+.mappa-grande {
+    width: 1200px;
+    height: 800px;
+}
+
+/* Mappa che si mostra quando il link è cliccato */
+.hidden {
+    display: none;
+}
+
+@media screen and (max-width: 1800px) {
+    .mappa-grande{
+        width: 800px;
+        height: 500px;
+    }
+
+    .modal-contenuto {
+        width: 70%;
+        height: 50%;
+    }
+
+}
+
+@media screen and (max-width: 1200px) {
+    .mappa-grande{
+        width: 600px;
+        height: 1000px;
+    }
+
+    .modal-contenuto {
+        width: 70%;
+        height: 70%;
+    }
+}
+
+@media screen and (max-width: 920px) {
+    .mappa-grande{
+        width: 290px;
+        height: 1000px;
+    }
+
+    .modal-contenuto {
+        width: 90%;
+        height: 70%;
     }
 }

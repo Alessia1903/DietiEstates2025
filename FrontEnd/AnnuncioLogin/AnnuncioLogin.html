@@ -8,6 +8,11 @@
     <script defer src="AnnuncioLogin.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Lexend&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 </head>
 <body class="flex flex-col items-center p-8" style="font-family: 'Lexend', sans-serif;">
     <!-- Intestazione con Logo e Icone -->
@@ -107,11 +112,11 @@
             <h2 id="annuncio-prezzo" class="custom-text"></h2>
 
             <div id="mappaContainer">
-                <a href="#" onclick="apriMappa(event)"
+                <a href="#" onclick="mostraMappa(event)"
                     style="color: #006D90; font-family: Lexend; font-weight: 500; text-decoration: underline;">
                     Visualizza la mappa
                 </a>
-            </div>
+            </div> 
         </div>
 
         <p id="annuncio-titolo"></p>
@@ -152,6 +157,14 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal per la mappa -->
+    <div id="mappaModal" class="mappa-modal">
+        <div class="modal-contenuto">
+            <button onclick="chiudiMappa()">Chiudi Mappa</button>
+            <div id="mappa" class="mappa-grande"></div>
+        </div>
+    </div> 
 
 </body>
 </html>
