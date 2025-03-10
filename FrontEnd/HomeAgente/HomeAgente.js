@@ -87,7 +87,7 @@ function mostraAnnunci() {
 
         div.addEventListener("click", () => {
             sessionStorage.setItem("idAnnuncio", immobile.idAnnuncio); 
-            window.location.href = "../AnnuncioAdmin/AnnuncioAdmin.html";
+            window.location.href = "../AnnuncioAgente/AnnuncioAgente.html";
         });
 
         container.appendChild(div);
