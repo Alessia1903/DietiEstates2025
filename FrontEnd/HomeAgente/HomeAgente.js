@@ -8,8 +8,7 @@ const annunciPerPagina = 10;
 let risultatiGlobali = []; // Salviamo tutti gli annunci
 
 document.addEventListener("DOMContentLoaded", async () => {
-    //const token = localStorage.getItem("token"); // Recupera il token salvato
-    const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
+    const token = localStorage.getItem("token"); // Recupera il token salvato
   
     if (!token) {
       alert("Accesso non autorizzato. Effettua il login.");

@@ -27,8 +27,7 @@ let risultatiGlobali = []; // Salviamo tutte le notifiche
 
 document.addEventListener("DOMContentLoaded", async () => {
     
-    const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
-    //const token = localStorage.getItem("token"); // Recupera il token salvato
+    const token = localStorage.getItem("token"); // Recupera il token salvato
   
     if (!token) {
       alert("Accesso non autorizzato. Effettua il login.");

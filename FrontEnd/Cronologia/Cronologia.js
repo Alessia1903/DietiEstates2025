@@ -5,7 +5,6 @@ let filtri = []; // Dati per i filtri
 
 document.addEventListener("DOMContentLoaded", async () => {
 
-    //const token = "Bearer abc123xyz456token789"; // Assegna un valore fittizio al token per il test
     const token = localStorage.getItem("token"); // Recupera il token salvato
 
     if (!token) {
