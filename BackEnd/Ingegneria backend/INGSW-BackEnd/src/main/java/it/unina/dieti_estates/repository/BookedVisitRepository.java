@@ -1,0 +1,23 @@
+package it.unina.dieti_estates.repository;
+
+import it.unina.dieti_estates.model.BookedVisit;
+import it.unina.dieti_estates.model.dto.BookedVisitDTO;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.sql.Timestamp;
+import java.util.List;
+
+@Repository
+public interface BookedVisitRepository extends JpaRepository<BookedVisit, Long> {
+
+    @Query("SELECT new it.unina.dieti_estates.model.BookedVisitDTO(b.id, b.status, b.requestDate, bu.email, p.address) " +
+       "FROM BookedVisit b " +
+       "JOIN b.buyer bu " +  
+       "JOIN b.estate p " +
+       "WHERE b.agent.id = :agentId")
+    List<BookedVisitDTO> findByEstateAgent(@Param("agentId") Long agentId);
+}

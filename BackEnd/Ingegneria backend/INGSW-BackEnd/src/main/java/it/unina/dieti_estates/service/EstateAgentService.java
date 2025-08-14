@@ -1,0 +1,205 @@
+package it.unina.dieti_estates.service;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import it.unina.dieti_estates.exception.auth.UnauthorizedAccessException;
+import it.unina.dieti_estates.exception.storage.FileStorageException;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.stereotype.Service;
+
+import it.unina.dieti_estates.model.*;
+import it.unina.dieti_estates.model.dto.*;
+import it.unina.dieti_estates.repository.BookedVisitRepository;
+import it.unina.dieti_estates.repository.EstateAgentRepository;
+import it.unina.dieti_estates.repository.RealEstateRepository;
+import it.unina.dieti_estates.exception.resource.BookedVisitNotFoundException;
+
+@Service
+public class EstateAgentService {
+
+    private final EstateAgentRepository agentRepository;
+    private final BookedVisitRepository visitRepository;
+    private final RealEstateRepository realEstateRepository;
+    private final AuthenticationManager authenticationManager;
+    private final JwtService jwtService;
+    private final BlobStorageService blobStorageService;
+
+    @Autowired
+    public EstateAgentService(
+            EstateAgentRepository agentRepository,
+            @Lazy AuthenticationManager authenticationManager,
+            JwtService jwtService,
+            BookedVisitRepository visitRepository,
+            RealEstateRepository realEstateRepository,
+            BlobStorageService blobStorageService
+    ) {
+        this.agentRepository = agentRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.visitRepository = visitRepository;
+        this.realEstateRepository = realEstateRepository;
+        this.blobStorageService = blobStorageService;
+    }
+    
+    public String loginAgent(LoginRequest loginAgentRequest) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                    loginAgentRequest.getEmail(),
+                    loginAgentRequest.getPassword()
+                )
+        );
+
+        EstateAgent agentDetails = (EstateAgent) authentication.getPrincipal();
+        return jwtService.generateToken(agentDetails);
+    }
+
+    public EstateAgent getProfile() {
+        EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (agent == null) {
+            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+        }
+        return agent;
+    }
+
+    public List<BookedVisitDTO> getAllBookedVisits() {
+        EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (agent == null) {
+            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+        }
+        return visitRepository.findByEstateAgent(agent.getId());
+    }
+
+    public String acceptVisit(Long visitId) {
+        EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (agent == null) {
+            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+        }
+
+        BookedVisit visit = visitRepository.findById(visitId)
+            .orElseThrow(() -> new BookedVisitNotFoundException("Visit not found with id: " + visitId));
+
+        if (!visit.getAgent().getId().equals(agent.getId())) {
+            throw new UnauthorizedAccessException("Estate agent can only manage their own visits");
+        }
+
+        visit.setStatus("accettata");
+        visitRepository.save(visit);
+        return "Visita accettata con successo";
+    }
+
+    public String rejectVisit(Long visitId) {
+        EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (agent == null) {
+            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+        }
+
+        BookedVisit visit = visitRepository.findById(visitId)
+            .orElseThrow(() -> new BookedVisitNotFoundException("Visit not found with id: " + visitId));
+
+        if (!visit.getAgent().getId().equals(agent.getId())) {
+            throw new UnauthorizedAccessException("Estate agent can only manage their own visits");
+        }
+
+        visit.setStatus("rifiutata");
+        visitRepository.save(visit);
+        return "Visita rifiutata con successo";
+    }
+
+    public RealEstateResponseDTO loadNewRealEstate(CreateRealEstateRequest request) throws IOException {
+        // Ottiene l'agente dal SecurityContext
+        EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (agent == null) {
+            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+        }
+
+        // Upload dell'immagine su Azure Blob Storage
+        String imageUrl = null;
+        if (request.getImage() != null && !request.getImage().isEmpty()) {
+            try {
+                imageUrl = blobStorageService.uploadFile(request.getImage());
+            } catch (Exception e) {
+                throw FileStorageException.uploadFailed(request.getImage().getOriginalFilename(), e.getMessage());
+            }
+        }
+
+        RealEstate realEstate = new RealEstate(
+            imageUrl,
+            request.getCity(),
+            request.getDistrict(),
+            request.getAddress(),
+            request.getStreetNumber(),
+            request.getFloor(),
+            request.getTotalBuildingFloors(),
+            request.getCommercialArea(),
+            request.getElevator(),
+            request.getRooms(),
+            request.getEnergyClass(),
+            request.getFurnishing(),
+            request.getHeating(),
+            request.getPropertyStatus(),
+            request.getContractType(),
+            request.getDescription(),
+            request.getPrice(),
+            agent
+        );
+
+        RealEstate savedEstate = realEstateRepository.save(realEstate);
+
+        return mapToResponseDTO(savedEstate);
+    }
+
+
+    private RealEstateResponseDTO mapToResponseDTO(RealEstate realEstate) {
+        RealEstateResponseDTO dto = new RealEstateResponseDTO();
+        dto.setId(realEstate.getId());
+        dto.setImageUrl(realEstate.getImageUrl());
+        dto.setCity(realEstate.getCity());
+        dto.setDistrict(realEstate.getDistrict());
+        dto.setAddress(realEstate.getAddress());
+        dto.setStreetNumber(realEstate.getStreetNumber());
+        dto.setFloor(realEstate.getFloor());
+        dto.setTotalBuildingFloors(realEstate.getTotalBuildingFloors());
+        dto.setCommercialArea(realEstate.getCommercialArea());
+        dto.setElevator(realEstate.getElevator());
+        dto.setRooms(realEstate.getRooms());
+        dto.setEnergyClass(realEstate.getEnergyClass());
+        dto.setFurnishing(realEstate.getFurnishing());
+        dto.setHeating(realEstate.getHeating());
+        dto.setPropertyStatus(realEstate.getPropertyStatus());
+        dto.setContractType(realEstate.getContractType());
+        dto.setDescription(realEstate.getDescription());
+        dto.setPrice(realEstate.getPrice());
+        return dto;
+    }
+
+    public PageResponse<RealEstateResponseDTO> getMyProperties(int page, int size) {
+        EstateAgent agent = getProfile();
+        Page<RealEstate> realEstatePage = realEstateRepository.findByAgentId(
+            agent.getId(), 
+            PageRequest.of(page, size)
+        );
+
+        List<RealEstateResponseDTO> dtos = realEstatePage.getContent()
+            .stream()
+            .map(this::mapToResponseDTO)
+            .collect(Collectors.toList());
+
+        return new PageResponse<>(
+            dtos,
+            realEstatePage.getNumber(),
+            realEstatePage.getSize(),
+            realEstatePage.getTotalElements(),
+            realEstatePage.hasNext()
+        );
+    }
+}
