@@ -1,0 +1,246 @@
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Cronologia.css";
+
+// MOCK: array di filtri cronologia
+const MOCK_FILTRI = [
+  {
+    id: 1,
+    citta: "Napoli",
+    contratto: "vendita",
+    classeEnergetica: "A3",
+    numLocali: 3,
+    prezzoMin: 100000,
+    prezzoMax: 250000,
+  },
+  {
+    id: 2,
+    citta: "Milano",
+    contratto: "affitto",
+    classeEnergetica: "B",
+    numLocali: 2,
+    prezzoMin: 800,
+    prezzoMax: 1500,
+  },
+  {
+    id: 3,
+    citta: "Roma",
+    contratto: "vendita",
+    classeEnergetica: "C",
+    numLocali: 4,
+    prezzoMin: 200000,
+    prezzoMax: 400000,
+  },
+  {
+    id: 4,
+    citta: "Torino",
+    contratto: "affitto",
+    classeEnergetica: "A1",
+    numLocali: 1,
+    prezzoMin: 500,
+    prezzoMax: 1200,
+  },
+  {
+    id: 5,
+    citta: "Bologna",
+    contratto: "vendita",
+    classeEnergetica: "D",
+    numLocali: 5,
+    prezzoMin: 250000,
+    prezzoMax: 600000,
+  },
+  {
+    id: 6,
+    citta: "Firenze",
+    contratto: "affitto",
+    classeEnergetica: "A2",
+    numLocali: 2,
+    prezzoMin: 900,
+    prezzoMax: 1800,
+  },
+];
+
+const CRONOLOGIA_PER_PAGINA = 5;
+
+const Cronologia = () => {
+  const navigate = useNavigate();
+  const [filtri] = useState(MOCK_FILTRI);
+  const [pagina, setPagina] = useState(1);
+
+  // Navigazione SPA
+  const handleLogoClick = () => {
+    navigate("/home");
+  };
+
+  const handleBack = (e) => {
+    e.preventDefault();
+    navigate("/home");
+  };
+
+  // Paginazione
+  const totalePagine = Math.ceil(filtri.length / CRONOLOGIA_PER_PAGINA);
+  const filtriDaMostrare = filtri.slice(
+    (pagina - 1) * CRONOLOGIA_PER_PAGINA,
+    pagina * CRONOLOGIA_PER_PAGINA
+  );
+
+  // Bottone "Cerca" su ogni filtro
+  const handleCerca = (filtro) => {
+    sessionStorage.setItem("citta", filtro.citta);
+    sessionStorage.setItem("contratto", filtro.contratto);
+    sessionStorage.setItem("classeEnergetica", filtro.classeEnergetica);
+    sessionStorage.setItem("numLocali", filtro.numLocali);
+    sessionStorage.setItem("prezzoMin", filtro.prezzoMin);
+    sessionStorage.setItem("prezzoMax", filtro.prezzoMax);
+    navigate("/risultati-login");
+  };
+
+  return (
+    <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
+      {/* Header */}
+      <div className="flex justify-between items-center w-full px-4 header-container">
+        <div className="logo-title cursor-pointer" id="logo-title" onClick={handleLogoClick}>
+          <img
+            src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"
+            alt="Logo DietiEstates"
+            className="logo"
+          />
+          <div>
+            <h1 className="title custom-text-color">DîetîEstates25</h1>
+            <p className="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
+          </div>
+        </div>
+        <div className="top-right-icons">
+          {/* Notifiche */}
+          <div className="icon-text hide-on-small" onClick={() => navigate("/notifiche-utente")}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" fill="none" className="custom-text-color">
+              <g clipPath="url(#clip0_26_983)">
+                <path d="M41.6665 8.33337H8.33317C6.0415 8.33337 4.1665 10.2084 4.1665 12.5V37.5C4.1665 39.7917 6.0415 41.6667 8.33317 41.6667H41.6665C43.9582 41.6667 45.8332 39.7917 45.8332 37.5V12.5C45.8332 10.2084 43.9582 8.33337 41.6665 8.33337ZM40.8332 17.1875L27.2082 25.7084C25.854 26.5625 24.1457 26.5625 22.7915 25.7084L9.1665 17.1875C8.64567 16.8542 8.33317 16.2917 8.33317 15.6875C8.33317 14.2917 9.854 13.4584 11.0415 14.1875L24.9998 22.9167L38.9582 14.1875C40.1457 13.4584 41.6665 14.2917 41.6665 15.6875C41.6665 16.2917 41.354 16.8542 40.8332 17.1875Z" fill="#073B4C"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_26_983">
+                  <rect width="50" height="50" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <span>Notifiche</span>
+          </div>
+          {/* Cronologia */}
+          <div className="icon-text hide-on-small" onClick={() => navigate("/cronologia")}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" fill="none" className="custom-text-color">
+              <g clipPath="url(#clip0_26_980)">
+                <path d="M27.6248 6.24995C17.0206 5.95828 8.33311 14.4791 8.33311 24.9999H4.60395C3.66645 24.9999 3.20811 26.1249 3.87478 26.7708L9.68728 32.6041C10.1039 33.0208 10.7498 33.0208 11.1664 32.6041L16.9789 26.7708C17.6248 26.1249 17.1664 24.9999 16.2289 24.9999H12.4998C12.4998 16.8749 19.1248 10.3124 27.2914 10.4166C35.0414 10.5208 41.5623 17.0416 41.6664 24.7916C41.7706 32.9374 35.2081 39.5833 27.0831 39.5833C23.7289 39.5833 20.6248 38.4374 18.1664 36.4999C17.3331 35.8541 16.1664 35.9166 15.4164 36.6666C14.5414 37.5416 14.6039 39.0208 15.5831 39.7708C18.7498 42.2708 22.7289 43.7499 27.0831 43.7499C37.6039 43.7499 46.1248 35.0624 45.8331 24.4583C45.5623 14.6874 37.3956 6.52078 27.6248 6.24995ZM26.5623 16.6666C25.7081 16.6666 24.9998 17.3749 24.9998 18.2291V25.8958C24.9998 26.6249 25.3956 27.3124 26.0206 27.6874L32.5206 31.5416C33.2706 31.9791 34.2289 31.7291 34.6664 30.9999C35.1039 30.2499 34.8539 29.2916 34.1248 28.8541L28.1248 25.2916V18.2083C28.1248 17.3749 27.4164 16.6666 26.5623 16.6666Z" fill="#073B4C"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_26_980">
+                  <rect width="50" height="50" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+            <span>Cronologia</span>
+          </div>
+          {/* Preferiti */}
+          <div className="icon-text hide-on-small" onClick={() => navigate("/preferiti")}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" fill="none">
+              <path d="M25 45.8333C23.9583 45.8333 22.9167 45.4167 22.0833 44.6875L7.29167 31.25C4.16667 28.5417 2.08333 24.8958 2.08333 20.8333C2.08333 13.2292 8.22917 7.08333 15.8333 7.08333C19.6875 7.08333 23.2292 8.95833 25 12.0833C26.7708 8.95833 30.3125 7.08333 34.1667 7.08333C41.7708 7.08333 47.9167 13.2292 47.9167 20.8333C47.9167 24.8958 45.8333 28.5417 42.7083 31.25L27.9167 44.6875C27.0833 45.4167 26.0417 45.8333 25 45.8333Z" fill="#06D6A0"/>
+            </svg>
+            <span>Preferiti</span>
+          </div>
+          {/* Profilo */}
+          <div className="icon-text" onClick={() => navigate("/profilo-utente")}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 60 60" fill="none" className="top-right custom-text-color">
+              <g clipPath="url(#clip0_26_978)">
+                <path d="M30 5C16.2 5 5 16.2 5 30C5 43.8 16.2 55 30 55C43.8 55 55 43.8 55 30C55 16.2 43.8 5 30 5ZM30 12.5C34.15 12.5 37.5 15.85 37.5 20C37.5 24.15 34.15 27.5 30 27.5C25.85 27.5 22.5 24.15 22.5 20C22.5 15.85 25.85 12.5 30 12.5ZM30 48C23.75 48 18.225 44.8 15 39.95C15.075 34.975 25 32.25 30 32.25C34.975 32.25 44.925 34.975 45 39.95C41.775 44.8 36.25 48 30 48Z" fill="#073B4C"/>
+              </g>
+              <defs>
+                <clipPath id="clip0_26_978">
+                  <rect width="60" height="60" fill="white"/>
+                </clipPath>
+              </defs>
+            </svg>
+          </div>
+        </div>
+      </div>
+
+      {/* Back link */}
+      <div className="flex justify-start w-full mb-4 pl-8 mt-8">
+        <a href="/home" className="back-link" onClick={handleBack}>
+          <span className="green-symbol" style={{display: "inline-flex", verticalAlign: "middle", marginRight: "6px"}}>
+            <svg width="18" height="18" viewBox="0 0 18 18" style={{display: "inline"}} fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M12 15L6 9L12 3" stroke="#06D6A0" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </span>
+          Torna alla home
+        </a>
+      </div>
+
+      {/* Risultati */}
+      <div id="search-container" className="container mt-8 w-full max-w-4xl flex flex-col">
+        {filtriDaMostrare.length === 0 ? (
+          <div className="text-gray-500 text-lg">Nessuna cronologia disponibile.</div>
+        ) : (
+          filtriDaMostrare.map((filtro) => (
+            <div key={filtro.id} className="flex items-center w-full mb-4">
+              <div className="bg-dark-blue p-8 rounded-lg flex-1">
+                <div className="filter-info mb-4 flex items-center">
+                  <div className="info-item bg-white p-2 rounded-lg flex-1">
+                    <span className="text-sm text-dark-green">{filtro.citta}</span>
+                  </div>
+                  <button
+                    className="search-btn p-2 bg-light-blue text-dark-green"
+                    onClick={() => handleCerca(filtro)}
+                  >
+                    CERCA
+                  </button>
+                </div>
+                <div className="filter-details flex flex-wrap gap-4 mt-4 w-full">
+                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
+                    <span className="text-sm text-dark-green">
+                      {filtro.contratto.charAt(0).toUpperCase() + filtro.contratto.slice(1)}
+                    </span>
+                  </div>
+                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
+                    <span className="text-sm text-dark-green">{filtro.classeEnergetica}</span>
+                  </div>
+                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
+                    <span className="text-sm text-dark-green">{filtro.numLocali}</span>
+                  </div>
+                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
+                    <span className="text-sm text-dark-green">{filtro.prezzoMin}</span>
+                  </div>
+                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
+                    <span className="text-sm text-dark-green">{filtro.prezzoMax}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* Paginazione */}
+      <div className="pagination-container items-center justify-center flex flex-wrap">
+        <button
+          className="pagination-button"
+          onClick={() => setPagina((p) => Math.max(1, p - 1))}
+          disabled={pagina === 1}
+        >
+          <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M39.5833 22.9166H16.3125L26.4792 12.75C27.2917 11.9375 27.2917 10.6041 26.4792 9.79163C25.6667 8.97913 24.3542 8.97913 23.5417 9.79163L9.8125 23.5208C9 24.3333 9 25.6458 9.8125 26.4583L23.5417 40.1875C24.3542 41 25.6667 41 26.4792 40.1875C27.2917 39.375 27.2917 38.0625 26.4792 37.25L16.3125 27.0833H39.5833C40.7292 27.0833 41.6667 26.1458 41.6667 25C41.6667 23.8541 40.7292 22.9166 39.5833 22.9166Z" fill="white"/>
+          </svg>
+        </button>
+        <button
+          className="pagination-button"
+          onClick={() => setPagina((p) => Math.min(totalePagine, p + 1))}
+          disabled={pagina === totalePagine}
+        >
+          <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10.4166 27.0833H33.6874L23.5208 37.25C22.7083 38.0625 22.7083 39.3958 23.5208 40.2083C24.3333 41.0208 25.6458 41.0208 26.4583 40.2083L40.1874 26.4791C40.9999 25.6666 40.9999 24.3541 40.1874 23.5416L26.4791 9.79163C25.6666 8.97913 24.3541 8.97913 23.5416 9.79163C22.7291 10.6041 22.7291 11.9166 23.5416 12.7291L33.6874 22.9166H10.4166C9.27075 22.9166 8.33325 23.8541 8.33325 25C8.33325 26.1458 9.27075 27.0833 10.4166 27.0833Z" fill="white"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  );
+};
+
+export default Cronologia;

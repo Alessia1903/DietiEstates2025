@@ -1,0 +1,104 @@
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #073B4C;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #073B4C;
+    margin-top: -5px;
+}
+
+.top-right-icons {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+}
+
+.icon-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #073B4C;
+    font-weight: 500;
+}
+
+.icon-text:hover {
+    color: #06D6A0;
+}
+
+.accesso {
+    background-color: #06D6A0;
+    color: #073B4C;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background 0.3s ease;
+}
+
+.accesso:hover {
+    background-color: #04b889;
+}
+
+.mt-8 {
+    margin-top: 2rem;
+}
+
+.mb-4 {
+    margin-bottom: 1rem;
+}
+
+.text-2xl {
+    font-size: 2rem;
+}
+
+.font-bold {
+    font-weight: bold;
+}
+
+.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+    margin-top: 1.5rem;
+}
+
+.p-8 {
+    padding: 2rem;
+}
+
+.w-full {
+    width: 100%;
+}
+
+/* Back link styles */
+.back-link {
+    color: #06D6A0;
+    text-decoration: none;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    transition: all 0.2s;
+}
+
+.back-link:hover {
+    opacity: 0.8;
+}

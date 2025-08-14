@@ -1,0 +1,245 @@
+.homeadmin-main-row {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: stretch;
+  justify-content: center;
+  margin-top: 64px;
+}
+
+.admin-info-box {
+  border: 2px solid #06D6A0;
+  background: #f8fff9;
+  border-radius: 15px;
+  padding: 40px 32px;
+  color: #073B4C;
+  box-shadow: 0 4px 16px rgba(7, 59, 76, 0.06);
+  min-width: 320px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.admin-info-box h3 {
+  color: #073B4C;
+  font-size: 1.4rem;
+  font-weight: bold;
+  margin-bottom: 18px;
+}
+
+.admin-info-box ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.admin-info-box li {
+  font-size: 1.08rem;
+  color: #073B4C;
+  margin-bottom: 18px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-info-box svg {
+  flex-shrink: 0;
+}
+
+.admin-info-note {
+  font-size: 1rem;
+  color: #d62828;
+  background: #fff8f8;
+  border-left: 4px solid #d62828;
+  padding: 12px 18px;
+  border-radius: 8px;
+  margin-top: 18px;
+}
+
+.admin-actions-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+  align-items: center;
+  justify-content: center;
+}
+
+.admin-register-box{
+    border: 5px solid #06D6A0;
+    border-radius: 15px;
+    padding: 60px 40px;
+    width: 410px;
+    height: 270px;
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: white;
+    color: #073B4C;
+    transition: transform 0.3s;
+    margin-top: 0;
+}
+
+.admin-register-box:hover { 
+    transform: scale(1.05); 
+}
+
+.admin-agency-icon-container {
+    position: relative;
+    width: 150px;
+    height: 150px;
+    display: inline-block;
+    margin: 10px;
+}
+
+.admin-building-icon {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.admin-circle {
+    position: absolute;
+    bottom: 15px;
+    right: 15px;
+    width: 32px;
+    height: 32px;
+    background: white;
+    border-radius: 50%;
+    z-index: 1;
+}
+
+.admin-small-plus-icon {
+    width: 60px;
+    height: 60px;
+}
+
+.admin-plus-icon {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    z-index: 2;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: 10px 20px;
+  flex-wrap: nowrap;
+  min-width: 0;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.admin-profile-icon {
+  margin-left: auto;
+  margin-right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60px;
+  width: 60px;
+  border-radius: 50%;
+  background: #f8fff9;
+  box-shadow: 0 2px 8px rgba(7, 59, 76, 0.08);
+  transition: background 0.2s;
+}
+
+.admin-profile-icon:hover {
+  background: #e6f7ee;
+}
+
+.logo {
+  height: 64px;
+  max-width: 100%;
+  transition: all 0.3s ease;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.subtitle {
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+  margin-top: -5px;
+}
+
+.custom-text-color {
+  color: #073B4C; 
+}
+
+@media (min-width: 768px) {
+  .homeadmin-main-row {
+    flex-direction: row;
+    gap: 40px;
+    align-items: flex-start;
+  }
+  .admin-info-box, .admin-actions-cards {
+    flex: 1;
+    max-width: 50%;
+  }
+}
+
+@media (max-width: 900px) {
+  .admin-register-box {
+    width: 90vw;
+    height: auto;
+    padding: 30px 10px;
+  }
+  .admin-agency-icon-container {
+    width: 100px;
+    height: 100px;
+  }
+  .admin-small-plus-icon {
+    width: 40px;
+    height: 40px;
+  }
+}
+
+@media (max-width: 600px) {
+  .homeadmin-main-row {
+    gap: 24px;
+    margin-top: 32px;
+  }
+  .admin-info-box {
+    padding: 18px 8px;
+    min-width: 0;
+  }
+  .admin-actions-cards {
+    gap: 24px;
+  }
+  .admin-register-box {
+    width: 98vw;
+    padding: 18px 4px;
+    font-size: 1rem;
+  }
+  .title {
+    font-size: 1.5rem;
+  }
+  .logo {
+    height: 40px;
+  }
+  .admin-profile-icon {
+    height: 44px;
+    width: 44px;
+  }
+}

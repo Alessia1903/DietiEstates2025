@@ -1,0 +1,280 @@
+body {
+    font-family: 'Lexend', sans-serif;
+    background-color: #f8f8f8;
+    min-height: 100vh;
+}
+
+.reg-agenzia-root {
+    width: 100vw;
+    min-height: 100vh;
+    background: #f8f8f8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.header-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding: 10px 20px;
+    min-width: 0;
+}
+
+.logo-title {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+    overflow: hidden;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logo {
+    height: 64px;
+    max-width: 100%;
+    transition: all 0.3s ease;
+}
+
+.title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #073B4C;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.subtitle {
+    font-size: 1rem;
+    color: #073B4C;
+    white-space: nowrap;
+    margin-top: -5px;
+}
+
+.back-link {
+    text-decoration: none;
+    color: #073B4C;
+    font-size: 20px;
+    font-weight: bold;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+.green-symbol {
+    color: #06D6A0;
+    font-weight: bold;
+}
+
+.reg-agenzia-card.wide {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(7, 59, 76, 0.10);
+    border: 5px solid #073B4C;
+    padding: 40px 32px 32px 32px;
+    max-width: 800px;
+    width: 100%;
+    margin: 32px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reg-agenzia-infobox {
+    background: #fffbe6;
+    border: 2px solid #FFD943;
+    border-radius: 12px;
+    padding: 24px 18px;
+    margin-bottom: 32px;
+    display: flex;
+    align-items: flex-start;
+    gap: 18px;
+    width: 100%;
+}
+
+.reg-agenzia-infobox-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.reg-agenzia-infobox-text {
+    color: #073B4C;
+    font-size: 1.08rem;
+}
+
+.reg-agenzia-infobox-text strong {
+    display: block;
+    margin-bottom: 10px;
+    font-size: 1.1rem;
+}
+
+.reg-agenzia-infobox-text ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.reg-agenzia-infobox-text li {
+    margin-bottom: 6px;
+    list-style: disc;
+}
+
+.reg-agenzia-form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+}
+
+.reg-agenzia-form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 18px;
+    width: 100%;
+}
+
+.reg-agenzia-form-group label {
+    font-size: 1rem;
+    color: #073B4C;
+    margin-bottom: 6px;
+    font-weight: 500;
+}
+
+.reg-agenzia-form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1.5px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+    background: #f9f9f9;
+    transition: border 0.2s;
+}
+
+.reg-agenzia-form-group input:focus {
+    border-color: #06D6A0;
+    outline: none;
+}
+
+.reg-agenzia-error-message {
+    color: #B6000F;
+    text-align: center;
+    background-color: #fff;
+    border: 3px solid #d62828;
+    border-radius: 5px;
+    padding: 10px;
+    margin-top: 10px;
+    font-weight: bold;
+    display: none;
+}
+
+.reg-agenzia-error-message:not(.hidden) {
+    display: block;
+}
+
+.reg-agenzia-button {
+    background-color: #06D6A0;
+    color: #073B4C;
+    font-size: 20px;
+    font-weight: bold;
+    border: none;
+    padding: 16px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 30px;
+    width: 100%;
+    transition: background 0.3s;
+    box-shadow: 0 2px 8px rgba(7, 59, 76, 0.08);
+}
+
+.reg-agenzia-button:hover {
+    background-color: #04b889;
+}
+
+.reg-agenzia-modal-bg {
+    position: fixed;
+    top: 0; left: 0; width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.reg-agenzia-modal-card {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 32px rgba(7, 59, 76, 0.10);
+    border: 4px solid #4DC538;
+    padding: 32px 24px;
+    max-width: 400px;
+    width: 90vw;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.reg-agenzia-modal-icon {
+    margin-bottom: 18px;
+}
+
+.reg-agenzia-modal-card h2 {
+    font-size: 1.5rem;
+    color: #073B4C;
+    margin-bottom: 12px;
+}
+
+.reg-agenzia-modal-card p {
+    font-size: 1.08rem;
+    color: #073B4C;
+    margin-bottom: 18px;
+}
+
+.reg-agenzia-modal-button {
+    background-color: #06D6A0;
+    color: #073B4C;
+    font-size: 18px;
+    font-weight: bold;
+    border: none;
+    padding: 12px 0;
+    border-radius: 8px;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.3s;
+}
+
+.reg-agenzia-modal-button:hover {
+    background-color: #04b889;
+}
+
+@media (max-width: 600px) {
+    .reg-agenzia-card.wide {
+        padding: 18px 6px 18px 6px;
+        max-width: 98vw;
+    }
+    .reg-agenzia-infobox {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 16px 8px;
+    }
+    .header-container {
+        padding: 10px 6px;
+    }
+    .logo {
+        height: 40px;
+    }
+    .title {
+        font-size: 1.3rem;
+    }
+    .subtitle {
+        font-size: 0.8rem;
+    }
+}

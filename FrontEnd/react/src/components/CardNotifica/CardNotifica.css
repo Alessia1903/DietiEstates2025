@@ -1,0 +1,66 @@
+.notifica-card {
+    background: #e8f9f2;
+    border-radius: 10px;
+    box-shadow: 0 0 8px rgba(0,0,0,0.08);
+    padding: 24px 24px 18px 24px;
+    border-left: 8px solid;
+    position: relative;
+    transition: background 0.2s;
+    margin-bottom: 16px;
+}
+
+.categoria-pill {
+    display: inline-block;
+    padding: 2px 12px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: translate(-8px, -50%);
+    z-index: 2;
+}
+
+.notifica-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+}
+
+.notifica-data {
+    font-size: 0.85rem;
+    color: #888;
+    margin-left: auto;
+}
+
+.notifica-titolo {
+    font-size: 1.1rem;
+    margin-bottom: 4px;
+    color: #073B4C;
+}
+
+.notifica-testo {
+    font-size: 1rem;
+    color: #222;
+}
+
+@media (max-width: 600px) {
+    .notifica-card {
+        padding: 12px 8px 10px 8px;
+    }
+    .categoria-pill {
+        font-size: 0.75rem;
+        padding: 3px 10px;
+    }
+    .notifica-titolo {
+        font-size: 1rem;
+    }
+    .notifica-testo {
+        font-size: 0.9rem;
+    }
+    .notifica-data {
+        font-size: 0.8rem;
+    }
+}

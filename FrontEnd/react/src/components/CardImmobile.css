@@ -1,0 +1,85 @@
+.card-immobile {
+  background: #f5f6fa; /* bianco più scuro */
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(7,59,76,0.08);
+  padding: 18px 24px;
+  margin: 18px 0;
+  display: flex;
+  flex-direction: row;
+  gap: 24px;
+  align-items: flex-start;
+  max-width: 700px;
+  width: 100%;
+  transition: transform 0.18s cubic-bezier(.4,1.5,.5,1), box-shadow 0.18s cubic-bezier(.4,1.5,.5,1);
+}
+
+.card-immobile:hover {
+  transform: scale(1.045);
+  box-shadow: 0 8px 32px rgba(7,59,76,0.18), 0 2px 8px rgba(7,59,76,0.10);
+  z-index: 2;
+}
+
+.card-immobile-img {
+  flex: 0 0 160px;
+  width: 160px;
+  height: 120px;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #eee;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.card-immobile-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.card-immobile-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card-immobile-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #073B4C;
+  margin: 0;
+}
+
+.card-immobile-details {
+  font-size: 0.98rem;
+  color: #118AB2;
+}
+
+.card-immobile-info {
+  font-size: 1.05rem;
+  color: #073B4C;
+  display: flex;
+  gap: 18px;
+  font-weight: 500;
+}
+
+.card-immobile-desc {
+  font-size: 0.98rem;
+  color: #323232;
+  margin-top: 6px;
+}
+
+@media (max-width: 700px) {
+  .card-immobile {
+    flex-direction: column;
+    align-items: stretch;
+    max-width: 98vw;
+    padding: 10px 4px;
+  }
+  .card-immobile-img {
+    width: 100%;
+    height: 180px;
+    margin-bottom: 8px;
+  }
+}
