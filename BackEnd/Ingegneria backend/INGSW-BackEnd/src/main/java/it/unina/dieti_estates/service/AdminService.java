@@ -41,6 +41,7 @@ public class AdminService {
     private final EstateAgentRepository agentRepository;
     private final ObjectMapper objectMapper;
     private final PasswordGenerator passwordGenerator;
+    private final AgencyRepository agencyRepository;
 
     @Autowired
     public AdminService(AdminRepository adminRepository, 
@@ -49,7 +50,8 @@ public class AdminService {
                        JwtService jwtService, 
                        EstateAgentRepository agentRepository,
                        ObjectMapper objectMapper,
-                       PasswordGenerator passwordGenerator) {
+                       PasswordGenerator passwordGenerator
+                       AgencyRepository agencyRepository) {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
         this.authenticationManager = authenticationManager;
@@ -57,6 +59,7 @@ public class AdminService {
         this.agentRepository = agentRepository;
         this.objectMapper = objectMapper;
         this.passwordGenerator = passwordGenerator;
+        this.agencyRepository = agencyRepository;
     }
 
     public String loginAdmin(LoginRequest loginAdminRequest) {
@@ -159,4 +162,41 @@ public class AdminService {
             qrCodeBase64
         );
     }
+
+    public QRCodeResponse createAgency(CreateAgencyRequest request) throws IOException, WriterException {
+        if (agencyRepository.existsByVatNumber(request.getVatNumber())) {
+            throw DuplicateResourceException.emailAlreadyExists(request.getVatNumber());
+        }
+
+        String generatedPassword = passwordGenerator.generateSecurePassword();
+
+        Admin admin = new Admin(
+            request.getAdminEmail(),
+            passwordEncoder.encode(generatedPassword),
+            request.getAdminFirstName(),
+            request.getAdminLastName(),
+            request.getVatNumber()
+        );
+        adminRepository.save(admin);
+
+        Agency agency = new Agency(
+            request.getAgencyName(),
+            request.getVatNumber(),
+            admin
+        );
+        agencyRepository.save(agency);
+
+        Map<String, String> qrData = new HashMap<>();
+        qrData.put("email", admin.getEmail());
+        qrData.put("password", generatedPassword);
+        String qrDataJson = objectMapper.writeValueAsString(qrData);
+
+        String qrCodeBase64 = QRCodeGenerator.generateQRCodeBase64(qrDataJson, 200, 200);
+
+        return new QRCodeResponse(
+            "Agenzia registrata con successo",
+            qrCodeBase64
+        );
+    }
+
 }

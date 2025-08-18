@@ -60,5 +60,9 @@ public class AdminController {
         return ResponseEntity.ok(admin);
     }
 
-    // TODO: implementare la registrazione dell'agenzia
+    @PostMapping("/create-agency")
+    public ResponseEntity<QRCodeResponse> createAgency(@RequestBody CreateAgencyRequest request) throws IOException, WriterException {
+        QRCodeResponse response = adminService.createAgency(request);
+        return ResponseEntity.ok(response);
+    }
 }
