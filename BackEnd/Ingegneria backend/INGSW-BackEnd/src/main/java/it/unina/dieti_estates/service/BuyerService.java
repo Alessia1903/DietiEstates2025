@@ -140,4 +140,17 @@ public class BuyerService {
         }
         return buyer;
     }
+
+    public void updateProfile(Buyer updatedBuyer) {
+        Buyer buyer = getProfile();
+        if (updatedBuyer.getFirstName() != null) buyer.setFirstName(updatedBuyer.getFirstName());
+        if (updatedBuyer.getLastName() != null) buyer.setLastName(updatedBuyer.getLastName());
+        if (updatedBuyer.getEmail() != null) buyer.setEmail(updatedBuyer.getEmail());
+        if (updatedBuyer.getPassword() != null && !updatedBuyer.getPassword().isEmpty()) {
+            buyer.setPassword(passwordEncoder.encode(updatedBuyer.getPassword()));
+        }
+        if (updatedBuyer.getBirthdate() != null) buyer.setBirthdate(updatedBuyer.getBirthdate());
+        
+        buyerRepository.save(buyer);
+    }
 }

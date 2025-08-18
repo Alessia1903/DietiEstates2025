@@ -67,13 +67,18 @@ public class BuyerController {
         return ResponseEntity.ok(response);
     }
 
+    @PreAuthorize("hasRole('BUYER')")
+    @PatchMapping("/profile")
+    public ResponseEntity<String> updateProfile(@RequestBody Buyer updatedBuyer) {
+        buyerService.updateProfile(updatedBuyer);
+        return ResponseEntity.ok("Profilo aggiornato con successo");
+    }
+
     // TODO: Implementare la funzionalità di ricerca
 
     // TODO: implementare il login con Google
 
     // TODO: implementare la registrazione con Google
-
-    // TODO: implementare la funzionalità di modifica dati profilo
 
     // TODO: implementare le notifiche
 

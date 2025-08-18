@@ -76,7 +76,10 @@ public class EstateAgentController {
         return ResponseEntity.ok(agentService.getMyProperties(page, size));
     }
 
-    // TODO: implementare la funzionalità di modifica dati profilo
-
-    // TODO: Implementare dettagli immobile
+    @PreAuthorize("hasRole('AGENT')")
+    @PatchMapping("/profile")
+    public ResponseEntity<String> updateProfile(@RequestBody EstateAgent updatedAgent) {
+        agentService.updateProfile(updatedAgent);
+        return ResponseEntity.ok("Profilo aggiornato con successo");
+    }
 }

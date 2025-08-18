@@ -23,6 +23,7 @@ import it.unina.dieti_estates.repository.BookedVisitRepository;
 import it.unina.dieti_estates.repository.EstateAgentRepository;
 import it.unina.dieti_estates.repository.RealEstateRepository;
 import it.unina.dieti_estates.exception.resource.BookedVisitNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
 public class EstateAgentService {
@@ -33,6 +34,8 @@ public class EstateAgentService {
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
     private final BlobStorageService blobStorageService;
+    private final PasswordEncoder passwordEncoder;
+
 
     @Autowired
     public EstateAgentService(
@@ -41,7 +44,8 @@ public class EstateAgentService {
             JwtService jwtService,
             BookedVisitRepository visitRepository,
             RealEstateRepository realEstateRepository,
-            BlobStorageService blobStorageService
+            BlobStorageService blobStorageService,
+            PasswordEncoder passwordEncoder
     ) {
         this.agentRepository = agentRepository;
         this.authenticationManager = authenticationManager;
@@ -49,6 +53,7 @@ public class EstateAgentService {
         this.visitRepository = visitRepository;
         this.realEstateRepository = realEstateRepository;
         this.blobStorageService = blobStorageService;
+        this.passwordEncoder = passwordEncoder;
     }
     
     public String loginAgent(LoginRequest loginAgentRequest) {
@@ -201,5 +206,18 @@ public class EstateAgentService {
             realEstatePage.getTotalElements(),
             realEstatePage.hasNext()
         );
+    }
+
+    public void updateProfile(EstateAgent updatedAgent) {
+        EstateAgent agent = getProfile();
+        if (updatedAgent.getFirstName() != null) agent.setFirstName(updatedAgent.getFirstName());
+        if (updatedAgent.getLastName() != null) agent.setLastName(updatedAgent.getLastName());
+        if (updatedAgent.getEmail() != null) agent.setEmail(updatedAgent.getEmail());
+        if (updatedAgent.getTelephoneNumber() != null) agent.setTelephoneNumber(updatedAgent.getTelephoneNumber());
+        if (updatedAgent.getQualifications() != null) agent.setQualifications(updatedAgent.getQualifications());
+        if (updatedAgent.getPassword() != null && !updatedAgent.getPassword().isEmpty()) {
+            agent.setPassword(passwordEncoder.encode(updatedAgent.getPassword()));
+        }
+        agentRepository.save(agent);
     }
 }

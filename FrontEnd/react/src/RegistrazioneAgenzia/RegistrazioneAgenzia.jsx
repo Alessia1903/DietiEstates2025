@@ -32,6 +32,7 @@ const RegistrazioneAgenzia = () => {
 
   // Modal state
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [qrCodeBase64, setQrCodeBase64] = useState("");
 
   // Handlers
   const handleLogoClick = () => {
@@ -66,7 +67,11 @@ const RegistrazioneAgenzia = () => {
       return;
     }
 
-    // Simula successo
+    // Simula chiamata al backend per ottenere il QR code
+    // Sostituisci questa parte con la vera chiamata API
+    const fakeQrCodeBase64 = "iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAIAAAADJ/2KAAABPUlEQVR42uWYyw6DMAwEm6r//8v0wCWStdbYubAml1YUcDNZP9d1XZ9nr+/n8et3f6y14AM39ft+8l09y235UNz/tVr77vc7I5udZU6I2HKjqHSpdhy5Rn6KPbflSZEsRSv35elx8YRlfoX7+CyKJ7ohfl215UaRZ89qviY6Nqa4esrLGcTo+I64qHST54zci3vso10fLZ5kVV51K1r5aTh7NNlfT2fVfDOLIq8UidqILp1zdOzueHUYz4RwUm9266MVv1xJvfqFK9vZo0m24B0x19/EPppQyT067wbVm521SGrBXp3S64fe1LtUa+w8ekzpXapaqWq0N9+ZPuvOKxSeP3LVzp11k/jH+5W5ObpX86kMzuNA/HX6rJv3xaQmMp5GHM26q5FSaS4/h7mz7qieXpZX1j3ni09eBhT/mqhonaWq8LwAAAAASUVORK5CYII"; // esempio, da sostituire
+    setQrCodeBase64(fakeQrCodeBase64);
+
     setShowSuccessModal(true);
   };
 
@@ -203,9 +208,20 @@ const RegistrazioneAgenzia = () => {
               </svg>
             </div>
             <h2>Registrazione completata!</h2>
-            <p>L'agenzia è stata registrata con successo.<br/>
-              <strong>Controlla la casella di posta elettronica</strong> per le credenziali di accesso.
+            <p>
+              L'agenzia è stata registrata con successo.<br/>
+              <strong>Scansiona il QR code qui sotto</strong> per accedere rapidamente all'area agenzia.<br/>
+              Conserva il codice per futuri accessi.
             </p>
+            {qrCodeBase64 && (
+              <div style={{ margin: "20px 0" }}>
+                <img
+                  src={`data:image/png;base64,${qrCodeBase64}`}
+                  alt="QR Code"
+                  style={{ width: "128px", height: "128px" }}
+                />
+              </div>
+            )}
             <button className="reg-agenzia-modal-button" onClick={handleSuccessProceed}>PROSEGUI</button>
           </div>
         </div>

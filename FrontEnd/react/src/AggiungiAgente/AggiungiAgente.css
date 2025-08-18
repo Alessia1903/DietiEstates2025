@@ -35,16 +35,6 @@
     width: 100%;
 }
 
-.aggiungiAgenteForm .form-group textarea {
-    width: 100%;
-    padding: 8px;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-    margin-top: 4px;
-    margin-bottom: 12px;
-    box-sizing: border-box;
-}
-
 /* Adattabilità su schermi più piccoli */
 @media (max-width: 768px) {
     .aggiungiAgente {

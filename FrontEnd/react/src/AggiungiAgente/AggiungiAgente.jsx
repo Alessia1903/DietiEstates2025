@@ -12,26 +12,14 @@ const AggiungiAgente = () => {
   const [cognomeAg, setCognomeAg] = useState("");
   const [emailAg, setEmailAg] = useState("");
   const [telefonoAg, setTelefonoAg] = useState("");
-  const [bioAg, setBioAg] = useState("");
   const [erroreMessaggio, setErroreMessaggio] = useState("");
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
+  const [qrCodeBase64, setQrCodeBase64] = useState("");
 
   // Gestione click su logo/titolo
   const handleLogoClick = () => {
     navigate("/home-admin");
-  };
-
-  // Gestione click su Dipendenti (icona e testo)
-  const handleDipendentiClick = () => {
-    const role = localStorage.getItem("role");
-    if (role === "collaboratore") {
-      navigate("/aggiungi-dipendenti-collaboratore");
-    } else if (role === "admin") {
-      navigate("/aggiungi-dipendenti-admin");
-    } else {
-      navigate("/home-no-login");
-    }
   };
 
   // Gestione submit form
@@ -39,12 +27,12 @@ const AggiungiAgente = () => {
     e.preventDefault();
     setErroreMessaggio("");
 
-    if (!nomeAg || !cognomeAg || !emailAg || !telefonoAg || !bioAg) {
+    if (!nomeAg || !cognomeAg || !emailAg || !telefonoAg) {
       setErroreMessaggio("⚠ Tutti i campi sono obbligatori!");
       return;
     }
 
-    const dati = { nomeAg, cognomeAg, emailAg, telefonoAg, bioAg };
+    const dati = { nomeAg, cognomeAg, emailAg, telefonoAg };
 
     try {
       const response = await fetch(
@@ -58,6 +46,10 @@ const AggiungiAgente = () => {
       const result = await response.json();
 
       if (response.ok) {
+        // Simula chiamata al backend per ottenere il QR code
+        // Sostituisci questa parte con la vera chiamata API
+        const fakeQrCodeBase64 = "iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAIAAAADJ/2KAAABPUlEQVR42uWYyw6DMAwEm6r//8v0wCWStdbYubAml1YUcDNZP9d1XZ9nr+/n8et3f6y14AM39ft+8l09y235UNz/tVr77vc7I5udZU6I2HKjqHSpdhy5Rn6KPbflSZEsRSv35elx8YRlfoX7+CyKJ7ohfl215UaRZ89qviY6Nqa4esrLGcTo+I64qHST54zci3vso10fLZ5kVV51K1r5aTh7NNlfT2fVfDOLIq8UidqILp1zdOzueHUYz4RwUm9266MVv1xJvfqFK9vZo0m24B0x19/EPppQyT067wbVm521SGrBXp3S64fe1LtUa+w8ekzpXapaqWq0N9+ZPuvOKxSeP3LVzp11k/jH+5W5ObpX86kMzuNA/HX6rJv3xaQmMp5GHM26q5FSaS4/h7mz7qieXpZX1j3ni09eBhT/mqhonaWq8LwAAAAASUVORK5CYII"; // esempio, da sostituire
+        setQrCodeBase64(fakeQrCodeBase64);
         setShowWarningModal(true);
       } else if (response.status === 409) {
         setErroreMessaggio("⚠ " + result.message);
@@ -162,69 +154,59 @@ const AggiungiAgente = () => {
           </div>
         </div>
         <div className="def-role">
-          Un Agente Immobiliare può svolgere qualsiasi mansione operativa e non può creare altri account.
+          Un Agente Immobiliare può svolgere qualsiasi mansione operativa, come caricare annunci di nuovi immobili, ma non può creare altri account.
         </div>
       </div>
 
       {/* Sezione Aggiunta Agente */}
       <div className="aggiungiAgente w-full max-w-lg mt-10 bg-white p-6 rounded-lg shadow-lg">
-<form className="aggiungiAgenteForm flex-col" onSubmit={handleSubmit}>
-  <div className="form-group">
-    <label htmlFor="nomeAg">Nome</label>
-    <input
-      type="text"
-      id="nomeAg"
-      required
-      value={nomeAg}
-      onChange={e => setNomeAg(e.target.value)}
-    />
-  </div>
-  <div className="form-group">
-    <label htmlFor="cognomeAg">Cognome</label>
-    <input
-      type="text"
-      id="cognomeAg"
-      required
-      value={cognomeAg}
-      onChange={e => setCognomeAg(e.target.value)}
-    />
-  </div>
-  <div className="form-group">
-    <label htmlFor="emailAg">Indirizzo Email</label>
-    <input
-      type="email"
-      id="emailAg"
-      required
-      value={emailAg}
-      onChange={e => setEmailAg(e.target.value)}
-    />
-  </div>
-  <div className="form-group">
-    <label htmlFor="telefonoAg">Numero di telefono</label>
-    <input
-      type="tel"
-      id="telefonoAg"
-      required
-      value={telefonoAg}
-      onChange={e => setTelefonoAg(e.target.value)}
-    />
-  </div>
-  <div className="form-group">
-    <label htmlFor="bioAg">Biografia</label>
-    <textarea
-      id="bioAg"
-      required
-      value={bioAg}
-      onChange={e => setBioAg(e.target.value)}
-      rows={3}
-    />
-  </div>
-  {erroreMessaggio && (
-    <div className="error-message" style={{ display: "block" }}>
-      {erroreMessaggio}
-    </div>
-  )}
-</form>
+        <form className="aggiungiAgenteForm flex-col" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="nomeAg">Nome</label>
+            <input
+              type="text"
+              id="nomeAg"
+              required
+              value={nomeAg}
+              onChange={e => setNomeAg(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="cognomeAg">Cognome</label>
+            <input
+              type="text"
+              id="cognomeAg"
+              required
+              value={cognomeAg}
+              onChange={e => setCognomeAg(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="emailAg">Indirizzo Email</label>
+            <input
+              type="email"
+              id="emailAg"
+              required
+              value={emailAg}
+              onChange={e => setEmailAg(e.target.value)}
+            />
+          </div>
+          <div className="form-group">
+            <label htmlFor="telefonoAg">Numero di telefono</label>
+            <input
+              type="tel"
+              id="telefonoAg"
+              required
+              value={telefonoAg}
+              onChange={e => setTelefonoAg(e.target.value)}
+            />
+          </div>
+          {erroreMessaggio && (
+            <div className="error-message" style={{ display: "block" }}>
+              {erroreMessaggio}
+            </div>
+          )}
+        </form>
       </div>
 
       <button
@@ -277,8 +259,17 @@ const AggiungiAgente = () => {
                 </svg>
               </div>
               <h2>Complimenti!</h2>
-              <p>Il nuovo dipendente è stato registrato con successo.</p>
-              <p><strong>Controlla la casella di posta elettronica</strong> per scoprire le credenziali di accesso.</p>
+              <p>Il nuovo agente è stato registrato con successo.</p>
+              <strong>Scansiona il QR code qui sotto</strong> per visualizzare le credenziali agente.<br/>
+              {qrCodeBase64 && (
+              <div style={{ margin: "20px 0" }}>
+                <img
+                  src={`data:image/png;base64,${qrCodeBase64}`}
+                  alt="QR Code"
+                  style={{ width: "128px", height: "128px" }}
+                />
+              </div>
+              )}
               <div className="modal-spacer"></div>
               <button id="confirmSuccessButton" onClick={handleConfirmSuccess}>PROSEGUI</button>
             </div>
