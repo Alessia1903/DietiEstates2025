@@ -14,7 +14,7 @@ import java.util.List;
 @Repository
 public interface BookedVisitRepository extends JpaRepository<BookedVisit, Long> {
 
-    @Query("SELECT new it.unina.dieti_estates.model.BookedVisitDTO(b.id, b.status, b.requestDate, bu.email, p.address) " +
+    @Query("SELECT new it.unina.dieti_estates.model.dto.BookedVisitDTO(b.id, b.status, b.requestDate, bu.email, p.address) " +
        "FROM BookedVisit b " +
        "JOIN b.buyer bu " +  
        "JOIN b.estate p " +

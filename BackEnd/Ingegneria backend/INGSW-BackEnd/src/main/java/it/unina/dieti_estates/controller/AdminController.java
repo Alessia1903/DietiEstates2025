@@ -4,6 +4,7 @@ import it.unina.dieti_estates.model.*;
 import it.unina.dieti_estates.model.dto.ChangePasswordRequest;
 import it.unina.dieti_estates.model.dto.CreateAdminRequest;
 import it.unina.dieti_estates.model.dto.CreateEstateAgentRequest;
+import it.unina.dieti_estates.model.dto.CreateAgencyRequest;
 import it.unina.dieti_estates.model.dto.QRCodeResponse;
 
 import java.io.IOException;

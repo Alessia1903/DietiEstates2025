@@ -6,14 +6,17 @@ import it.unina.dieti_estates.exception.auth.InvalidCredentialsException;
 import it.unina.dieti_estates.exception.auth.UnauthorizedAccessException;
 import it.unina.dieti_estates.exception.validation.DuplicateResourceException;
 import it.unina.dieti_estates.model.Admin;
+import it.unina.dieti_estates.model.Agency;
 import it.unina.dieti_estates.model.EstateAgent;
 import it.unina.dieti_estates.model.LoginRequest;
 import it.unina.dieti_estates.model.dto.ChangePasswordRequest;
 import it.unina.dieti_estates.model.dto.CreateAdminRequest;
 import it.unina.dieti_estates.model.dto.CreateEstateAgentRequest;
+import it.unina.dieti_estates.model.dto.CreateAgencyRequest;
 import it.unina.dieti_estates.model.dto.QRCodeResponse;
 import it.unina.dieti_estates.repository.AdminRepository;
 import it.unina.dieti_estates.repository.EstateAgentRepository;
+import it.unina.dieti_estates.repository.AgencyRepository;
 import it.unina.dieti_estates.utils.PasswordGenerator;
 import it.unina.dieti_estates.utils.QRCodeGenerator;
 
@@ -50,7 +53,7 @@ public class AdminService {
                        JwtService jwtService, 
                        EstateAgentRepository agentRepository,
                        ObjectMapper objectMapper,
-                       PasswordGenerator passwordGenerator
+                       PasswordGenerator passwordGenerator,
                        AgencyRepository agencyRepository) {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;

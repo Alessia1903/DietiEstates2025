@@ -82,7 +82,5 @@ public class BuyerController {
 
     // TODO: implementare le notifiche
 
-    // TODO: Implementare dettagli immobile
-
     // TODO: implementare la funzionalità di richiesta visita
 }
