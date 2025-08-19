@@ -8,6 +8,7 @@ import it.unina.dieti_estates.model.dto.FavoriteSearchResponse;
 import it.unina.dieti_estates.model.dto.PageResponse;
 import it.unina.dieti_estates.model.dto.RegistrationResponse;
 import it.unina.dieti_estates.service.BuyerService;
+import it.unina.dieti_estates.model.dto.RealEstateResponseDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -74,7 +75,15 @@ public class BuyerController {
         return ResponseEntity.ok("Profilo aggiornato con successo");
     }
 
-    // TODO: Implementare la funzionalità di ricerca
+    @PostMapping("/search")
+    public ResponseEntity<PageResponse<RealEstateResponseDTO>> searchRealEstates(
+        @RequestBody FavoriteRequest request,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size
+    ) {
+        PageResponse<RealEstateResponseDTO> response = buyerService.searchRealEstates(request, page, size);
+        return ResponseEntity.ok(response);
+    }
 
     // TODO: implementare il login con Google
 

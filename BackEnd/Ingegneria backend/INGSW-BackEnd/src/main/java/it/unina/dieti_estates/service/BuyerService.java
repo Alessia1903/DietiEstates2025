@@ -31,18 +31,21 @@ public class BuyerService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final FavoriteSearchRepository favoriteSearchRepository;
+    private final RealEstateRepository realEstateRepository;
 
     @Autowired
     public BuyerService(BuyerRepository buyerRepository, 
                        PasswordEncoder passwordEncoder, 
                        JwtService jwtService, 
                        @Lazy AuthenticationManager authenticationManager,
-                       FavoriteSearchRepository favoriteSearchRepository) {
+                       FavoriteSearchRepository favoriteSearchRepository,
+                       RealEstateRepository realEstateRepository) {
         this.buyerRepository = buyerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.favoriteSearchRepository = favoriteSearchRepository;
+        this.realEstateRepository = realEstateRepository;
     }
 
     public RegistrationResponse registerNewBuyer(Buyer buyer) {
@@ -152,5 +155,50 @@ public class BuyerService {
         if (updatedBuyer.getBirthdate() != null) buyer.setBirthdate(updatedBuyer.getBirthdate());
         
         buyerRepository.save(buyer);
+    }
+
+    public PageResponse<RealEstateResponseDTO> searchRealEstates(FavoriteRequest request, int page, int size) {
+        Page<RealEstate> realEstates = realEstateRepository.searchRealEstates(
+            request.getCity(),
+            request.getContractType(),
+            request.getEnergyClass(),
+            request.getRooms(),
+            request.getMinPrice(),
+            request.getMaxPrice(),
+            PageRequest.of(page, size)
+        );
+        List<RealEstateResponseDTO> dtos = realEstates.getContent()
+            .stream()
+            .map(re -> {
+                RealEstateResponseDTO dto = new RealEstateResponseDTO();
+                dto.setId(re.getId());
+                dto.setImageUrl(re.getImageUrl());
+                dto.setCity(re.getCity());
+                dto.setDistrict(re.getDistrict());
+                dto.setAddress(re.getAddress());
+                dto.setStreetNumber(re.getStreetNumber());
+                dto.setFloor(re.getFloor());
+                dto.setTotalBuildingFloors(re.getTotalBuildingFloors());
+                dto.setCommercialArea(re.getCommercialArea());
+                dto.setElevator(re.getElevator());
+                dto.setRooms(re.getRooms());
+                dto.setEnergyClass(re.getEnergyClass());
+                dto.setFurnishing(re.getFurnishing());
+                dto.setHeating(re.getHeating());
+                dto.setPropertyStatus(re.getPropertyStatus());
+                dto.setContractType(re.getContractType());
+                dto.setDescription(re.getDescription());
+                dto.setPrice(re.getPrice());
+                return dto;
+            })
+            .collect(Collectors.toList());
+
+        return new PageResponse<>(
+            dtos,
+            realEstates.getNumber(),
+            realEstates.getSize(),
+            realEstates.getTotalElements(),
+            realEstates.hasNext()
+        );
     }
 }

@@ -15,3 +15,20 @@ public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {
     @Query("SELECT r FROM RealEstate r WHERE r.agent.id = :agentId")
     Page<RealEstate> findByAgentId(@Param("agentId") Long agentId, Pageable pageable);
 }
+
+@Query("SELECT r FROM RealEstate r " +
+           "WHERE (:city IS NULL OR r.city = :city) " +
+           "AND (:contractType IS NULL OR r.contractType = :contractType) " +
+           "AND (:energyClass IS NULL OR r.energyClass = :energyClass) " +
+           "AND (:rooms IS NULL OR r.rooms = :rooms) " +
+           "AND (:minPrice IS NULL OR r.price >= :minPrice) " +
+           "AND (:maxPrice IS NULL OR r.price <= :maxPrice)")
+    Page<RealEstate> searchRealEstates(
+        @Param("city") String city,
+        @Param("contractType") String contractType,
+        @Param("energyClass") String energyClass,
+        @Param("rooms") Integer rooms,
+        @Param("minPrice") Double minPrice,
+        @Param("maxPrice") Double maxPrice,
+        Pageable pageable
+    );
