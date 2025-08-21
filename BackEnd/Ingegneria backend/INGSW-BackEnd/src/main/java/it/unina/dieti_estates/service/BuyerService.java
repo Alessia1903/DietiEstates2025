@@ -30,6 +30,18 @@ import java.util.Collections;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import it.unina.dieti_estates.exception.auth.UserNotFoundException;
+import it.unina.dieti_estates.model.dto.VisitRequest;
+import it.unina.dieti_estates.model.dto.WeatherRequest;
+import it.unina.dieti_estates.model.BookedVisit;
+import it.unina.dieti_estates.repository.BookedVisitRepository;
+import java.net.URL;
+import java.net.HttpURLConnection;
+import java.io.InputStream;
+import java.util.Scanner;
+import java.sql.Timestamp;
+import it.unina.dieti_estates.exception.business.WeatherApiException;
+import it.unina.dieti_estates.exception.resource.RealEstateNotFoundException;
+import it.unina.dieti_estates.exception.validation.DuplicateResourceException;
 
 
 @Service
@@ -41,6 +53,7 @@ public class BuyerService {
     private final AuthenticationManager authenticationManager;
     private final FavoriteSearchRepository favoriteSearchRepository;
     private final RealEstateRepository realEstateRepository;
+    private final BookedVisitRepository bookedVisitRepository;
 
     @Autowired
     public BuyerService(BuyerRepository buyerRepository, 
@@ -48,13 +61,15 @@ public class BuyerService {
                        JwtService jwtService, 
                        @Lazy AuthenticationManager authenticationManager,
                        FavoriteSearchRepository favoriteSearchRepository,
-                       RealEstateRepository realEstateRepository) {
+                       RealEstateRepository realEstateRepository,
+                       BookedVisitRepository bookedVisitRepository) {
         this.buyerRepository = buyerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.favoriteSearchRepository = favoriteSearchRepository;
         this.realEstateRepository = realEstateRepository;
+        this.bookedVisitRepository = bookedVisitRepository;
     }
 
     public RegistrationResponse registerNewBuyer(Buyer buyer) {
@@ -264,4 +279,101 @@ public class BuyerService {
             return null;
         }
     }
+
+    public Object getWeatherForecast(WeatherRequest request) {
+        try {
+            String city = request.getCity();
+            String startDate = request.getDate();
+            java.time.LocalDate start = java.time.LocalDate.parse(startDate);
+            java.time.LocalDate end = start.plusDays(7);
+            String endDate = end.toString();
+
+            // Step 1: Geocoding con Nominatim
+            String geoUrl = "https://nominatim.openstreetmap.org/search?city=" + java.net.URLEncoder.encode(city, "UTF-8") + "&format=json&limit=1";
+            URL geoApiUrl = new URL(geoUrl);
+            HttpURLConnection geoConn = (HttpURLConnection) geoApiUrl.openConnection();
+            geoConn.setRequestMethod("GET");
+            geoConn.setRequestProperty("User-Agent", "DietiEstates/1.0");
+            geoConn.connect();
+            int geoResponseCode = geoConn.getResponseCode();
+            if (geoResponseCode != 200) {
+                throw new WeatherApiException("Errore chiamata Nominatim: codice " + geoResponseCode);
+            }
+            InputStream geoIs = geoConn.getInputStream();
+            Scanner geoScanner = new Scanner(geoIs).useDelimiter("\\A");
+            String geoResult = geoScanner.hasNext() ? geoScanner.next() : "";
+            geoScanner.close();
+            geoIs.close();
+
+            // Parsing JSON manuale (solo per lat/lon)
+            String lat = null, lon = null;
+            if (geoResult.startsWith("[") && geoResult.length() > 2) {
+                int latIdx = geoResult.indexOf("\"lat\":\"");
+                int lonIdx = geoResult.indexOf("\"lon\":\"");
+                if (latIdx != -1 && lonIdx != -1) {
+                    lat = geoResult.substring(latIdx + 7, geoResult.indexOf("\"", latIdx + 7));
+                    lon = geoResult.substring(lonIdx + 7, geoResult.indexOf("\"", lonIdx + 7));
+                }
+            }
+            if (lat == null || lon == null) {
+                throw new WeatherApiException("Latitudine/longitudine non trovate per la città: " + city);
+            }
+
+            // Step 2: Chiamata OpenMeteo con lat/lon
+            String url = "https://api.open-meteo.com/v1/forecast?"
+                       + "latitude=" + lat
+                       + "&longitude=" + lon
+                       + "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode"
+                       + "&start_date=" + startDate
+                       + "&end_date=" + endDate
+                       + "&timezone=Europe/Rome";
+
+            URL apiUrl = new URL(url);
+            HttpURLConnection conn = (HttpURLConnection) apiUrl.openConnection();
+            conn.setRequestMethod("GET");
+            conn.connect();
+            int responseCode = conn.getResponseCode();
+            if (responseCode != 200) {
+                throw new WeatherApiException("Errore chiamata OpenMeteo: codice " + responseCode);
+            }
+            InputStream is = conn.getInputStream();
+            Scanner s = new Scanner(is).useDelimiter("\\A");
+            String result = s.hasNext() ? s.next() : "";
+            s.close();
+            is.close();
+            return result;
+        } catch (Exception e) {
+            throw new WeatherApiException("Errore nel recupero delle previsioni meteo: " + e.getMessage());
+        }
+    }
+
+    @Transactional
+    public void bookVisit(VisitRequest request) {
+        Long realEstateId = request.getRealEstateId();
+        String date = request.getDate();
+        String time = request.getTime();
+
+        RealEstate estate = realEstateRepository.findById(realEstateId)
+            .orElseThrow(() -> new RealEstateNotFoundException("Immobile non trovato"));
+
+        Buyer buyer = getProfile();
+        EstateAgent agent = estate.getAgent();
+
+        Timestamp visitTimestamp = Timestamp.valueOf(date + " " + time + ":00");
+        boolean exists = bookedVisitRepository.existsByEstateAndRequestDate(estate, visitTimestamp);
+
+        if (exists) {
+            throw new DuplicateResourceException("Visita già prenotata per questo immobile, data e orario");
+        }
+
+        BookedVisit visit = new BookedVisit();
+        visit.setStatus("In attesa");
+        visit.setRequestDate(visitTimestamp);
+        visit.setRealEstate(estate);
+        visit.setBuyer(buyer);
+        visit.setAgent(agent);
+
+        bookedVisitRepository.save(visit);
+    }
+
 }

@@ -9,6 +9,8 @@ import it.unina.dieti_estates.model.dto.PageResponse;
 import it.unina.dieti_estates.model.dto.RegistrationResponse;
 import it.unina.dieti_estates.service.BuyerService;
 import it.unina.dieti_estates.model.dto.RealEstateResponseDTO;
+import it.unina.dieti_estates.model.dto.WeatherRequest;
+import it.unina.dieti_estates.model.dto.VisitRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -97,7 +99,18 @@ public class BuyerController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: implementare le notifiche
+    @PreAuthorize("hasRole('BUYER')")
+    @PostMapping("/weather")
+    public ResponseEntity<?> getWeather(@RequestBody WeatherRequest request) {
+        return ResponseEntity.ok(buyerService.getWeatherForecast(request));
+    }
 
-    // TODO: implementare la funzionalità di richiesta visita
+    @PreAuthorize("hasRole('BUYER')")
+    @PostMapping("/book-visit")
+    public ResponseEntity<String> bookVisit(@RequestBody VisitRequest request) {
+        buyerService.bookVisit(request);
+        return ResponseEntity.ok("Visita prenotata con successo");
+    }
+
+    // TODO: implementare le notifiche
 }
