@@ -22,6 +22,5 @@ public interface BookedVisitRepository extends JpaRepository<BookedVisit, Long> 
        "WHERE b.agent.id = :agentId")
     List<BookedVisitDTO> findByEstateAgent(@Param("agentId") Long agentId);
 
-boolean existsByEstateAndRequestDate(RealEstate estate, Timestamp requestDate);
-
+    boolean existsByEstateAndRequestDate(RealEstate estate, Timestamp requestDate);
 }
