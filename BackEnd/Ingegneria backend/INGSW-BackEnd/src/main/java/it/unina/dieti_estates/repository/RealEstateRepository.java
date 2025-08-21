@@ -14,9 +14,8 @@ import org.springframework.stereotype.Repository;
 public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {
     @Query("SELECT r FROM RealEstate r WHERE r.agent.id = :agentId")
     Page<RealEstate> findByAgentId(@Param("agentId") Long agentId, Pageable pageable);
-}
 
-@Query("SELECT r FROM RealEstate r " +
+    @Query("SELECT r FROM RealEstate r " +
            "WHERE (:city IS NULL OR r.city = :city) " +
            "AND (:contractType IS NULL OR r.contractType = :contractType) " +
            "AND (:energyClass IS NULL OR r.energyClass = :energyClass) " +
@@ -32,3 +31,4 @@ public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {
         @Param("maxPrice") Double maxPrice,
         Pageable pageable
     );
+}

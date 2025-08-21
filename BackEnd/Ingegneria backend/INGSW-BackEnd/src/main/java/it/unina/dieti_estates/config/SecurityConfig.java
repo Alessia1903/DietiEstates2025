@@ -46,9 +46,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
                             "/api/buyers/register", 
-                                        "/api/buyers/login", 
-                                        "/api/admins/login",
-                                        "/api/estate-agents/login").permitAll()
+                            "/api/buyers/login", 
+                            "/api/buyers/google-login",
+                            "/api/buyers/google-register",
+                            "/api/admins/login",
+                            "/api/estate-agents/login").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

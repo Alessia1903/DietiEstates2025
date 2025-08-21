@@ -21,6 +21,15 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
+import it.unina.dieti_estates.repository.RealEstateRepository;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
+import com.google.api.client.json.jackson2.JacksonFactory;
+import java.util.Collections;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import it.unina.dieti_estates.exception.auth.UserNotFoundException;
 
 
 @Service
@@ -200,5 +209,59 @@ public class BuyerService {
             realEstates.getTotalElements(),
             realEstates.hasNext()
         );
+    }
+
+    public String loginBuyerWithGoogle(String idTokenString) {
+        GoogleIdToken idToken = verifyGoogleIdToken(idTokenString);
+        if (idToken == null) {
+            throw new InvalidCredentialsException("ID token Google non valido");
+        }
+        String email = idToken.getPayload().getEmail();
+        Buyer buyer = buyerRepository.findByEmail(email)
+            .orElseThrow(new java.util.function.Supplier<UserNotFoundException>() {
+                @Override
+                public UserNotFoundException get() {
+                    return new UserNotFoundException("Buyer non trovato per email Google");
+                }
+            });
+        UserDetails userDetails = org.springframework.security.core.userdetails.User
+            .withUsername(buyer.getEmail())
+            .password(buyer.getPassword())
+            .authorities("ROLE_BUYER")
+            .build();
+        return jwtService.generateToken(userDetails);
+    }
+
+    public RegistrationResponse registerBuyerWithGoogle(String idTokenString) {
+        GoogleIdToken idToken = verifyGoogleIdToken(idTokenString);
+        if (idToken == null) {
+            throw new InvalidCredentialsException("ID token Google non valido");
+        }
+        String email = idToken.getPayload().getEmail();
+        if (buyerRepository.findByEmail(email).isPresent()) {
+            throw new InvalidCredentialsException("Buyer già registrato con questa email Google");
+        }
+        Buyer buyer = new Buyer();
+        buyer.setEmail(email);
+        buyer.setFirstName((String) idToken.getPayload().get("given_name"));
+        buyer.setLastName((String) idToken.getPayload().get("family_name"));
+        buyer.setPassword(passwordEncoder.encode("google-auth")); // Placeholder password
+        buyerRepository.save(buyer);
+        return new RegistrationResponse("Registrazione Google andata a buon fine");
+    }
+
+    // Helper for Google ID token verification
+    private GoogleIdToken verifyGoogleIdToken(String idTokenString) {
+        try {
+            GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
+                GoogleNetHttpTransport.newTrustedTransport(),
+                JacksonFactory.getDefaultInstance()
+            )
+            .setAudience(Collections.singletonList(System.getenv("GOOGLE_CLIENT_ID")))
+            .build();
+            return verifier.verify(idTokenString);
+        } catch (GeneralSecurityException | IOException e) {
+            return null;
+        }
     }
 }

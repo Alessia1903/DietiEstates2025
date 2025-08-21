@@ -85,9 +85,17 @@ public class BuyerController {
         return ResponseEntity.ok(response);
     }
 
-    // TODO: implementare il login con Google
+    @PostMapping("/google-login")
+    public ResponseEntity<String> loginBuyerWithGoogle(@RequestBody String idToken) {
+        String jwt = buyerService.loginBuyerWithGoogle(idToken);
+        return ResponseEntity.ok(jwt);
+    }
 
-    // TODO: implementare la registrazione con Google
+    @PostMapping("/google-register")
+    public ResponseEntity<RegistrationResponse> registerBuyerWithGoogle(@RequestBody String idToken) {
+        RegistrationResponse response = buyerService.registerBuyerWithGoogle(idToken);
+        return ResponseEntity.ok(response);
+    }
 
     // TODO: implementare le notifiche
 
