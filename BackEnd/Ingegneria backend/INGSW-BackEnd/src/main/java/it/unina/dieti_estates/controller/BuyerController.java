@@ -11,6 +11,7 @@ import it.unina.dieti_estates.service.BuyerService;
 import it.unina.dieti_estates.model.dto.RealEstateResponseDTO;
 import it.unina.dieti_estates.model.dto.WeatherRequest;
 import it.unina.dieti_estates.model.dto.VisitRequest;
+import it.unina.dieti_estates.model.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -112,5 +113,13 @@ public class BuyerController {
         return ResponseEntity.ok("Visita prenotata con successo");
     }
 
-    // TODO: implementare le notifiche
+    @PreAuthorize("hasRole('BUYER')")
+    @GetMapping("/notifications")
+    public ResponseEntity<PageResponse<Notification>> getNotifications(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size
+    ) {
+        PageResponse<Notification> notifications = buyerService.getNotificationsForCurrentBuyer(page, size);
+        return ResponseEntity.ok(notifications);
+    }
 }

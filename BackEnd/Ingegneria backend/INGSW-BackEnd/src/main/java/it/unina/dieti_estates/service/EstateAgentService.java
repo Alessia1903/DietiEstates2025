@@ -22,7 +22,10 @@ import it.unina.dieti_estates.model.dto.*;
 import it.unina.dieti_estates.repository.BookedVisitRepository;
 import it.unina.dieti_estates.repository.EstateAgentRepository;
 import it.unina.dieti_estates.repository.RealEstateRepository;
+import it.unina.dieti_estates.repository.NotificationRepository;
+import it.unina.dieti_estates.repository.FavoriteSearchRepository;
 import it.unina.dieti_estates.exception.resource.BookedVisitNotFoundException;
+import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Service
@@ -35,6 +38,8 @@ public class EstateAgentService {
     private final JwtService jwtService;
     private final BlobStorageService blobStorageService;
     private final PasswordEncoder passwordEncoder;
+    private final NotificationRepository notificationRepository;
+    private final FavoriteSearchRepository favoriteSearchRepository;
 
 
     @Autowired
@@ -45,8 +50,9 @@ public class EstateAgentService {
             BookedVisitRepository visitRepository,
             RealEstateRepository realEstateRepository,
             BlobStorageService blobStorageService,
-            PasswordEncoder passwordEncoder
-    ) {
+            PasswordEncoder passwordEncoder,
+            NotificationRepository notificationRepository,
+            FavoriteSearchRepository favoriteSearchRepository) {
         this.agentRepository = agentRepository;
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
@@ -54,6 +60,8 @@ public class EstateAgentService {
         this.realEstateRepository = realEstateRepository;
         this.blobStorageService = blobStorageService;
         this.passwordEncoder = passwordEncoder;
+        this.notificationRepository = notificationRepository;
+        this.favoriteSearchRepository = favoriteSearchRepository;
     }
     
     public String loginAgent(LoginRequest loginAgentRequest) {
@@ -99,6 +107,18 @@ public class EstateAgentService {
 
         visit.setStatus("accettata");
         visitRepository.save(visit);
+
+        // CREA NOTIFICA PER BUYER
+        Notification notification = new Notification(
+            "Visita Accettata",
+            "VISITA",
+            "La tua richiesta di visita per l'immobile '" + visit.getRealEstate().getAddress() + "' è stata ACCETTATA.",
+            LocalDateTime.now(),
+            visit.getBuyer(),
+            visit.getRealEstate()
+        );
+        notificationRepository.save(notification);
+
         return "Visita accettata con successo";
     }
 
@@ -117,6 +137,18 @@ public class EstateAgentService {
 
         visit.setStatus("rifiutata");
         visitRepository.save(visit);
+
+        // CREA NOTIFICA PER BUYER
+        Notification notification = new Notification(
+            "Visita Rifiutata",
+            "VISITA",
+            "La tua richiesta di visita per l'immobile '" + visit.getRealEstate().getAddress() + "' è stata RIFIUTATA.",
+            LocalDateTime.now(),
+            visit.getBuyer(),
+            visit.getRealEstate()
+        );
+        notificationRepository.save(notification);
+
         return "Visita rifiutata con successo";
     }
 
@@ -159,6 +191,26 @@ public class EstateAgentService {
         );
 
         RealEstate savedEstate = realEstateRepository.save(realEstate);
+
+        // NOTIFICHE AI BUYER CON PREFERITI COMPATIBILI
+        List<FavoriteSearch> matchingFavorites = favoriteSearchRepository.findMatchingFavorites(
+            savedEstate.getCity(),
+            savedEstate.getContractType(),
+            savedEstate.getEnergyClass(),
+            savedEstate.getRooms(),
+            savedEstate.getPrice().doubleValue()
+        );
+        for (FavoriteSearch fav : matchingFavorites) {
+            Notification notification = new Notification(
+                "Nuova proprietà in linea con la tua ricerca",
+                "NUOVA_PROPRIETA",
+                "Nuovo immobile compatibile con i tuoi preferiti: " + savedEstate.getAddress(),
+                LocalDateTime.now(),
+                fav.getBuyer(),
+                savedEstate
+            );
+            notificationRepository.save(notification);
+        }
 
         return mapToResponseDTO(savedEstate);
     }

@@ -34,6 +34,7 @@ import it.unina.dieti_estates.model.dto.VisitRequest;
 import it.unina.dieti_estates.model.dto.WeatherRequest;
 import it.unina.dieti_estates.model.BookedVisit;
 import it.unina.dieti_estates.repository.BookedVisitRepository;
+import it.unina.dieti_estates.repository.NotificationRepository;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.InputStream;
@@ -54,6 +55,7 @@ public class BuyerService {
     private final FavoriteSearchRepository favoriteSearchRepository;
     private final RealEstateRepository realEstateRepository;
     private final BookedVisitRepository bookedVisitRepository;
+    private final NotificationRepository notificationRepository;
 
     @Autowired
     public BuyerService(BuyerRepository buyerRepository, 
@@ -62,7 +64,8 @@ public class BuyerService {
                        @Lazy AuthenticationManager authenticationManager,
                        FavoriteSearchRepository favoriteSearchRepository,
                        RealEstateRepository realEstateRepository,
-                       BookedVisitRepository bookedVisitRepository) {
+                       BookedVisitRepository bookedVisitRepository,
+                       NotificationRepository notificationRepository) {
         this.buyerRepository = buyerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -70,6 +73,7 @@ public class BuyerService {
         this.favoriteSearchRepository = favoriteSearchRepository;
         this.realEstateRepository = realEstateRepository;
         this.bookedVisitRepository = bookedVisitRepository;
+        this.notificationRepository = notificationRepository;
     }
 
     public RegistrationResponse registerNewBuyer(Buyer buyer) {
@@ -89,9 +93,30 @@ public class BuyerService {
             );
 
             // 2. Recupera i dettagli dell'utente autenticato (sarà un Buyer)
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Buyer buyer = (Buyer) authentication.getPrincipal();
 
-            return jwtService.generateToken(userDetails);
+            // Generazione random notifica promozionale (10% probabilità)
+            if (Math.random() < 0.10) {
+                String[] promoMessages = {
+                    "Scopri le nuove proprietà in evidenza!",
+                    "Solo per te: sconto sulle commissioni questa settimana!",
+                    "Visita gratuita per i nuovi iscritti!",
+                    "Nuove promozioni disponibili, non perderle!",
+                    "DietiEstates ti premia: controlla le offerte speciali!"
+                };
+                int idx = (int)(Math.random() * promoMessages.length);
+                Notification promo = new Notification(
+                    "Promozione speciale!",
+                    "PROMOZIONALE",
+                    promoMessages[idx],
+                    java.time.LocalDateTime.now(),
+                    buyer,
+                    null
+                );
+                notificationRepository.save(promo);
+            }
+
+            return jwtService.generateToken(buyer);
         } catch (AuthenticationException e) {
             throw new InvalidCredentialsException("Email o password non valida");
         }
@@ -376,4 +401,15 @@ public class BuyerService {
         bookedVisitRepository.save(visit);
     }
 
+    public PageResponse getNotificationsForCurrentBuyer(int page, int size) {
+        Buyer buyer = getProfile();
+        Page<Notification> notificationPage = notificationRepository.findByBuyer(buyer, PageRequest.of(page, size));
+        return new PageResponse<>(
+            notificationPage.getContent(),
+            notificationPage.getNumber(),
+            notificationPage.getSize(),
+            notificationPage.getTotalElements(),
+            notificationPage.hasNext()
+        );
+    }
 }
