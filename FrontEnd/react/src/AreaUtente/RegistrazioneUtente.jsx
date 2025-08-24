@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./RegistrazioneUtente.css";
 
 const validateEmail = (email) => {
@@ -23,7 +24,7 @@ const RegistrazioneUtente = () => {
     navigate("/");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (
@@ -52,7 +53,29 @@ const RegistrazioneUtente = () => {
     }
 
     setShowError(false);
-    setShowModal(true);
+
+    // Chiamata al backend per registrazione
+    try {
+      await axios.post(
+        "http://localhost:8080/api/buyers/register",
+        {
+          firstName: nome,
+          lastName: cognome,
+          birthdate: dataNascita,
+          email,
+          password
+        },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      setShowModal(true);
+    } catch (error) {
+      if (error.response && error.response.status === 409) {
+        setErrorMsg("Email già registrata.");
+      } else {
+        setErrorMsg("Errore di connessione. Riprova.");
+      }
+      setShowError(true);
+    }
   };
 
   const handleModalConfirm = () => {

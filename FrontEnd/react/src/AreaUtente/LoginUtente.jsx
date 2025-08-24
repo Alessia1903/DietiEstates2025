@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./LoginUtente.css";
 
 const validateEmail = (email) => {
@@ -29,9 +30,20 @@ const LoginUtente = () => {
 
     try {
       setShowError(false);
+      // Chiamata al backend per login
+      const response = await axios.post(
+        "http://localhost:8080/api/buyers/login",
+        { email, password },
+        { headers: { "Content-Type": "application/json" } }
+      );
+      localStorage.setItem("jwtToken", response.data);
       navigate("/home");
     } catch (error) {
-      setErrorMsg("Errore di connessione. Riprova.");
+      if (error.response && error.response.status === 401) {
+        setErrorMsg("Credenziali non valide.");
+      } else {
+        setErrorMsg("Errore di connessione. Riprova.");
+      }
       setShowError(true);
     }
   };
