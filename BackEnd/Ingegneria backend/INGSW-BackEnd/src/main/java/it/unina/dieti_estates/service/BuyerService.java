@@ -26,6 +26,8 @@ import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Collections;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -366,7 +368,19 @@ public class BuyerService {
             String result = s.hasNext() ? s.next() : "";
             s.close();
             is.close();
-            return result;
+            
+            try {
+                ObjectMapper mapper = new ObjectMapper();
+                JsonNode root = mapper.readTree(result);
+                if (root.has("daily")) {
+                    return root.get("daily");
+                } else {
+                    throw new WeatherApiException("Risposta OpenMeteo non contiene dati 'daily'");
+                }
+            } catch (Exception ex) {
+                throw new WeatherApiException("Errore parsing JSON meteo: " + ex.getMessage());
+            }
+
         } catch (Exception e) {
             throw new WeatherApiException("Errore nel recupero delle previsioni meteo: " + e.getMessage());
         }

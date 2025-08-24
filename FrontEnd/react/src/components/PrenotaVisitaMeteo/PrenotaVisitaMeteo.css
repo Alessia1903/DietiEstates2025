@@ -1,0 +1,176 @@
+.pvm-modal-outer {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.pvm-modal-inner {
+  width: 1200px;
+  max-width: 98vw;
+  background: #fff;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 32px rgba(7,59,76,0.15);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.pvm-title {
+  color: #073B4C;
+  font-weight: bold;
+  font-size: 2rem;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.pvm-desc {
+  font-size: 1.2rem;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.pvm-meteo-row {
+  display: flex;
+  gap: 18px;
+  margin-bottom: 24px;
+  width: 100%;
+  justify-content: center;
+}
+
+.pvm-meteo-day {
+  background: #f7f7f7;
+  border: 1px solid #ddd;
+  border-radius: 14px;
+  min-width: 140px;
+  padding: 12px 8px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: none;
+  font-size: 1rem;
+}
+
+.pvm-meteo-day.pvm-selected {
+  background: #06D6A0;
+  border: 2px solid #073B4C;
+  box-shadow: 0 2px 8px #06D6A033;
+}
+
+.pvm-meteo-icon {
+  font-size: 2.2rem;
+  margin-bottom: 4px;
+}
+
+.pvm-meteo-date {
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.pvm-meteo-text {
+  font-size: 1rem;
+  margin: 2px 0;
+}
+
+.pvm-meteo-temp {
+  font-size: 1rem;
+  margin-top: 2px;
+}
+
+.pvm-max {
+  color: #E76F51;
+}
+
+.pvm-min {
+  color: #457B9D;
+}
+
+.pvm-meteo-rain {
+  font-size: 0.95rem;
+  color: #457B9D;
+  margin-top: 2px;
+}
+
+.pvm-time-row {
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.pvm-label {
+  font-weight: bold;
+  color: #073B4C;
+  font-size: 1.1rem;
+}
+
+.pvm-time-input {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #06D6A0;
+  font-size: 1rem;
+}
+
+.pvm-buttons {
+  display: flex;
+  gap: 16px;
+  margin-top: 10px;
+  width: 100%;
+  justify-content: center;
+}
+
+.pvm-confirm {
+  background: #06D6A0;
+  color: #073B4C;
+  font-weight: bold;
+  border: none;
+  border-radius: 7px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  opacity: 1;
+  transition: background 0.2s;
+}
+
+.pvm-confirm:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pvm-cancel {
+  background: #fff;
+  color: #073B4C;
+  border: 2px solid #06D6A0;
+  border-radius: 7px;
+  padding: 12px 28px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.pvm-cancel:hover {
+  background: #06D6A0;
+  color: #fff;
+}
+
+@media (max-width: 1200px) {
+  .pvm-modal-inner {
+    width: 98vw;
+    padding: 18px;
+  }
+  .pvm-meteo-row {
+    gap: 10px;
+  }
+  .pvm-meteo-day {
+    min-width: 90px;
+    padding: 10px 6px;
+  }
+}

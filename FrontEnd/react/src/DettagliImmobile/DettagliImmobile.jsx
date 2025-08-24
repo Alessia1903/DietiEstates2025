@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./DettagliImmobile.css";
+import PrenotaVisitaMeteo from "../components/PrenotaVisitaMeteo/PrenotaVisitaMeteo";
 
 // MOCK per demo: in produzione recupera da sessionStorage o API
 const MOCK_ANNUNCIO = {
@@ -33,6 +34,7 @@ const DettagliImmobile = () => {
   const [imgIndex, setImgIndex] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
   const [showMappa, setShowMappa] = useState(false);
+  const [showVisitMenu, setShowVisitMenu] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -199,9 +201,19 @@ const DettagliImmobile = () => {
       </div>
 
       {/* Bottone visita */}
-      <button className="visit-button mx-auto" onClick={() => setShowSuccess(true)}>
+      <button className="visit-button mx-auto" onClick={() => setShowVisitMenu(true)}>
         RICHIEDI UNA VISITA
       </button>
+
+      {/* Modale richiesta visita */}
+      <PrenotaVisitaMeteo
+        show={showVisitMenu}
+        onClose={() => setShowVisitMenu(false)}
+        onConfirm={() => {
+          setShowVisitMenu(false);
+          setShowSuccess(true);
+        }}
+      />
 
       {/* Modale successo */}
       {showSuccess && (
