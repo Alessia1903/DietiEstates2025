@@ -1,27 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./ProfiloUtente.css";
-
-const MOCK_USER = {
-  nome: "Mario",
-  cognome: "Rossi",
-  datanascita: "1990-01-01",
-  email: "mario.rossi@email.com",
-  password: "password123"
-};
 
 const ProfiloUtente = () => {
   const navigate = useNavigate();
-  // In una vera app, questi dati arriverebbero da una fetch protetta da token
-  const [user, setUser] = useState(MOCK_USER);
+  const [user, setUser] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(MOCK_USER);
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSave = () => {
-    // In futuro, qui verrà fatta la chiamata al backend
-    setUser(formData);
-    setIsEditing(false);
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setErrorMsg("");
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await axios.get(
+          "http://localhost:8080/api/buyers/profile",
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        // Mappa i dati del backend ai campi frontend
+        const backendUser = response.data;
+        setUser({
+          nome: backendUser.firstName,
+          cognome: backendUser.lastName,
+          datanascita: backendUser.birthdate,
+          email: backendUser.email,
+          password: backendUser.password 
+        });
+        setFormData({
+          nome: backendUser.firstName,
+          cognome: backendUser.lastName,
+          datanascita: backendUser.birthdate,
+          email: backendUser.email,
+          password: backendUser.password
+        });
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          setErrorMsg("Sessione scaduta. Effettua di nuovo il login.");
+          setTimeout(() => {
+            navigate("/login");
+          }, 2000);
+        } else {
+          setErrorMsg("Errore nel caricamento del profilo.");
+        }
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      // Prepara i dati da inviare, omettendo la password se non modificata
+      const payload = {
+        firstName: formData.nome,
+        lastName: formData.cognome,
+        birthdate: formData.datanascita,
+        email: formData.email
+      };
+      // Invia la password solo se è stata modificata
+      if (formData.password && formData.password !== user.password) {
+        payload.password = formData.password;
+      }
+      await axios.patch(
+        "http://localhost:8080/api/buyers/profile",
+        payload,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      setUser(formData);
+      setIsEditing(false);
+      alert("Profilo aggiornato con successo! Devi effettuare nuovamente il login.");
+      // Logout e redirect al login
+      localStorage.removeItem("jwtToken");
+      navigate("/login");
+
+    } catch (error) {
+      alert("Errore nell'aggiornamento del profilo.");
+      console.error(error);
+    }
   };
 
   // Navigazione SPA
@@ -132,7 +203,7 @@ const ProfiloUtente = () => {
               className="edit-input"
             />
           ) : (
-            <span>{user.nome}</span>
+            <span>{user ? user.nome : ""}</span>
           )}
         </div>
         <div className="field">
@@ -145,7 +216,7 @@ const ProfiloUtente = () => {
               className="edit-input"
             />
           ) : (
-            <span>{user.cognome}</span>
+            <span>{user ? user.cognome : ""}</span>
           )}
         </div>
         <div className="field">
@@ -158,7 +229,7 @@ const ProfiloUtente = () => {
               className="edit-input"
             />
           ) : (
-            <span>{user.datanascita || "-"}</span>
+            <span>{user ? user.datanascita : "-"}</span>
           )}
         </div>
         <div className="field">
@@ -171,7 +242,7 @@ const ProfiloUtente = () => {
               className="edit-input"
             />
           ) : (
-            <span>{user.email}</span>
+            <span>{user ? user.email : ""}</span>
           )}
         </div>
         <div className="field">
@@ -184,7 +255,7 @@ const ProfiloUtente = () => {
               className="edit-input"
             />
           ) : (
-            <span>{showPassword ? user.password : "********"}</span>
+            <span>{showPassword ? (user ? user.password : "") : "********"}</span>
           )}
           <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
             {showPassword ? "X" : "MOSTRA"}

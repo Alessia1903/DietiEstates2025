@@ -1,5 +1,6 @@
 package it.unina.dieti_estates.model;
 import java.util.Date;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
 import jakarta.persistence.Table;
@@ -14,6 +15,7 @@ import java.util.Collections;
 @Table(name = "\"buyer\"")
 @PrimaryKeyJoinColumn(name = "id")
 public class Buyer extends User{
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private Date birthdate;
 
     public Buyer() {
