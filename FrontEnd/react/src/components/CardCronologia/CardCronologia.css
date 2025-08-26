@@ -1,0 +1,108 @@
+
+
+.search-card-container {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 16px rgba(7, 59, 76, 0.08);
+  padding: 24px;
+  transition: all 0.3s ease;
+  border: 1px solid #e5f7f2;
+  margin-bottom: 24px;
+}
+
+.search-card-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(7, 59, 76, 0.12);
+}
+
+.search-card-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.search-card-location {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: #073B4C;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-card-type-badge {
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.search-card-type-badge.vendita {
+  background-color: #f8fff9;
+  color: #06D6A0;
+  border: 1px solid #06D6A0;
+}
+
+.search-card-type-badge.affitto {
+  background-color: #f0f7ff;
+  color: #073B4C;
+  border: 1px solid #073B4C;
+}
+
+.search-card-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 16px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f8fff9;
+  border-radius: 8px;
+}
+
+.search-card-detail-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #073B4C;
+  font-size: 0.95rem;
+}
+
+.search-card-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 16px;
+  border-top: 1px solid #e5f7f2;
+}
+
+.search-card-repeat {
+  background-color: #06D6A0;
+  color: #073B4C;
+  font-weight: bold;
+  padding: 10px 20px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+  cursor: pointer;
+  border: none;
+}
+
+.search-card-repeat:hover {
+  background-color: #04B889;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 800px) {
+  .search-card-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .search-card-footer {
+    flex-direction: column;
+    gap: 16px;
+    align-items: stretch;
+  }
+}

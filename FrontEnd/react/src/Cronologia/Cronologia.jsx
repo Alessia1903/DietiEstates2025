@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Cronologia.css";
+import CardCronologia from "../components/CardCronologia/CardCronologia";
 
 const CRONOLOGIA_PER_PAGINA = 5;
 
@@ -31,17 +32,6 @@ const Cronologia = () => {
     (pagina - 1) * CRONOLOGIA_PER_PAGINA,
     pagina * CRONOLOGIA_PER_PAGINA
   );
-
-  // Bottone "Cerca" su ogni filtro
-  const handleCerca = (filtro) => {
-    sessionStorage.setItem("citta", filtro.citta);
-    sessionStorage.setItem("contratto", filtro.contratto);
-    sessionStorage.setItem("classeEnergetica", filtro.classeEnergetica);
-    sessionStorage.setItem("numLocali", filtro.numLocali);
-    sessionStorage.setItem("prezzoMin", filtro.prezzoMin);
-    sessionStorage.setItem("prezzoMax", filtro.prezzoMax);
-    navigate("/risultati-login");
-  };
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
@@ -123,45 +113,12 @@ const Cronologia = () => {
       </div>
 
       {/* Risultati */}
-      <div id="search-container" className="container mt-8 w-full max-w-4xl flex flex-col">
+      <div id="search-container">
         {filtriDaMostrare.length === 0 ? (
           <div className="text-gray-500 text-lg">Nessuna cronologia disponibile.</div>
         ) : (
           filtriDaMostrare.map((filtro) => (
-            <div key={filtro.id} className="flex items-center w-full mb-4">
-              <div className="bg-dark-blue p-8 rounded-lg flex-1">
-                <div className="filter-info mb-4 flex items-center">
-                  <div className="info-item bg-white p-2 rounded-lg flex-1">
-                    <span className="text-sm text-dark-green">{filtro.citta}</span>
-                  </div>
-                  <button
-                    className="search-btn p-2 bg-light-blue text-dark-green"
-                    onClick={() => handleCerca(filtro)}
-                  >
-                    CERCA
-                  </button>
-                </div>
-                <div className="filter-details flex flex-wrap gap-4 mt-4 w-full">
-                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
-                    <span className="text-sm text-dark-green">
-                      {filtro.contratto.charAt(0).toUpperCase() + filtro.contratto.slice(1)}
-                    </span>
-                  </div>
-                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
-                    <span className="text-sm text-dark-green">{filtro.classeEnergetica}</span>
-                  </div>
-                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
-                    <span className="text-sm text-dark-green">{filtro.numLocali}</span>
-                  </div>
-                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
-                    <span className="text-sm text-dark-green">{filtro.prezzoMin}</span>
-                  </div>
-                  <div className="info-item bg-white p-2 rounded-lg flex-1 min-w-[150px]">
-                    <span className="text-sm text-dark-green">{filtro.prezzoMax}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <CardCronologia key={filtro.id} filtro={filtro} />
           ))
         )}
       </div>

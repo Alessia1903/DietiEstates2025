@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CardImmobile from "../components/CardImmobile";
 import "./HomeLogin.css";
@@ -145,6 +145,44 @@ const HomeLogin = () => {
   const handleCardClick = () => {
     navigate("/dettagli-immobile");
   }
+
+  // Avvio automatico ricerca se arrivo da Cronologia o se flag avviaRicerca è presente
+  useEffect(() => {
+    const sessionCitta = sessionStorage.getItem("citta");
+    const sessionContratto = sessionStorage.getItem("contratto");
+    const sessionClasseEnergetica = sessionStorage.getItem("classeEnergetica");
+    const sessionNumLocali = sessionStorage.getItem("numLocali");
+    const sessionPrezzoMin = sessionStorage.getItem("prezzoMin");
+    const sessionPrezzoMax = sessionStorage.getItem("prezzoMax");
+    const avviaRicerca = sessionStorage.getItem("avviaRicerca");
+
+    if (
+      sessionCitta &&
+      sessionContratto &&
+      sessionClasseEnergetica &&
+      sessionNumLocali &&
+      sessionPrezzoMin &&
+      sessionPrezzoMax &&
+      avviaRicerca === "true"
+    ) {
+      setCitta(sessionCitta);
+      setContratto(sessionContratto);
+      setClasseEnergetica(sessionClasseEnergetica);
+      setNumLocali(sessionNumLocali);
+      setPrezzoMin(sessionPrezzoMin);
+      setPrezzoMax(sessionPrezzoMax);
+
+      setLoading(true);
+      setShowResults(false);
+      setTimeout(() => {
+        setLoading(false);
+        setShowResults(true);
+      }, 1500);
+
+      // Rimuovi il flag dopo l'avvio
+      sessionStorage.removeItem("avviaRicerca");
+    }
+  }, [showResults, loading]);
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>

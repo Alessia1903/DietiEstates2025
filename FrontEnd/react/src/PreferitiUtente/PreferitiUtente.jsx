@@ -65,10 +65,6 @@ const PreferitiUtente = () => {
     }
   };
 
-  const handleRepeatSearch = () => {
-    alert("Funzione di ripetizione ricerca non ancora implementata.");
-  };
-
   const handleBack = (e) => {
     e.preventDefault();
     navigate("/home");
@@ -139,7 +135,6 @@ const PreferitiUtente = () => {
               key={ricerca.id}
               ricerca={ricerca}
               onDelete={() => handleDeleteSearch(ricerca.id)}
-              onRepeat={handleRepeatSearch}
             />
           ))
         )}
