@@ -37,6 +37,7 @@ const LoginUtente = () => {
         { headers: { "Content-Type": "application/json" } }
       );
       localStorage.setItem("jwtToken", response.data);
+      localStorage.setItem("userEmail", email);
       navigate("/home");
     } catch (error) {
       if (error.response && error.response.status === 401) {

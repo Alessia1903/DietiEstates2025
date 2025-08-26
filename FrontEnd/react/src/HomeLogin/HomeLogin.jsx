@@ -86,6 +86,25 @@ const HomeLogin = () => {
     }
     setInputError(false);
 
+    // Salva la ricerca in localStorage (max 10) per utente
+    const userEmail = localStorage.getItem("userEmail") || "anonimo";
+    const key = `ricercheSalvate_${userEmail}`;
+    const nuovaRicerca = {
+      citta,
+      contratto,
+      classeEnergetica,
+      numLocali,
+      prezzoMin,
+      prezzoMax,
+      data: new Date().toLocaleString()
+    };
+    let history = JSON.parse(localStorage.getItem(key) || "[]");
+    history.push(nuovaRicerca);
+    if (history.length > 10) {
+      history = history.slice(history.length - 10);
+    }
+    localStorage.setItem(key, JSON.stringify(history));
+
     // Simula caricamento
     setLoading(true);
     setShowResults(false);
@@ -299,7 +318,6 @@ const HomeLogin = () => {
                   prezzoMax,
                   data: new Date().toLocaleString()
                 };
-                localStorage.setItem("ricercheSalvate", JSON.stringify([...ricercheSalvate, nuovaRicerca]));
                 alert("Ricerca salvata nei preferiti!");
               }}
             >

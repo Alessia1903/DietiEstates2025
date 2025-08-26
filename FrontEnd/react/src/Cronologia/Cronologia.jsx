@@ -2,69 +2,17 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Cronologia.css";
 
-// MOCK: array di filtri cronologia
-const MOCK_FILTRI = [
-  {
-    id: 1,
-    citta: "Napoli",
-    contratto: "vendita",
-    classeEnergetica: "A3",
-    numLocali: 3,
-    prezzoMin: 100000,
-    prezzoMax: 250000,
-  },
-  {
-    id: 2,
-    citta: "Milano",
-    contratto: "affitto",
-    classeEnergetica: "B",
-    numLocali: 2,
-    prezzoMin: 800,
-    prezzoMax: 1500,
-  },
-  {
-    id: 3,
-    citta: "Roma",
-    contratto: "vendita",
-    classeEnergetica: "C",
-    numLocali: 4,
-    prezzoMin: 200000,
-    prezzoMax: 400000,
-  },
-  {
-    id: 4,
-    citta: "Torino",
-    contratto: "affitto",
-    classeEnergetica: "A1",
-    numLocali: 1,
-    prezzoMin: 500,
-    prezzoMax: 1200,
-  },
-  {
-    id: 5,
-    citta: "Bologna",
-    contratto: "vendita",
-    classeEnergetica: "D",
-    numLocali: 5,
-    prezzoMin: 250000,
-    prezzoMax: 600000,
-  },
-  {
-    id: 6,
-    citta: "Firenze",
-    contratto: "affitto",
-    classeEnergetica: "A2",
-    numLocali: 2,
-    prezzoMin: 900,
-    prezzoMax: 1800,
-  },
-];
-
 const CRONOLOGIA_PER_PAGINA = 5;
 
 const Cronologia = () => {
   const navigate = useNavigate();
-  const [filtri] = useState(MOCK_FILTRI);
+  // Leggi la cronologia dal localStorage
+  const [filtri] = useState(() => {
+    const userEmail = localStorage.getItem("userEmail") || "anonimo";
+    const key = `ricercheSalvate_${userEmail}`;
+    const salvate = JSON.parse(localStorage.getItem(key) || "[]");
+    return salvate.map((filtro, idx) => ({ ...filtro, id: idx + 1 }));
+  });
   const [pagina, setPagina] = useState(1);
 
   // Navigazione SPA
