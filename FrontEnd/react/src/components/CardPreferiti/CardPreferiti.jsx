@@ -30,8 +30,8 @@ const CardPreferiti = ({ ricerca, onDelete, onRepeat }) => {
           </svg>
           {ricerca.citta}
         </div>
-        <span className={`search-card-type-badge ${ricerca.contratto.toLowerCase()}`}>
-          {ricerca.contratto}
+        <span className={`search-card-type-badge ${(ricerca.contratto || "N/A").toLowerCase()}`}>
+          {ricerca.contratto || "N/A"}
         </span>
       </div>
 

@@ -1,52 +1,71 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import CardPreferiti from "../components/CardPreferiti";
+import CardPreferiti from "../components/CardPreferiti/CardPreferiti";
 import "./PreferitiUtente.css";
-
-// Mock ricerche preferite
-const MOCK_RICERCHE = [
-  {
-    citta: "Napoli",
-    contratto: "Vendita",
-    classeEnergetica: "A3",
-    numLocali: "3",
-    prezzoMin: "200000",
-    prezzoMax: "250000",
-    data: "2025-07-14 10:23"
-  },
-  {
-    citta: "Milano",
-    contratto: "Affitto",
-    classeEnergetica: "B",
-    numLocali: "2",
-    prezzoMin: "1000",
-    prezzoMax: "1500",
-    data: "2025-07-13 18:45"
-  },
-  {
-    citta: "Roma",
-    contratto: "Vendita",
-    classeEnergetica: "C",
-    numLocali: "5",
-    prezzoMin: "500000",
-    prezzoMax: "600000",
-    data: "2025-07-12 09:12"
-  }
-];
 
 const PreferitiUtente = () => {
   const navigate = useNavigate();
+  const [ricerche, setRicerche] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // In futuro: caricare da backend/localStorage
-  const ricerche = MOCK_RICERCHE;
+  useEffect(() => {
+    const fetchFavorites = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const axios = (await import("axios")).default;
+        const response = await axios.get(
+          "http://localhost:8080/api/buyers/favorites",
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        setRicerche(
+          (response.data.content || []).map(fav => ({
+            id: fav.id,
+            contratto: fav.contractType,
+            citta: fav.city,
+            classeEnergetica: fav.energyClass,
+            numLocali: fav.rooms,
+            prezzoMin: fav.minPrice,
+            prezzoMax: fav.maxPrice,
+            data: fav.favoritedAt
+          }))
+        );
+      } catch (error) {
+        setRicerche([]);
+        console.error("Errore nel caricamento dei preferiti:", error);
+      }
+      setLoading(false);
+    };
+    fetchFavorites();
+  }, []);
 
-  const handleDeleteSearch = (idx) => {
-    // In futuro: implementare la rimozione
-    alert("Funzione di rimozione non ancora implementata.");
+  const handleDeleteSearch = async (favoriteId) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const axios = (await import("axios")).default;
+      await axios.post(
+        "http://localhost:8080/api/buyers/favorites/remove",
+        { favoriteSearchId: favoriteId },
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      setRicerche((prev) => prev.filter((r) => r.id !== favoriteId));
+    } catch (error) {
+      alert("Errore nella rimozione della ricerca preferita.");
+      console.error(error);
+    }
   };
 
   const handleRepeatSearch = () => {
-    // In futuro: implementare la ripetizione della ricerca
     alert("Funzione di ripetizione ricerca non ancora implementata.");
   };
 
@@ -115,11 +134,11 @@ const PreferitiUtente = () => {
         {ricerche.length === 0 ? (
           <div className="text-center text-lg custom-text-color">Non hai ancora salvato nessuna ricerca.</div>
         ) : (
-          ricerche.map((ricerca, idx) => (
+          ricerche.map((ricerca) => (
             <CardPreferiti
-              key={idx}
+              key={ricerca.id}
               ricerca={ricerca}
-              onDelete={() => handleDeleteSearch(idx)}
+              onDelete={() => handleDeleteSearch(ricerca.id)}
               onRepeat={handleRepeatSearch}
             />
           ))

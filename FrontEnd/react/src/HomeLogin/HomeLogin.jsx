@@ -306,19 +306,35 @@ const HomeLogin = () => {
             <button
               className="accesso"
               style={{ minWidth: "180px", fontWeight: "bold" }}
-              onClick={() => {
-                // Simulazione salvataggio ricerca in localStorage
-                const ricercheSalvate = JSON.parse(localStorage.getItem("ricercheSalvate") || "[]");
-                const nuovaRicerca = {
-                  citta,
-                  contratto,
-                  classeEnergetica,
-                  numLocali,
-                  prezzoMin,
-                  prezzoMax,
-                  data: new Date().toLocaleString()
-                };
-                alert("Ricerca salvata nei preferiti!");
+              onClick={async () => {
+                // Chiamata backend per salvataggio ricerca preferita
+                try {
+                  const token = localStorage.getItem("jwtToken");
+                  const payload = {
+                    city: citta,
+                    contractType: contratto,
+                    energyClass: classeEnergetica,
+                    rooms: numLocali,
+                    minPrice: prezzoMin,
+                    maxPrice: prezzoMax
+                  };
+                  await import("axios").then(({default: axios}) =>
+                    axios.post(
+                      "http://localhost:8080/api/buyers/favorites/add",
+                      payload,
+                      {
+                        headers: {
+                          "Authorization": `Bearer ${token}`,
+                          "Content-Type": "application/json"
+                        }
+                      }
+                    )
+                  );
+                  alert("Ricerca salvata nei preferiti!");
+                } catch (error) {
+                  alert("Errore nel salvataggio della ricerca preferita.");
+                  console.error(error);
+                }
               }}
             >
               Salva ricerca
