@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./AreaAgenzia.css";
 
 const AreaAgenzia = () => {
@@ -13,7 +14,7 @@ const AreaAgenzia = () => {
     navigate("/");
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email.trim() || !password.trim()) {
@@ -23,7 +24,32 @@ const AreaAgenzia = () => {
     }
 
     setShowError(false);
-    navigate("/home-agente");
+
+    try {
+      // Prova login admin
+      const adminResp = await axios.post(
+        "http://localhost:8080/api/admins/login",
+        { email, password }
+      );
+      // Se va a buon fine, salva token e vai a home admin
+      localStorage.setItem("jwtToken", adminResp.data);
+      navigate("/home-admin");
+      return;
+    } catch (errAdmin) {
+      // Se errore, prova login estate agent
+      try {
+        const agentResp = await axios.post(
+          "http://localhost:8080/api/estate-agents/login",
+          { email, password }
+        );
+        localStorage.setItem("jwtToken", agentResp.data);
+        navigate("/home-agente");
+        return;
+      } catch (errAgent) {
+        setErrorMsg("Credenziali non valide.");
+        setShowError(true);
+      }
+    }
   };
 
   return (

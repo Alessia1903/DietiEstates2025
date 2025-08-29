@@ -25,6 +25,7 @@ import it.unina.dieti_estates.repository.RealEstateRepository;
 import it.unina.dieti_estates.repository.NotificationRepository;
 import it.unina.dieti_estates.repository.FavoriteSearchRepository;
 import it.unina.dieti_estates.exception.resource.BookedVisitNotFoundException;
+import it.unina.dieti_estates.exception.auth.InvalidCredentialsException;
 import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -65,15 +66,18 @@ public class EstateAgentService {
     }
     
     public String loginAgent(LoginRequest loginAgentRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginAgentRequest.getEmail(),
-                    loginAgentRequest.getPassword()
-                )
-        );
-
-        EstateAgent agentDetails = (EstateAgent) authentication.getPrincipal();
-        return jwtService.generateToken(agentDetails);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                        loginAgentRequest.getEmail(),
+                        loginAgentRequest.getPassword()
+                    )
+            );
+            EstateAgent agentDetails = (EstateAgent) authentication.getPrincipal();
+            return jwtService.generateToken(agentDetails);
+        } catch (Exception ex) {
+            throw new InvalidCredentialsException("Credenziali non valide");
+        }
     }
 
     public EstateAgent getProfile() {

@@ -66,15 +66,18 @@ public class AdminService {
     }
 
     public String loginAdmin(LoginRequest loginAdminRequest) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                    loginAdminRequest.getEmail(),
-                    loginAdminRequest.getPassword()
-                )
-        );
-
-        UserDetails adminDetails = (UserDetails) authentication.getPrincipal();
-        return jwtService.generateToken(adminDetails);
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                        loginAdminRequest.getEmail(),
+                        loginAdminRequest.getPassword()
+                    )
+            );
+            Admin adminDetails = (Admin) authentication.getPrincipal();
+            return jwtService.generateToken(adminDetails);
+        } catch (Exception ex) {
+            throw new InvalidCredentialsException("Credenziali non valide");
+        }
     }
 
     public QRCodeResponse createAdminAccount(CreateAdminRequest request) throws IOException, WriterException {
