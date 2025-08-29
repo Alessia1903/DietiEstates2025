@@ -193,99 +193,107 @@ const ProfiloUtente = () => {
             </g>
           </svg>
         </div>
-        <div className="field">
-          <strong>Nome:</strong>
-          {isEditing ? (
-            <input
-              type="text"
-              value={formData.nome}
-              onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user ? user.nome : ""}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Cognome:</strong>
-          {isEditing ? (
-            <input
-              type="text"
-              value={formData.cognome}
-              onChange={(e) => setFormData({ ...formData, cognome: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user ? user.cognome : ""}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Data di nascita:</strong>
-          {isEditing ? (
-            <input
-              type="date"
-              value={formData.datanascita || ""}
-              onChange={(e) => setFormData({ ...formData, datanascita: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user ? user.datanascita : "-"}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Email:</strong>
-          {isEditing ? (
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user ? user.email : ""}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Password:</strong>
-          {isEditing ? (
-            <input
-              type={showPassword ? "text" : "password"}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{showPassword ? (user ? user.password : "") : "********"}</span>
-          )}
-          <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
-            {showPassword ? "X" : "MOSTRA"}
-          </button>
-        </div>
-        <div className="edit-action">
-          <button 
-            className={`edit-btn ${isEditing ? 'save' : ''}`} 
-            onClick={() => {
-              if (isEditing) {
-                handleSave();
-              } else {
-                setIsEditing(true);
-              }
-            }}
-          >
-            {isEditing ? 'Salva' : 'Modifica dati'}
-          </button>
-          {isEditing && (
-            <button 
-              className="cancel-btn" 
-              onClick={() => {
-                setFormData(user);
-                setIsEditing(false);
-              }}
-            >
-              Annulla
-            </button>
-          )}
-        </div>
+        {loading ? (
+          <div className="field">Caricamento profilo utente...</div>
+        ) : errorMsg ? (
+          <div className="field error">{errorMsg}</div>
+        ) : user ? (
+          <>
+            <div className="field">
+              <strong>Nome:</strong>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.nome}
+                  onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{user.nome}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Cognome:</strong>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.cognome}
+                  onChange={(e) => setFormData({ ...formData, cognome: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{user.cognome}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Data di nascita:</strong>
+              {isEditing ? (
+                <input
+                  type="date"
+                  value={formData.datanascita || ""}
+                  onChange={(e) => setFormData({ ...formData, datanascita: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{user.datanascita}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Email:</strong>
+              {isEditing ? (
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{user.email}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Password:</strong>
+              {isEditing ? (
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{showPassword ? user.password : "********"}</span>
+              )}
+              <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
+                {showPassword ? "X" : "MOSTRA"}
+              </button>
+            </div>
+            <div className="edit-action">
+              <button 
+                className={`edit-btn ${isEditing ? 'save' : ''}`} 
+                onClick={() => {
+                  if (isEditing) {
+                    handleSave();
+                  } else {
+                    setIsEditing(true);
+                  }
+                }}
+              >
+                {isEditing ? 'Salva' : 'Modifica dati'}
+              </button>
+              {isEditing && (
+                <button 
+                  className="cancel-btn" 
+                  onClick={() => {
+                    setFormData(user);
+                    setIsEditing(false);
+                  }}
+                >
+                  Annulla
+                </button>
+              )}
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   );

@@ -1,19 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./ProfiloAdmin.css";
-
-const MOCK_ADMIN = {
-  nome: "Mario",
-  cognome: "Rossi",
-  email: "admin.rossi@email.com",
-  password: "passwordAdmin",
-  partitaIVA: "IT12345678901"
-};
 
 const ProfiloAdmin = () => {
   const navigate = useNavigate();
-  const [admin] = useState(MOCK_ADMIN);
+  const [admin, setAdmin] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setErrorMsg("");
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await axios.get(
+          "http://localhost:8080/api/admins/profile",
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        const backendAdmin = response.data;
+        setAdmin({
+          nome: backendAdmin.firstName,
+          cognome: backendAdmin.lastName,
+          email: backendAdmin.email,
+          password: backendAdmin.password,
+          partitaIVA: backendAdmin.vatNumber
+        });
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          setErrorMsg("Sessione scaduta. Effettua di nuovo il login.");
+          setTimeout(() => {
+            navigate("/home-admin");
+          }, 2000);
+        } else {
+          setErrorMsg("Errore nel caricamento del profilo.");
+        }
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, []);
 
   const handleLogoClick = () => {
     navigate("/home-admin");
@@ -40,9 +73,7 @@ const ProfiloAdmin = () => {
           </div>
         </div>
         <div className="top-right-icons">
-          {/* Spacer to keep header wide */}
           <div style={{ width: "120px", display: "inline-block" }}></div>
-          {/* Profilo identico a HomeAdmin */}
           <div className="admin-profile-icon" style={{ cursor: "pointer" }} onClick={() => navigate("/profilo-admin")}>
             <svg width="60" height="60" viewBox="0 0 60 60" fill="none" xmlns="http://www.w3.org/2000/svg">
               <g clipPath="url(#clip0_20_523)">
@@ -74,17 +105,25 @@ const ProfiloAdmin = () => {
             </g>
           </svg>
         </div>
-        <div className="field"><strong>Nome:</strong> <span>{admin.nome}</span></div>
-        <div className="field"><strong>Cognome:</strong> <span>{admin.cognome}</span></div>
-        <div className="field"><strong>Email:</strong> <span>{admin.email}</span></div>
-        <div className="field">
-          <strong>Password:</strong>
-          <span>{showPassword ? admin.password : "********"}</span>
-          <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
-            {showPassword ? "X" : "MOSTRA"}
-          </button>
-        </div>
-        <div className="field"><strong>Partita IVA:</strong> <span>{admin.partitaIVA}</span></div>
+        {loading ? (
+          <div className="field">Caricamento profilo admin...</div>
+        ) : errorMsg ? (
+          <div className="field error">{errorMsg}</div>
+        ) : admin ? (
+          <>
+            <div className="field"><strong>Nome:</strong> <span>{admin.nome}</span></div>
+            <div className="field"><strong>Cognome:</strong> <span>{admin.cognome}</span></div>
+            <div className="field"><strong>Email:</strong> <span>{admin.email}</span></div>
+            <div className="field">
+              <strong>Password:</strong>
+              <span>{showPassword ? admin.password : "********"}</span>
+              <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
+                {showPassword ? "X" : "MOSTRA"}
+              </button>
+            </div>
+            <div className="field"><strong>Partita IVA:</strong> <span>{admin.partitaIVA}</span></div>
+          </>
+        ) : null}
       </div>
     </div>
   );
