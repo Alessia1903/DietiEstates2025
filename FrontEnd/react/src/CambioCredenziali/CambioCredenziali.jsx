@@ -9,6 +9,7 @@ const validatePassword = (password) => {
 
 const CambioCredenziali = () => {
   const navigate = useNavigate();
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState("");
@@ -22,6 +23,11 @@ const CambioCredenziali = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!currentPassword.trim()) {
+      setErrorMsg("Inserisci la password attuale.");
+      setShowError(true);
+      return;
+    }
     if (newPassword !== confirmPassword) {
       setErrorMsg("Le password non coincidono");
       setShowError(true);
@@ -38,15 +44,19 @@ const CambioCredenziali = () => {
     setShowError(false);
 
     try {
+      const token = localStorage.getItem("jwtToken");
       const response = await fetch(
-        "https://80b7ead0-7ae9-493b-903f-9f9ae87bdada.mock.pstmn.io/Login",
+        "http://localhost:8080/api/admins/change-amministration-password",
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
+            Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify({ password: newPassword }),
+          body: JSON.stringify({
+            currentPassword: currentPassword,
+            newPassword: newPassword,
+          }),
         }
       );
 
@@ -105,6 +115,16 @@ const CambioCredenziali = () => {
 
       <div className="form-container">
         <form className="changePasswordForm flex-col" onSubmit={handleSubmit}>
+          <div className="form-group">
+            <label htmlFor="currentPassword">Password Attuale:</label>
+            <input
+              type="password"
+              id="currentPassword"
+              required
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+            />
+          </div>
           <div className="form-group">
             <label htmlFor="newPassword">Nuova Password:</label>
             <input

@@ -33,7 +33,7 @@ const AreaAgenzia = () => {
       );
       // Se va a buon fine, salva token e vai a home admin
       localStorage.setItem("jwtToken", adminResp.data);
-      navigate("/home-admin");
+      navigate("/cambio-credenziali");
       return;
     } catch (errAdmin) {
       // Se errore, prova login estate agent
