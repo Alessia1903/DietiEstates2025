@@ -52,7 +52,8 @@ public class SecurityConfig {
                             "/api/buyers/google-login",
                             "/api/buyers/google-register",
                             "/api/admins/login",
-                            "/api/estate-agents/login").permitAll()
+                            "/api/estate-agents/login",
+                            "/api/admins/create-agency").permitAll()
                         .anyRequest().authenticated())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 

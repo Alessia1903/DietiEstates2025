@@ -180,13 +180,13 @@ public class AdminService {
             request.getAdminLastName(),
             request.getVatNumber()
         );
-        adminRepository.save(admin);
 
         Agency agency = new Agency(
             request.getAgencyName(),
             request.getVatNumber(),
             admin
         );
+
         agencyRepository.save(agency);
 
         Map<String, String> qrData = new HashMap<>();

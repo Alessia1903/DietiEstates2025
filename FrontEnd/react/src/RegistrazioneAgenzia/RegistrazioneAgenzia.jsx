@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./RegistrazioneAgenzia.css";
 
 function validaPartitaIVA(piva) {
@@ -67,12 +68,24 @@ const RegistrazioneAgenzia = () => {
       return;
     }
 
-    // Simula chiamata al backend per ottenere il QR code
-    // Sostituisci questa parte con la vera chiamata API
-    const fakeQrCodeBase64 = "iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAIAAAADJ/2KAAABPUlEQVR42uWYyw6DMAwEm6r//8v0wCWStdbYubAml1YUcDNZP9d1XZ9nr+/n8et3f6y14AM39ft+8l09y235UNz/tVr77vc7I5udZU6I2HKjqHSpdhy5Rn6KPbflSZEsRSv35elx8YRlfoX7+CyKJ7ohfl215UaRZ89qviY6Nqa4esrLGcTo+I64qHST54zci3vso10fLZ5kVV51K1r5aTh7NNlfT2fVfDOLIq8UidqILp1zdOzueHUYz4RwUm9266MVv1xJvfqFK9vZo0m24B0x19/EPppQyT067wbVm521SGrBXp3S64fe1LtUa+w8ekzpXapaqWq0N9+ZPuvOKxSeP3LVzp11k/jH+5W5ObpX86kMzuNA/HX6rJv3xaQmMp5GHM26q5FSaS4/h7mz7qieXpZX1j3ni09eBhT/mqhonaWq8LwAAAAASUVORK5CYII"; // esempio, da sostituire
-    setQrCodeBase64(fakeQrCodeBase64);
-
-    setShowSuccessModal(true);
+    // Chiamata reale al backend per registrazione agenzia
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/admins/create-agency",
+        {
+          agencyName: nomeAgenzia,
+          vatNumber: partitaIVA,
+          adminFirstName: nomeAdmin,
+          adminLastName: cognomeAdmin,
+          adminEmail: emailAdmin
+        }
+      );
+      setQrCodeBase64(response.data.base64QRCode || "");
+      setShowSuccessModal(true);
+    } catch (error) {
+      setErroreMessaggio("Errore nella registrazione: " + (error.response?.data?.message || "Controlla i dati inseriti."));
+      setShowError(true);
+    }
   };
 
   const handleSuccessProceed = () => {
