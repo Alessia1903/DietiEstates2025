@@ -1,36 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./ProfiloAgente.css";
-
-// MOCK dati profilo agente
-const MOCK_PROFILO = {
-  nome: "Mario",
-  cognome: "Rossi",
-  email: "mario.rossi@agenzia.it",
-  password: "password123",
-  telefono: "3331234567",
-  bio: "Agente immobiliare con esperienza pluriennale."
-};
 
 const ProfiloAgente = () => {
   const navigate = useNavigate();
+  const [agent, setAgent] = useState(null);
   const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState(MOCK_PROFILO);
-  const [user, setUser] = useState(MOCK_PROFILO);
+  const [formData, setFormData] = useState({});
+  const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleSave = () => {
-    // In futuro, qui verrà fatta la chiamata al backend
-    setUser(formData);
-    setIsEditing(false);
+  useEffect(() => {
+    const fetchProfile = async () => {
+      setLoading(true);
+      setErrorMsg("");
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await axios.get(
+          "http://localhost:8080/api/estate-agents/profile",
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        // Mappa i dati del backend ai campi frontend
+        const backendAgent = response.data;
+        setAgent({
+          nome: backendAgent.firstName,
+          cognome: backendAgent.lastName,
+          email: backendAgent.email,
+          telefono: backendAgent.telephoneNumber,
+          qualifiche: backendAgent.qualifications,
+          password: backendAgent.password
+        });
+        setFormData({
+          nome: backendAgent.firstName,
+          cognome: backendAgent.lastName,
+          email: backendAgent.email,
+          telefono: backendAgent.telephoneNumber,
+          qualifiche: backendAgent.qualifications,
+          password: backendAgent.password
+        });
+      } catch (error) {
+        if (error.response && error.response.status === 401) {
+          setErrorMsg("Sessione scaduta. Effettua di nuovo il login.");
+          setTimeout(() => {
+            navigate("/home-agente");
+          }, 2000);
+        } else {
+          setErrorMsg("Errore nel caricamento del profilo.");
+        }
+      }
+      setLoading(false);
+    };
+    fetchProfile();
+  }, []);
+
+  const handleSave = async () => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      // Prepara i dati da inviare, omettendo la password se non modificata
+      const payload = {
+        firstName: formData.nome,
+        lastName: formData.cognome,
+        email: formData.email,
+        telephoneNumber: formData.telefono,
+        qualifications: formData.qualifiche
+      };
+      // Invia la password solo se è stata modificata
+      if (formData.password && formData.password !== agent.password) {
+        payload.password = formData.password;
+      }
+      await axios.patch(
+        "http://localhost:8080/api/estate-agents/profile",
+        payload,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      setAgent(formData);
+      setIsEditing(false);
+      alert("Profilo aggiornato con successo! Devi effettuare nuovamente il login.");
+      // Logout e redirect al login
+      localStorage.removeItem("jwtToken");
+      navigate("/area-agenzia");
+
+    } catch (error) {
+      alert("Errore nell'aggiornamento del profilo.");
+      console.error(error);
+    }
   };
 
+  // Navigazione SPA
   const handleLogoClick = () => {
-    navigate("/home-agente");
-  };
-
-  const handleBack = (e) => {
-    e.preventDefault();
     navigate("/home-agente");
   };
 
@@ -40,6 +109,11 @@ const ProfiloAgente = () => {
 
   const handleProfiloClick = () => {
     navigate("/profilo-agente");
+  };
+
+  const handleBack = (e) => {
+    e.preventDefault();
+    navigate("/home-agente");
   };
 
   return (
@@ -58,9 +132,7 @@ const ProfiloAgente = () => {
           </div>
         </div>
         <div className="top-right-icons">
-          {/* Spacer to keep header wide */}
           <div style={{ width: "120px", display: "inline-block" }}></div>
-          {/* Notifiche */}
           <div className="icon-text hide-on-small" onClick={handleNotificheClick}>
             <svg width="40" height="40" viewBox="0 0 50 50" fill="none">
               <path d="M41.6667 8.33325H8.33335C6.04169 8.33325 4.16669 10.2083 4.16669 12.4999V37.4999C4.16669 39.7916 6.04169 41.6666 8.33335 41.6666H41.6667C43.9584 41.6666 45.8334 39.7916 45.8334 37.4999V12.4999C45.8334 10.2083 43.9584 8.33325 41.6667 8.33325ZM40.8334 17.1874L27.2084 25.7083C25.8542 26.5624 24.1459 26.5624 22.7917 25.7083L9.16669 17.1874C8.64585 16.8541 8.33335 16.2916 8.33335 15.6874C8.33335 14.2916 9.85419 13.4583 11.0417 14.1874L25 22.9166L38.9584 14.1874C40.1459 13.4583 41.6667 14.2916 41.6667 15.6874C41.6667 16.2916 41.3542 16.8541 40.8334 17.1874Z" fill="#073B4C"/>
@@ -99,112 +171,120 @@ const ProfiloAgente = () => {
             </g>
           </svg>
         </div>
-        <div className="field">
-          <strong>Nome:</strong>
-          {isEditing ? (
-            <input
-              type="text"
-              value={formData.nome}
-              onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user.nome}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Cognome:</strong>
-          {isEditing ? (
-            <input
-              type="text"
-              value={formData.cognome}
-              onChange={(e) => setFormData({ ...formData, cognome: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user.cognome}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Email:</strong>
-          {isEditing ? (
-            <input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user.email}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Numero di telefono:</strong>
-          {isEditing ? (
-            <input
-              type="tel"
-              value={formData.telefono || ""}
-              onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{user.telefono || "-"}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Biografia:</strong>
-          {isEditing ? (
-            <textarea
-              value={formData.bio || ""}
-              onChange={(e) => setFormData({ ...formData, bio: e.target.value })}
-              className="edit-input"
-              rows={3}
-            />
-          ) : (
-            <span>{user.bio || "-"}</span>
-          )}
-        </div>
-        <div className="field">
-          <strong>Password:</strong>
-          {isEditing ? (
-            <input
-              type={showPassword ? "text" : "password"}
-              value={formData.password}
-              onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-              className="edit-input"
-            />
-          ) : (
-            <span>{showPassword ? user.password : "********"}</span>
-          )}
-          <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
-            {showPassword ? "X" : "MOSTRA"}
-          </button>
-        </div>
-        <div className="edit-action">
-          <button 
-            className={`edit-btn ${isEditing ? 'save' : ''}`} 
-            onClick={() => {
-              if (isEditing) {
-                handleSave();
-              } else {
-                setIsEditing(true);
-              }
-            }}
-          >
-            {isEditing ? 'Salva' : 'Modifica dati'}
-          </button>
-          {isEditing && (
-            <button 
-              className="cancel-btn" 
-              onClick={() => {
-                setFormData(user);
-                setIsEditing(false);
-              }}
-            >
-              Annulla
-            </button>
-          )}
-        </div>
+        {loading ? (
+          <div className="field">Caricamento profilo agente...</div>
+        ) : errorMsg ? (
+          <div className="field error">{errorMsg}</div>
+        ) : agent ? (
+          <>
+            <div className="field">
+              <strong>Nome:</strong>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.nome}
+                  onChange={(e) => setFormData({ ...formData, nome: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{agent.nome}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Cognome:</strong>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.cognome}
+                  onChange={(e) => setFormData({ ...formData, cognome: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{agent.cognome}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Email:</strong>
+              {isEditing ? (
+                <input
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{agent.email}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Telefono:</strong>
+              {isEditing ? (
+                <input
+                  type="tel"
+                  value={formData.telefono}
+                  onChange={(e) => setFormData({ ...formData, telefono: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{agent.telefono}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Biografia:</strong>
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={formData.qualifiche}
+                  onChange={(e) => setFormData({ ...formData, qualifiche: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{agent.qualifiche}</span>
+              )}
+            </div>
+            <div className="field">
+              <strong>Password:</strong>
+              {isEditing ? (
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={formData.password}
+                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                  className="edit-input"
+                />
+              ) : (
+                <span>{showPassword ? agent.password : "********"}</span>
+              )}
+              <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
+                {showPassword ? "X" : "MOSTRA"}
+              </button>
+            </div>
+            <div className="edit-action">
+              <button 
+                className={`edit-btn ${isEditing ? 'save' : ''}`} 
+                onClick={() => {
+                  if (isEditing) {
+                    handleSave();
+                  } else {
+                    setIsEditing(true);
+                  }
+                }}
+              >
+                {isEditing ? 'Salva' : 'Modifica dati'}
+              </button>
+              {isEditing && (
+                <button 
+                  className="cancel-btn" 
+                  onClick={() => {
+                    setFormData(agent);
+                    setIsEditing(false);
+                  }}
+                >
+                  Annulla
+                </button>
+              )}
+            </div>
+          </>
+        ) : null}
       </div>
     </div>
   );
