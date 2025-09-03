@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./AggiungiCollaboratore.css";
 
 const AggiungiCollaboratore = () => {
@@ -20,7 +21,9 @@ const AggiungiCollaboratore = () => {
   };
 
   // Gestione submit form
-  const handleSubmit = async (e) => {
+  const [pendingData, setPendingData] = useState(null);
+
+  const handleSubmit = (e) => {
     e.preventDefault();
     setErroreMessaggio("");
 
@@ -29,44 +32,53 @@ const AggiungiCollaboratore = () => {
       return;
     }
 
-    const dati = { nomeCo, cognomeCo, emailCo };
+    // Salva i dati in pendingData e mostra il modale di conferma
+    setPendingData({
+      email: emailCo,
+      firstName: nomeCo,
+      lastName: cognomeCo
+    });
+    setShowWarningModal(true);
+  };
+
+  // Chiamata backend solo dopo conferma
+  const handleConfirmWarning = async () => {
+    setShowWarningModal(false);
+    if (!pendingData) return;
 
     try {
-      const response = await fetch(
-        "https://cd5480b0-66c3-4d3f-8864-98af937fa5de.mock.pstmn.io/login",
+      const token = localStorage.getItem("jwtToken");
+      const response = await axios.post(
+        "http://localhost:8080/api/admins/create-admin",
+        pendingData,
         {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(dati),
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
-      const result = await response.json();
+      const result = response.data;
 
-      if (response.ok) {
-
-        // Simula chiamata al backend per ottenere il QR code
-        // Sostituisci questa parte con la vera chiamata API
-        const fakeQrCodeBase64 = "iVBORw0KGgoAAAANSUhEUgAAADYAAAA2CAIAAAADJ/2KAAABPUlEQVR42uWYyw6DMAwEm6r//8v0wCWStdbYubAml1YUcDNZP9d1XZ9nr+/n8et3f6y14AM39ft+8l09y235UNz/tVr77vc7I5udZU6I2HKjqHSpdhy5Rn6KPbflSZEsRSv35elx8YRlfoX7+CyKJ7ohfl215UaRZ89qviY6Nqa4esrLGcTo+I64qHST54zci3vso10fLZ5kVV51K1r5aTh7NNlfT2fVfDOLIq8UidqILp1zdOzueHUYz4RwUm9266MVv1xJvfqFK9vZo0m24B0x19/EPppQyT067wbVm521SGrBXp3S64fe1LtUa+w8ekzpXapaqWq0N9+ZPuvOKxSeP3LVzp11k/jH+5W5ObpX86kMzuNA/HX6rJv3xaQmMp5GHM26q5FSaS4/h7mz7qieXpZX1j3ni09eBhT/mqhonaWq8LwAAAAASUVORK5CYII"; // esempio, da sostituire
-        setQrCodeBase64(fakeQrCodeBase64);
-        setShowWarningModal(true);
-      } else if (response.status === 409) {
-        setErroreMessaggio("⚠ " + result.message);
+      if (result.base64QRCode) {
+        setQrCodeBase64(result.base64QRCode);
+        setShowSuccessModal(true);
       } else {
         setErroreMessaggio("❌ Errore imprevisto. Riprova più tardi.");
       }
     } catch (error) {
-      setErroreMessaggio("❌ Errore di connessione. Controlla la tua rete.");
+      if (error.response && error.response.status === 409) {
+        setErroreMessaggio("⚠ Email già esistente");
+      } else {
+        setErroreMessaggio("❌ Errore di connessione. Controlla la tua rete.");
+      }
     }
-  };
-
-  // Gestione modali
-  const handleConfirmWarning = () => {
-    setShowWarningModal(false);
-    setShowSuccessModal(true);
+    setPendingData(null);
   };
 
   const handleCancelWarning = () => {
     setShowWarningModal(false);
+    setPendingData(null);
   };
 
   const handleConfirmSuccess = () => {
