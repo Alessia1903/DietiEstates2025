@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import "./AggiungiImmobile.css";
 
 const initialForm = {
@@ -85,9 +86,47 @@ const AggiungiImmobile = () => {
   };
 
   // Conferma modale warning
-  const handleConfirmWarning = () => {
+  const handleConfirmWarning = async () => {
     setShowWarning(false);
-    setShowSuccess(true);
+    setError("");
+    // Mappa i campi frontend -> backend
+    const formData = new FormData();
+    formData.append("city", form.city);
+    formData.append("district", form.town);
+    formData.append("address", form.address);
+    formData.append("streetNumber", form.civicNumber);
+    formData.append("floor", form.floor);
+    formData.append("totalBuildingFloors", form.totalFloors);
+    formData.append("commercialArea", form.surface);
+    formData.append("elevator", form.elevator);
+    formData.append("rooms", form.rooms);
+    formData.append("energyClass", form.energyClass);
+    formData.append("furnishing", form.arredamento);
+    formData.append("heating", form.riscaldamento);
+    formData.append("propertyStatus", form.stato);
+    formData.append("contractType", form.contratto);
+    formData.append("description", form.description);
+    formData.append("price", form.price);
+    if (form.file) {
+      formData.append("image", form.file);
+    }
+
+    try {
+      const token = localStorage.getItem("jwtToken");
+      await axios.post(
+        "http://localhost:8080/api/estate-agents/load-real-estate",
+        formData,
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "multipart/form-data"
+          }
+        }
+      );
+      setShowSuccess(true);
+    } catch (err) {
+      setError("❌ Errore nell'invio dell'annuncio. Riprova.");
+    }
   };
 
   // Conferma modale successo
