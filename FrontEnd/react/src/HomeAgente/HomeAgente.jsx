@@ -1,58 +1,52 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import CardImmobile from "../components/CardImmobile";
 import "./HomeAgente.css";
 
-// MOCK: annunci di esempio
-const MOCK_ANNUNCI = [
-  {
-    idAnnuncio: 1,
-    immagine: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
-    prezzo: 220000,
-    stanze: 3,
-    superficie: 90,
-    contratto: "Vendita",
-    indirizzo: "Via Roma 12",
-    citta: "Napoli",
-    comune: "Napoli",
-    descrizione: "Luminoso appartamento in zona centrale, vicino a tutti i servizi. Ampio salone, cucina abitabile, due camere da letto e bagno. Balcone panoramico."
-  },
-  {
-    idAnnuncio: 2,
-    immagine: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
-    prezzo: 1200,
-    stanze: 2,
-    superficie: 55,
-    contratto: "Affitto",
-    indirizzo: "Via Milano 8",
-    citta: "Milano",
-    comune: "Milano",
-    descrizione: "Bilocale arredato in zona Isola, ideale per giovani coppie. Composto da soggiorno con angolo cottura, camera matrimoniale, bagno e balcone."
-  },
-  {
-    idAnnuncio: 3,
-    immagine: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80",
-    prezzo: 540000,
-    stanze: 5,
-    superficie: 180,
-    contratto: "Vendita",
-    indirizzo: "Via Appia 100",
-    citta: "Roma",
-    comune: "Roma",
-    descrizione: "Ampia villa indipendente con giardino privato e garage doppio. Salone, cucina, quattro camere, tre bagni, terrazzo e cantina."
-  }
-];
-
-const annunciPerPagina = 10;
+const annunciPerPagina = 5;
 
 const HomeAgente = () => {
   const navigate = useNavigate();
   const [paginaCorrente, setPaginaCorrente] = useState(1);
   const [annunci, setAnnunci] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // In futuro: fetch dal backend con token
-    setAnnunci(MOCK_ANNUNCI);
+    // Fetch immobili dell'agente dal backend
+    const fetchImmobili = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await axios.get(
+          "http://localhost:8080/api/estate-agents/my-properties?page=0&size=5",
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        // Mappa i dati backend -> frontend per CardImmobile
+        const immobili = response.data.content.map((immobile) => ({
+          idAnnuncio: immobile.id,
+          immagine: immobile.imageUrl,
+          prezzo: immobile.price,
+          stanze: immobile.rooms,
+          superficie: immobile.commercialArea,
+          contratto: immobile.contractType,
+          indirizzo: `${immobile.address} ${immobile.streetNumber}`,
+          citta: immobile.city,
+          comune: immobile.district,
+          descrizione: immobile.description,
+        }));
+        setAnnunci(immobili);
+      } catch (error) {
+        setAnnunci([]);
+      }
+      setLoading(false);
+    };
+    fetchImmobili();
   }, []);
 
   const totalePagine = Math.ceil(annunci.length / annunciPerPagina);
@@ -155,8 +149,10 @@ const HomeAgente = () => {
       <div className="w-full max-w-4xl mx-auto">
         <div className="container mt-6 w-full max-w-4xl flex">
           <div id="risultati" className="flex flex-wrap justify-center gap-4 w-full">
-            {annunciDaMostrare.length === 0 ? (
-              <div className="text-gray-500 text-lg">Nessun annuncio disponibile.</div>
+            {loading ? (
+              <div className="text-gray-500 text-lg">Caricamento immobili...</div>
+            ) : annunci.length === 0 ? (
+              <div className="text-gray-500 text-lg">Non hai creato alcun annuncio.</div>
             ) : (
               annunciDaMostrare.map((immobile) => (
                 <CardImmobile
