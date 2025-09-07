@@ -1,59 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CardNotifica from "../components/CardNotifica/CardNotifica";
 import "./NotificheUtente.css";
-
-// Notifiche di esempio per ciascuna categoria
-const MOCK_NOTIFICHE = [
-  {
-    id: 1,
-    categoria: "promozionali",
-    titolo: "Offerta Speciale!",
-    testo: "Scopri le nuove promozioni sulle case in vendita a Napoli.",
-    data: "2025-07-09 10:30",
-    letto: false,
-  },
-  {
-    id: 2,
-    categoria: "nuove-proprieta",
-    titolo: "Nuova proprietà in linea con la tua ricerca",
-    testo: "È disponibile un nuovo appartamento a Milano con 2 locali, classe B.",
-    data: "2025-07-08 18:00",
-    letto: false,
-  },
-  {
-    id: 3,
-    categoria: "visite",
-    titolo: "Visita confermata",
-    testo: "La tua visita per l'immobile in Via Roma, Torino è stata confermata dall'agente.",
-    data: "2025-07-07 15:00",
-    letto: true,
-  },
-  {
-    id: 4,
-    categoria: "visite",
-    titolo: "Visita rifiutata",
-    testo: "L'agente ha rifiutato la visita per l'immobile in Via Garibaldi, Bologna.",
-    data: "2025-07-06 11:30",
-    letto: true,
-  },
-  {
-    id: 5,
-    categoria: "promozionali",
-    titolo: "Nuovo servizio: Valutazione gratuita",
-    testo: "Richiedi ora una valutazione gratuita del tuo immobile!",
-    data: "2025-07-05 09:00",
-    letto: true,
-  },
-  {
-    id: 6,
-    categoria: "nuove-proprieta",
-    titolo: "Nuova proprietà in linea con la tua ricerca",
-    testo: "Scopri la nuova villa a Roma con 4 locali, classe energetica C.",
-    data: "2025-07-04 17:45",
-    letto: false,
-  },
-];
 
 const CATEGORIE = [
   { key: "promozionali", label: "Promozionali" },
@@ -61,21 +9,63 @@ const CATEGORIE = [
   { key: "visite", label: "Visite" },
 ];
 
+// Funzione di mapping tipo backend -> categoria frontend
+function categoriaNotifica(type) {
+  if (!type) return "promozionali";
+  if (type === "NUOVA_PROPRIETA") return "nuove-proprieta";
+  if (type === "VISITA") return "visite";
+  return "promozionali";
+}
+
 const NotificheUtente = () => {
   const navigate = useNavigate();
-  // Stato dei toggle per categoria
+  const [notifiche, setNotifiche] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [attive, setAttive] = useState({
     promozionali: true,
     "nuove-proprieta": true,
     visite: true,
   });
 
-  // Filtra notifiche in base ai toggle attivi
-  const notificheFiltrate = MOCK_NOTIFICHE.filter((n) => attive[n.categoria]);
-
   // PAGINAZIONE
   const NOTIFICHE_PER_PAGINA = 5;
   const [pagina, setPagina] = useState(1);
+
+  useEffect(() => {
+    const fetchNotifiche = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const axios = (await import("axios")).default;
+        const response = await axios.get(
+          "http://localhost:8080/api/buyers/notifications?page=0&size=5",
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        // Mappa notifiche backend -> frontend
+        const mapped = response.data.content.map((n) => ({
+          id: n.id,
+          categoria: categoriaNotifica(n.type),
+          titolo: n.title,
+          testo: n.message,
+          data: n.createdAt ? n.createdAt.replace("T", " ").substring(0, 16) : "",
+        }));
+        setNotifiche(mapped);
+      } catch (error) {
+        setNotifiche([]);
+      }
+      setLoading(false);
+    };
+    fetchNotifiche();
+  }, []);
+
+  // Filtra notifiche in base ai toggle attivi
+  const notificheFiltrate = notifiche.filter((n) => attive[n.categoria]);
+
   const totalePagine = Math.ceil(notificheFiltrate.length / NOTIFICHE_PER_PAGINA);
   const notificheDaMostrare = notificheFiltrate.slice(
     (pagina - 1) * NOTIFICHE_PER_PAGINA,
@@ -189,8 +179,10 @@ const NotificheUtente = () => {
 
       {/* Lista notifiche */}
       <div className="notifiche-list w-full max-w-3xl flex flex-col gap-6">
-        {notificheFiltrate.length === 0 ? (
-          <div className="text-gray-500 text-lg text-center">Nessuna notifica da mostrare.</div>
+        {loading ? (
+          <div className="text-gray-500 text-lg text-center">Caricamento notifiche...</div>
+        ) : notificheFiltrate.length === 0 ? (
+          <div className="text-gray-500 text-lg text-center">Non ci sono notifiche da leggere.</div>
         ) : (
           notificheDaMostrare.map((notifica) => (
             <CardNotifica
