@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import CardImmobile from "../components/CardImmobile";
 import "./HomeNoLogin.css";
 
 const HomeNoLogin = () => {
@@ -11,6 +13,9 @@ const HomeNoLogin = () => {
   const [prezzoMin, setPrezzoMin] = useState("");
   const [prezzoMax, setPrezzoMax] = useState("");
   const [inputError, setInputError] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [risultati, setRisultati] = useState([]);
 
   // Sincronizzazione prezzi
   const sincronizzaMax = (min, max) => {
@@ -33,23 +38,58 @@ const HomeNoLogin = () => {
   };
 
   // Gestione ricerca
-  const cerca = () => {
+  const cerca = async () => {
     if (!citta.trim()) {
       setInputError(true);
       return;
     }
     setInputError(false);
 
-    // Salva i parametri di ricerca nella sessionStorage
-    sessionStorage.setItem("citta", citta.trim());
-    sessionStorage.setItem("contratto", contratto);
-    sessionStorage.setItem("classeEnergetica", classeEnergetica);
-    sessionStorage.setItem("numLocali", numLocali);
-    sessionStorage.setItem("prezzoMin", prezzoMin);
-    sessionStorage.setItem("prezzoMax", prezzoMax);
+    setLoading(true);
+    setShowResults(false);
 
-    // Reindirizza alla pagina risultati
-    navigate("/risultati-nolog");
+    const startTime = Date.now();
+
+    try {
+      const searchParams = {
+        city: citta.trim(),
+        contractType: contratto || null,
+        energyClass: classeEnergetica || null,
+        rooms: numLocali ? parseInt(numLocali) : null,
+        minPrice: prezzoMin ? parseFloat(prezzoMin) : null,
+        maxPrice: prezzoMax ? parseFloat(prezzoMax) : null
+      };
+
+      const response = await axios.post(
+        "http://localhost:8080/api/buyers/search",
+        searchParams,
+        {
+          params: {
+            page: 0,
+            size: 5
+          }
+        }
+      );
+
+      setRisultati(response.data.content);
+      
+      // Calcola il tempo trascorso
+      const elapsedTime = Date.now() - startTime;
+      // Se è passato meno di 1.5 secondi, aspetta la differenza
+      setTimeout(() => {
+        setLoading(false);
+        setShowResults(true);
+      }, Math.max(0, 1500 - elapsedTime));
+    } catch (error) {
+      console.error("Errore nella ricerca:", error);
+      setRisultati([]);
+      // Mantieni lo stesso comportamento del timer anche in caso di errore
+      const elapsedTime = Date.now() - startTime;
+      setTimeout(() => {
+        setLoading(false);
+        setShowResults(true);
+      }, Math.max(0, 1500 - elapsedTime));
+    }
   };
 
   // Gestione input numerici
@@ -147,10 +187,10 @@ const HomeNoLogin = () => {
 
         <p className="text-white text-lg mt-6 mb-0 text-center">Filtri avanzati:</p>
         <div className="flex flex-col md:flex-row md:flex-wrap gap-4 items-center justify-between w-full">
-          <select id="contratto" value={contratto} onChange={(e) => setContratto(e.target.value)}>
+            <select id="contratto" value={contratto} onChange={(e) => setContratto(e.target.value)}>
             <option value="">Contratto</option>
-            <option value="vendita">Vendita</option>
-            <option value="affitto">Affitto</option>
+            <option value="VENDITA">Vendita</option>
+            <option value="AFFITTO">Affitto</option>
           </select>
           <select id="classeEnergetica" value={classeEnergetica} onChange={(e) => setClasseEnergetica(e.target.value)}>
             <option value="">Classe Energetica</option>
@@ -196,6 +236,55 @@ const HomeNoLogin = () => {
           />
         </div>
       </div>
+
+      {/* Loader video */}
+      {loading && (
+        <div id="loadingAnimation" className="fixed top-0 left-0 w-full h-full bg-white flex justify-center items-center z-50">
+          <video autoPlay loop muted className="w-[1000px] h-[1000px]">
+            <source src="https://raw.githubusercontent.com/Alessia1903/DietiEstates2025/master/Photos/LenteAnimation.mp4" type="video/mp4" />
+            Il tuo browser non supporta il tag video.
+          </video>
+        </div>
+      )}
+
+      {/* Risultati ricerca */}
+      {showResults && (
+        <div className="container mt-6 w-full max-w-4xl">
+          <div id="risultati" className="flex flex-wrap justify-center gap-4">
+            {risultati.length === 0 ? (
+              <div className="text-gray-500 text-lg">Nessun risultato trovato</div>
+            ) : (
+              risultati.map((immobile) => (
+                <CardImmobile 
+                  key={immobile.id}
+                  immobile={{
+                    idAnnuncio: immobile.id,
+                    immagine: immobile.imageUrl,
+                    prezzo: immobile.price,
+                    stanze: immobile.rooms,
+                    superficie: immobile.commercialArea,
+                    contratto: immobile.contractType,
+                    indirizzo: `${immobile.address} ${immobile.streetNumber}`,
+                    citta: immobile.city,
+                    comune: immobile.district,
+                    descrizione: immobile.description,
+                    foto: immobile.images || [immobile.imageUrl],
+                    piano: immobile.floor,
+                    totalePiani: immobile.totalBuildingFloors,
+                    numeroStanze: immobile.rooms,
+                    classeEnergetica: immobile.energyClass,
+                    arredamento: immobile.furnishing,
+                    riscaldamento: immobile.heating,
+                    stato: immobile.propertyStatus,
+                    ascensore: immobile.elevator
+                  }}
+                  onClick={() => navigate("/dettagli-immobile")}
+                />
+              ))
+            )}
+          </div>
+        </div>
+      )}
     </div>
   );
 };

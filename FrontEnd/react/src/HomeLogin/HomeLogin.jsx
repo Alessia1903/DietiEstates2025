@@ -1,46 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import CardImmobile from "../components/CardImmobile";
 import "./HomeLogin.css";
-
-const MOCK_IMMOBILI = [
-  {
-    idAnnuncio: 1,
-    immagine: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=400&q=80",
-    prezzo: 220000,
-    stanze: 3,
-    superficie: 90,
-    contratto: "Vendita",
-    indirizzo: "Via Roma 12",
-    citta: "Napoli",
-    comune: "Napoli",
-    descrizione: "Luminoso appartamento in zona centrale, vicino a tutti i servizi. Ampio salone, cucina abitabile, due camere da letto e bagno. Balcone panoramico."
-  },
-  {
-    idAnnuncio: 2,
-    immagine: "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=400&q=80",
-    prezzo: 1200,
-    stanze: 2,
-    superficie: 55,
-    contratto: "Affitto",
-    indirizzo: "Via Milano 8",
-    citta: "Milano",
-    comune: "Milano",
-    descrizione: "Bilocale arredato in zona Isola, ideale per giovani coppie. Composto da soggiorno con angolo cottura, camera matrimoniale, bagno e balcone."
-  },
-  {
-    idAnnuncio: 3,
-    immagine: "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=400&q=80",
-    prezzo: 540000,
-    stanze: 5,
-    superficie: 180,
-    contratto: "Vendita",
-    indirizzo: "Via Appia 100",
-    citta: "Roma",
-    comune: "Roma",
-    descrizione: "Ampia villa indipendente con giardino privato e garage doppio. Salone, cucina, quattro camere, tre bagni, terrazzo e cantina."
-  }
-];
 
 const HomeLogin = () => {
   const navigate = useNavigate();
@@ -57,6 +19,7 @@ const HomeLogin = () => {
   // Stato per mostrare risultati e loader
   const [showResults, setShowResults] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [risultati, setRisultati] = useState([]);
 
   // Sincronizzazione prezzi
   const sincronizzaMax = (min, max) => {
@@ -79,7 +42,7 @@ const HomeLogin = () => {
   };
 
   // Gestione ricerca
-  const cerca = () => {
+  const cerca = useCallback(() => {
     if (!citta.trim()) {
       setInputError(true);
       return;
@@ -105,14 +68,6 @@ const HomeLogin = () => {
     }
     localStorage.setItem(key, JSON.stringify(history));
 
-    // Simula caricamento
-    setLoading(true);
-    setShowResults(false);
-    setTimeout(() => {
-      setLoading(false);
-      setShowResults(true);
-    }, 1500);
-
     // Salva i parametri di ricerca nella sessionStorage
     sessionStorage.setItem("citta", citta.trim());
     sessionStorage.setItem("contratto", contratto);
@@ -120,9 +75,13 @@ const HomeLogin = () => {
     sessionStorage.setItem("numLocali", numLocali);
     sessionStorage.setItem("prezzoMin", prezzoMin);
     sessionStorage.setItem("prezzoMax", prezzoMax);
-
-    // (Non reindirizza, mostra risultati sotto)
-  };
+    
+    // Imposta il flag per avviare la ricerca
+    sessionStorage.setItem("avviaRicerca", "true");
+    
+    // Ricarica la pagina per avviare la ricerca
+    window.location.reload();
+  }, [citta, contratto, classeEnergetica, numLocali, prezzoMin, prezzoMax, setInputError]);
 
   // Gestione input numerici
   const handleNumLocali = (e) => {
@@ -149,40 +108,65 @@ const HomeLogin = () => {
   // Avvio automatico ricerca se arrivo da Cronologia o se flag avviaRicerca è presente
   useEffect(() => {
     const sessionCitta = sessionStorage.getItem("citta");
-    const sessionContratto = sessionStorage.getItem("contratto");
-    const sessionClasseEnergetica = sessionStorage.getItem("classeEnergetica");
-    const sessionNumLocali = sessionStorage.getItem("numLocali");
-    const sessionPrezzoMin = sessionStorage.getItem("prezzoMin");
-    const sessionPrezzoMax = sessionStorage.getItem("prezzoMax");
     const avviaRicerca = sessionStorage.getItem("avviaRicerca");
 
-    if (
-      sessionCitta &&
-      sessionContratto &&
-      sessionClasseEnergetica &&
-      sessionNumLocali &&
-      sessionPrezzoMin &&
-      sessionPrezzoMax &&
-      avviaRicerca === "true"
-    ) {
+    if (sessionCitta && avviaRicerca === "true") {
+      // Imposta i parametri di ricerca dagli stati
       setCitta(sessionCitta);
-      setContratto(sessionContratto);
-      setClasseEnergetica(sessionClasseEnergetica);
-      setNumLocali(sessionNumLocali);
-      setPrezzoMin(sessionPrezzoMin);
-      setPrezzoMax(sessionPrezzoMax);
+      setContratto(sessionStorage.getItem("contratto") || "");
+      setClasseEnergetica(sessionStorage.getItem("classeEnergetica") || "");
+      setNumLocali(sessionStorage.getItem("numLocali") || "");
+      setPrezzoMin(sessionStorage.getItem("prezzoMin") || "");
+      setPrezzoMax(sessionStorage.getItem("prezzoMax") || "");
 
+      // Rimuovi il flag prima di eseguire la ricerca
+      sessionStorage.removeItem("avviaRicerca");
+
+      // Avvia la ricerca API
       setLoading(true);
       setShowResults(false);
-      setTimeout(() => {
-        setLoading(false);
-        setShowResults(true);
-      }, 1500);
 
-      // Rimuovi il flag dopo l'avvio
-      sessionStorage.removeItem("avviaRicerca");
+      const searchParams = {
+        city: sessionCitta.trim(),
+        contractType: sessionStorage.getItem("contratto") || null,
+        energyClass: sessionStorage.getItem("classeEnergetica") || null,
+        rooms: sessionStorage.getItem("numLocali") ? parseInt(sessionStorage.getItem("numLocali")) : null,
+        minPrice: sessionStorage.getItem("prezzoMin") ? parseFloat(sessionStorage.getItem("prezzoMin")) : null,
+        maxPrice: sessionStorage.getItem("prezzoMax") ? parseFloat(sessionStorage.getItem("prezzoMax")) : null
+      };
+
+      // Esegui la ricerca con un minimo di tempo di caricamento
+      const executeSearch = async () => {
+        try {
+          const response = await axios.post(
+            "http://localhost:8080/api/buyers/search",
+            searchParams,
+            {
+              params: {
+                page: 0,
+                size: 5
+              }
+            }
+          );
+
+          setRisultati(response.data.content);
+        } catch (error) {
+          console.error("Errore nella ricerca:", error);
+          setRisultati([]);
+        }
+      };
+      
+      const startTime = Date.now();
+      executeSearch().then(() => {
+        const elapsedTime = Date.now() - startTime;
+        // Se il tempo trascorso è minore di 1.5 secondi, aspetta la differenza
+        setTimeout(() => {
+          setLoading(false);
+          setShowResults(true);
+        }, Math.max(0, 1500 - elapsedTime));
+      });
     }
-  }, [showResults, loading]);
+  }, []); // Esegui solo al mount
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
@@ -277,8 +261,8 @@ const HomeLogin = () => {
         <div className="flex flex-row flex-wrap gap-4 items-center justify-center w-full mb-2">
           <select id="contratto" value={contratto} onChange={(e) => setContratto(e.target.value)}>
             <option value="">Contratto</option>
-            <option value="vendita">Vendita</option>
-            <option value="affitto">Affitto</option>
+            <option value="VENDITA">Vendita</option>
+            <option value="AFFITTO">Affitto</option>
           </select>
           <select id="classeEnergetica" value={classeEnergetica} onChange={(e) => setClasseEnergetica(e.target.value)}>
             <option value="">Classe Energetica</option>
@@ -378,10 +362,38 @@ const HomeLogin = () => {
               Salva ricerca
             </button>
           </div>
-          <div id="risultati">
-            {MOCK_IMMOBILI.map((immobile) => (
-              <CardImmobile key={immobile.id} immobile={immobile} onClick={handleCardClick}/>
-            ))}
+          <div id="risultati" className="flex flex-wrap justify-center gap-4">
+            {risultati.length === 0 ? (
+              <div className="text-gray-500 text-lg">Nessun risultato trovato</div>
+            ) : (
+              risultati.map((immobile) => (
+                <CardImmobile 
+                  key={immobile.id}
+                  immobile={{
+                    idAnnuncio: immobile.id,
+                    immagine: immobile.imageUrl,
+                    prezzo: immobile.price,
+                    stanze: immobile.rooms,
+                    superficie: immobile.commercialArea,
+                    contratto: immobile.contractType,
+                    indirizzo: `${immobile.address} ${immobile.streetNumber}`,
+                    citta: immobile.city,
+                    comune: immobile.district,
+                    descrizione: immobile.description,
+                    foto: immobile.images || [immobile.imageUrl],
+                    piano: immobile.floor,
+                    totalePiani: immobile.totalBuildingFloors,
+                    numeroStanze: immobile.rooms,
+                    classeEnergetica: immobile.energyClass,
+                    arredamento: immobile.furnishing,
+                    riscaldamento: immobile.heating,
+                    stato: immobile.propertyStatus,
+                    ascensore: immobile.elevator
+                  }}
+                  onClick={handleCardClick}
+                />
+              ))
+            )}
           </div>
         </div>
       )}
