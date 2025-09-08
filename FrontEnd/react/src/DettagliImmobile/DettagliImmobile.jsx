@@ -1,24 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./DettagliImmobile.css";
 import PrenotaVisitaMeteo from "../components/PrenotaVisitaMeteo/PrenotaVisitaMeteo";
 
-// Funzione per decodificare il ruolo dal JWT
-function getUserRoleFromToken() {
-  const token = localStorage.getItem("jwtToken");
-  if (!token) return null;
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1]));
-    if (payload.authorities && Array.isArray(payload.authorities)) {
-      if (payload.authorities.includes("ROLE_BUYER")) return "BUYER";
-      if (payload.authorities.includes("ROLE_ESTATE_AGENT")) return "ESTATE_AGENT";
-    }
-    if (payload.role) return payload.role;
-    return null;
-  } catch (e) {
-    return null;
-  }
-}
 
 const DettagliImmobile = () => {
   const [annuncio, setAnnuncio] = useState(null);
@@ -26,8 +10,26 @@ const DettagliImmobile = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showVisitMenu, setShowVisitMenu] = useState(false);
   const [showMappa, setShowMappa] = useState(false);
-  const [userRole, setUserRole] = useState(null);
+  const [isBuyer, setIsBuyer] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // Verifica se l'utente è un buyer basandosi sul path e il token
+  useEffect(() => {
+    const token = localStorage.getItem("jwtToken");
+    const currentPath = location.pathname;
+    const referrer = document.referrer;
+    
+    // Percorsi tipici del buyer
+    const buyerPaths = ["/home", "/cronologia", "/preferiti", "/notifiche-utente", "/profilo-utente"];
+    
+    // Controlla se il percorso corrente o il referrer sono di un buyer
+    const isBuyerPath = buyerPaths.some(path => 
+      referrer.includes(path) || currentPath === path
+    );
+
+    setIsBuyer(!!token && isBuyerPath);
+  }, [location]);
 
   useEffect(() => {
     // Recupera i dati dell'immobile da sessionStorage
@@ -41,7 +43,6 @@ const DettagliImmobile = () => {
     try {
       const parsedData = JSON.parse(rawData);
       setAnnuncio(parsedData);
-      setUserRole(getUserRoleFromToken());
     } catch (error) {
       navigate(-1);
     }
@@ -178,7 +179,7 @@ const DettagliImmobile = () => {
       </div>
 
       {/* Bottone visita solo per BUYER */}
-      {userRole === "BUYER" && (
+      {isBuyer && (
         <>
           <button className="visit-button mx-auto" onClick={() => setShowVisitMenu(true)}>
             RICHIEDI UNA VISITA
