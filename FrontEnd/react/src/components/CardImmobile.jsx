@@ -1,10 +1,20 @@
 import React from "react";
 import "./CardImmobile.css";
+import { useNavigate } from "react-router-dom";
 
 const CardImmobile = ({ immobile, onClick }) => {
-  // Adatta i dati per la struttura "annuncio" di HomeAgente
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    // Salva i dati dell'immobile in sessionStorage
+    sessionStorage.removeItem("dettagliImmobile"); 
+    sessionStorage.setItem("dettagliImmobile", JSON.stringify(immobile));
+    
+    navigate("/dettagli-immobile");
+  };
+
   return (
-    <div className="annuncio" onClick={() => onClick(immobile)}>
+    <div className="annuncio" onClick={handleClick}>
       <img
         src={immobile.img || immobile.immagine || "https://via.placeholder.com/100"}
         alt={immobile.titolo || "Immobile"}

@@ -3,59 +3,64 @@ import { useNavigate } from "react-router-dom";
 import "./DettagliImmobile.css";
 import PrenotaVisitaMeteo from "../components/PrenotaVisitaMeteo/PrenotaVisitaMeteo";
 
-// MOCK per demo: in produzione recupera da sessionStorage o API
-const MOCK_ANNUNCIO = {
-  prezzo: 220000,
-  contratto: "vendita",
-  indirizzo: "Via Roma 10",
-  citta: "Napoli",
-  comune: "Napoli",
-  descrizione: "Luminoso appartamento in zona centrale, vicino a tutti i servizi. Ampio salone, cucina abitabile, due camere da letto e bagno. Balcone panoramico. Ristrutturato di recente. Ottimo per famiglie o investimento. Possibilità di box auto. Classe energetica A3. Spese condominiali contenute. Servito da mezzi pubblici e negozi. Libero subito.",
-  piano: "2",
-  totalePiani: "5",
-  superficie: 95,
-  numeroStanze: 3,
-  classeEnergetica: "A3",
-  arredamento: "Parzialmente arredato",
-  riscaldamento: "Autonomo",
-  stato: "Ottimo/Ristrutturato",
-  ascensore: true,
-  latitudine: 40.8522,
-  longitudine: 14.2681,
-  foto: [
-    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=800&q=80",
-    "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?auto=format&fit=crop&w=800&q=80"
-  ]
-};
+// Funzione per decodificare il ruolo dal JWT
+function getUserRoleFromToken() {
+  const token = localStorage.getItem("jwtToken");
+  if (!token) return null;
+  try {
+    const payload = JSON.parse(atob(token.split(".")[1]));
+    if (payload.authorities && Array.isArray(payload.authorities)) {
+      if (payload.authorities.includes("ROLE_BUYER")) return "BUYER";
+      if (payload.authorities.includes("ROLE_ESTATE_AGENT")) return "ESTATE_AGENT";
+    }
+    if (payload.role) return payload.role;
+    return null;
+  } catch (e) {
+    return null;
+  }
+}
 
 const DettagliImmobile = () => {
   const [annuncio, setAnnuncio] = useState(null);
   const [imgIndex, setImgIndex] = useState(0);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [showMappa, setShowMappa] = useState(false);
   const [showVisitMenu, setShowVisitMenu] = useState(false);
+  const [showMappa, setShowMappa] = useState(false);
+  const [userRole, setUserRole] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
-    setAnnuncio(MOCK_ANNUNCIO);
-  }, []);
-
-  useEffect(() => {
-    if (showMappa && window.L && annuncio) {
-      const map = window.L.map("mappa", {
-        center: [annuncio.latitudine, annuncio.longitudine],
-        zoom: 15
-      });
-      window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-        attribution: '&copy; OpenStreetMap contributors'
-      }).addTo(map);
-      window.L.marker([annuncio.latitudine, annuncio.longitudine]).addTo(map).bindPopup("Siamo qui!").openPopup();
-      return () => map.remove();
+    // Recupera i dati dell'immobile da sessionStorage
+    const rawData = sessionStorage.getItem("dettagliImmobile");
+    
+    if (!rawData) {
+      navigate(-1);
+      return;
     }
-  }, [showMappa, annuncio]);
 
-  if (!annuncio) return null;
+    try {
+      const parsedData = JSON.parse(rawData);
+      setAnnuncio(parsedData);
+      setUserRole(getUserRoleFromToken());
+    } catch (error) {
+      navigate(-1);
+    }
+  }, [navigate]);
+
+  if (!annuncio) return (
+    <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
+      <div className="header-container">
+        <div className="logo-title cursor-pointer" id="logo-title" onClick={() => navigate("/")}>
+          <img
+            src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"
+            alt="Logo DietiEstates"
+            className="logo"
+          />
+        </div>
+      </div>
+      <div className="text-gray-500 text-lg mt-8">Nessun dettaglio immobile disponibile.</div>
+    </div>
+  );
 
   const images = annuncio.foto && annuncio.foto.length > 0
     ? annuncio.foto
@@ -66,7 +71,7 @@ const DettagliImmobile = () => {
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
-      {/* Header */}
+      {/* Solo Logo */}
       <div className="header-container">
         <div className="logo-title cursor-pointer" id="logo-title" onClick={() => navigate("/")}>
           <img
@@ -77,34 +82,6 @@ const DettagliImmobile = () => {
           <div>
             <h1 className="title custom-text-color">DîetîEstates25</h1>
             <p className="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
-          </div>
-        </div>
-        <div className="top-right-icons">
-          <div className="icon-text hide-on-small" onClick={() => navigate("/notifiche-utente")}>
-            {/* Notifiche SVG */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" fill="none" className="custom-text-color">
-              <g clipPath="url(#clip0_26_983)">
-                <path d="M41.6665 8.33337H8.33317C6.0415 8.33337 4.1665 10.2084 4.1665 12.5V37.5C4.1665 39.7917 6.0415 41.6667 8.33317 41.6667H41.6665C43.9582 41.6667 45.8332 39.7917 45.8332 37.5V12.5C45.8332 10.2084 43.9582 8.33337 41.6665 8.33337ZM40.8332 17.1875L27.2082 25.7084C25.854 26.5625 24.1457 26.5625 22.7915 25.7084L9.1665 17.1875C8.64567 16.8542 8.33317 16.2917 8.33317 15.6875C8.33317 14.2917 9.854 13.4584 11.0415 14.1875L24.9998 22.9167L38.9582 14.1875C40.1457 13.4584 41.6665 14.2917 41.6665 15.6875C41.6665 16.2917 41.354 16.8542 40.8332 17.1875Z" fill="#073B4C"/>
-              </g>
-            </svg>
-            <span>Notifiche</span>
-          </div>
-          <div className="icon-text hide-on-small" onClick={() => navigate("/cronologia")}>
-            {/* Cronologia SVG */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 50 50" fill="none" className="custom-text-color">
-              <g clipPath="url(#clip0_26_980)">
-                <path d="M27.6248 6.24995C17.0206 5.95828 8.33311 14.4791 8.33311 24.9999H4.60395C3.66645 24.9999 3.20811 26.1249 3.87478 26.7708L9.68728 32.6041C10.1039 33.0208 10.7498 33.0208 11.1664 32.6041L16.9789 26.7708C17.6248 26.1249 17.1664 24.9999 16.2289 24.9999H12.4998C12.4998 16.8749 19.1248 10.3124 27.2914 10.4166C35.0414 10.5208 41.5623 17.0416 41.6664 24.7916C41.7706 32.9374 35.2081 39.5833 27.0831 39.5833C23.7289 39.5833 20.6248 38.4374 18.1664 36.4999C17.3331 35.8541 16.1664 35.9166 15.4164 36.6666C14.5414 37.5416 14.6039 39.0208 15.5831 39.7708C18.7498 42.2708 22.7289 43.7499 27.0831 43.7499C37.6039 43.7499 46.1248 35.0624 45.8331 24.4583C45.5623 14.6874 37.3956 6.52078 27.6248 6.24995ZM26.5623 16.6666C25.7081 16.6666 24.9998 17.3749 24.9998 18.2291V25.8958C24.9998 26.6249 25.3956 27.3124 26.0206 27.6874L32.5206 31.5416C33.2706 31.9791 34.2289 31.7291 34.6664 30.9999C35.1039 30.2499 34.8539 29.2916 34.1248 28.8541L28.1248 25.2916V18.2083C28.1248 17.3749 27.4164 16.6666 26.5623 16.6666Z" fill="#073B4C"/>
-              </g>
-            </svg>
-            <span>Cronologia</span>
-          </div>
-          <div className="icon-text" onClick={() => navigate("/profilo-utente")}>
-            {/* Profilo SVG */}
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 60 60" fill="none" className="top-right custom-text-color">
-              <g clipPath="url(#clip0_26_978)">
-                <path d="M30 5C16.2 5 5 16.2 5 30C5 43.8 16.2 55 30 55C43.8 55 55 43.8 55 30C55 16.2 43.8 5 30 5ZM30 12.5C34.15 12.5 37.5 15.85 37.5 20C37.5 24.15 34.15 27.5 30 27.5C25.85 27.5 22.5 24.15 22.5 20C22.5 15.85 25.85 12.5 30 12.5ZM30 48C23.75 48 18.225 44.8 15 39.95C15.075 34.975 25 32.25 30 32.25C34.975 32.25 44.925 34.975 45 39.95C41.775 44.8 36.25 48 30 48Z" fill="#073B4C"/>
-              </g>
-            </svg>
           </div>
         </div>
       </div>
@@ -164,7 +141,7 @@ const DettagliImmobile = () => {
       <div className="container w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%] mt-2">
         <div className="flex w-full justify-between items-center">
           <h2 id="annuncio-prezzo" className="custom-text">
-            € {annuncio.prezzo.toLocaleString()}
+            € {annuncio.prezzo?.toLocaleString?.() || annuncio.prezzo}
           </h2>
           <div id="mappaContainer">
             <a
@@ -200,42 +177,46 @@ const DettagliImmobile = () => {
         </div>
       </div>
 
-      {/* Bottone visita */}
-      <button className="visit-button mx-auto" onClick={() => setShowVisitMenu(true)}>
-        RICHIEDI UNA VISITA
-      </button>
+      {/* Bottone visita solo per BUYER */}
+      {userRole === "BUYER" && (
+        <>
+          <button className="visit-button mx-auto" onClick={() => setShowVisitMenu(true)}>
+            RICHIEDI UNA VISITA
+          </button>
 
-      {/* Modale richiesta visita */}
-      <PrenotaVisitaMeteo
-        show={showVisitMenu}
-        onClose={() => setShowVisitMenu(false)}
-        onConfirm={() => {
-          setShowVisitMenu(false);
-          setShowSuccess(true);
-        }}
-      />
+          {/* Modale richiesta visita */}
+          <PrenotaVisitaMeteo
+            show={showVisitMenu}
+            onClose={() => setShowVisitMenu(false)}
+            onConfirm={() => {
+              setShowVisitMenu(false);
+              setShowSuccess(true);
+            }}
+          />
 
-      {/* Modale successo */}
-      {showSuccess && (
-        <div id="successModal" style={{ display: "flex" }}>
-          <div className="modal-outer-success">
-            <div className="modal-inner-success">
-              <div data-svg-wrapper>
-                <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M55 9.16675C29.7 9.16675 9.16663 29.7001 9.16663 55.0001C9.16663 80.3001 29.7 100.833 55 100.833C80.3 100.833 100.833 80.3001 100.833 55.0001C100.833 29.7001 80.3 9.16675 55 9.16675ZM42.5791 74.6626L26.125 58.2084C24.3375 56.4209 24.3375 53.5334 26.125 51.7459C27.9125 49.9584 30.8 49.9584 32.5875 51.7459L45.8333 64.9459L77.3666 33.4126C79.1541 31.6251 82.0416 31.6251 83.8291 33.4126C85.6166 35.2001 85.6166 38.0876 83.8291 39.8751L49.0416 74.6626C47.3 76.4501 44.3666 76.4501 42.5791 74.6626Z" fill="#4DC538"/>
-                </svg>
+          {/* Modale successo */}
+          {showSuccess && (
+            <div id="successModal" style={{ display: "flex" }}>
+              <div className="modal-outer-success">
+                <div className="modal-inner-success">
+                  <div data-svg-wrapper>
+                    <svg width="110" height="110" viewBox="0 0 110 110" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M55 9.16675C29.7 9.16675 9.16663 29.7001 9.16663 55.0001C9.16663 80.3001 29.7 100.833 55 100.833C80.3 100.833 100.833 80.3001 100.833 55.0001C100.833 29.7001 80.3 9.16675 55 9.16675ZM42.5791 74.6626L26.125 58.2084C24.3375 56.4209 24.3375 53.5334 26.125 51.7459C27.9125 49.9584 30.8 49.9584 32.5875 51.7459L45.8333 64.9459L77.3666 33.4126C79.1541 31.6251 82.0416 31.6251 83.8291 33.4126C85.6166 35.2001 85.6166 38.0876 83.8291 39.8751L49.0416 74.6626C47.3 76.4501 44.3666 76.4501 42.5791 74.6626Z" fill="#4DC538"/>
+                    </svg>
+                  </div>
+                  <h2>Complimenti!</h2>
+                  <p>La richiesta è stata inviata con successo.</p>
+                  <div className="modal-spacer"></div>
+                  <button id="confirmSuccessButton" onClick={() => setShowSuccess(false)}>
+                    PROSEGUI
+                  </button>
+                </div>
               </div>
-              <h2>Complimenti!</h2>
-              <p>La richiesta è stata inviata con successo.</p>
-              <div className="modal-spacer"></div>
-              <button id="confirmSuccessButton" onClick={() => setShowSuccess(false)}>
-                PROSEGUI
-              </button>
             </div>
-          </div>
-        </div>
+          )}
+        </>
       )}
-
+      
       {/* Modale mappa */}
       {showMappa && (
         <div id="mappaModal" className="mappa-modal" style={{ display: "flex" }}>

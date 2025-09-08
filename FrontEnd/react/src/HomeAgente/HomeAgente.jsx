@@ -39,6 +39,16 @@ const HomeAgente = () => {
           citta: immobile.city,
           comune: immobile.district,
           descrizione: immobile.description,
+          // Campi aggiuntivi per DettagliImmobile
+          foto: immobile.images || (immobile.imageUrl ? [immobile.imageUrl] : []),
+          piano: immobile.floor,
+          totalePiani: immobile.totalBuildingFloors,
+          numeroStanze: immobile.rooms,
+          classeEnergetica: immobile.energyClass,
+          arredamento: immobile.furnishing,
+          riscaldamento: immobile.heating,
+          stato: immobile.propertyStatus,
+          ascensore: immobile.elevator,
         }));
         setAnnunci(immobili);
       } catch (error) {
@@ -69,11 +79,6 @@ const HomeAgente = () => {
 
   const handleAggiungiAnnuncio = () => {
     navigate("/aggiungi-immobile");
-  };
-
-  const handleAnnuncioClick = (idAnnuncio) => {
-    sessionStorage.setItem("idAnnuncio", idAnnuncio);
-    navigate("/dettagli-immobile");
   };
 
   return (
@@ -158,7 +163,6 @@ const HomeAgente = () => {
                 <CardImmobile
                   key={immobile.idAnnuncio}
                   immobile={immobile}
-                  onClick={() => handleAnnuncioClick(immobile.idAnnuncio)}
                 />
               ))
             )}
