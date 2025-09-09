@@ -34,15 +34,15 @@ const DettagliImmobile = () => {
   useEffect(() => {
     // Recupera i dati dell'immobile da sessionStorage
     const rawData = sessionStorage.getItem("dettagliImmobile");
-    
-    if (!rawData) {
-      navigate(-1);
-      return;
-    }
 
     try {
       const parsedData = JSON.parse(rawData);
-      setAnnuncio(parsedData);
+      if (parsedData.idAnnuncio || parsedData.id) {
+        parsedData.id = Number(parsedData.idAnnuncio || parsedData.id);
+        setAnnuncio(parsedData);
+      } else {
+        navigate(-1);
+      }
     } catch (error) {
       navigate(-1);
     }
@@ -193,6 +193,8 @@ const DettagliImmobile = () => {
               setShowVisitMenu(false);
               setShowSuccess(true);
             }}
+            realEstateId={Number(annuncio.idAnnuncio || annuncio.id)}
+            city={annuncio.city || annuncio.citta}
           />
 
           {/* Modale successo */}

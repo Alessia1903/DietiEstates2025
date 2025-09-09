@@ -1,27 +1,52 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import "./PrenotaVisitaMeteo.css";
 
 const PrenotaVisitaMeteo = ({
   show,
   onClose,
-  onConfirm
+  onConfirm,
+  realEstateId,
+  city
 }) => {
   const [selectedDateIdx, setSelectedDateIdx] = useState(null);
   const [selectedTime, setSelectedTime] = useState("");
+  const [weatherData, setWeatherData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
-  // Mock meteo come backend
-  const today = new Date();
-  const daily = {
-    time: Array.from({ length: 7 }).map((_, i) => {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
-      return d.toISOString().slice(0, 10);
-    }),
-    temperature_2m_max: [30, 31, 29, 28, 32, 33, 30],
-    temperature_2m_min: [20, 21, 19, 18, 22, 23, 20],
-    precipitation_sum: [0, 0.2, 0, 1.5, 0, 0, 0.8],
-    weathercode: [1, 2, 3, 61, 1, 2, 95]
-  };
+  useEffect(() => {
+    const fetchWeather = async () => {
+      if (!show || !city) return;
+      
+      setLoading(true);
+      setError(null);
+      
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await axios.post(
+          "http://localhost:8080/api/buyers/weather",
+          { city },
+          {
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": `Bearer ${token}`
+            }
+          }
+        );
+
+        setWeatherData(response.data);
+      } catch (err) {
+        const errorMsg = err.response?.data?.message || err.message;
+        setError(`Errore nel caricamento dei dati meteo: ${errorMsg}`);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWeather();
+  }, [show, city]);
+  
   const weatherDesc = {
     1: { icon: "☀️", text: "Soleggiato" },
     2: { icon: "🌤️", text: "Parzialmente nuvoloso" },
@@ -32,10 +57,46 @@ const PrenotaVisitaMeteo = ({
 
   if (!show) return null;
 
-  const handleConfirm = () => {
-    onConfirm();
-    setSelectedDateIdx(null);
-    setSelectedTime("");
+  const handleConfirm = async () => {
+    if (!selectedDateIdx || !selectedTime || !weatherData?.time?.[selectedDateIdx]) {
+      setError("Seleziona una data e un orario validi");
+      return;
+    }
+
+    try {
+      const token = localStorage.getItem("jwtToken");
+      const selectedDate = weatherData.time[selectedDateIdx];
+      const numericId = Number(realEstateId);
+
+      if (!realEstateId || isNaN(numericId) || numericId <= 0) {
+        setError("ID immobile non valido o mancante");
+        return;
+      }
+
+      const formattedDate = new Date(selectedDate).toISOString().split('T')[0];
+
+      await axios.post(
+        "http://localhost:8080/api/buyers/book-visit",
+        {
+          realEstateId: numericId,
+          date: formattedDate,
+          time: selectedTime
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          }
+        }
+      );
+      
+      onConfirm();
+      setSelectedDateIdx(null);
+      setSelectedTime("");
+    } catch (err) {
+      const errorMsg = err.response?.data?.message || err.message;
+      setError(`Errore nella prenotazione della visita: ${errorMsg}`);
+    }
   };
 
   return (
@@ -43,25 +104,40 @@ const PrenotaVisitaMeteo = ({
       <div className="pvm-modal-inner">
         <h2 className="pvm-title">Prenota una visita</h2>
         <p className="pvm-desc">Scegli una data tra i prossimi 7 giorni e consulta il meteo previsto:</p>
-        <div className="pvm-meteo-row">
-          {daily.time.map((date, idx) => (
-            <div
-              key={date}
-              className={`pvm-meteo-day${selectedDateIdx === idx ? " pvm-selected" : ""}`}
-              onClick={() => setSelectedDateIdx(idx)}
-            >
-              <div className="pvm-meteo-icon">{weatherDesc[daily.weathercode[idx]].icon}</div>
-              <div className="pvm-meteo-date">{new Date(date).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" })}</div>
-              <div className="pvm-meteo-text">{weatherDesc[daily.weathercode[idx]].text}</div>
-              <div className="pvm-meteo-temp">
-                <span className="pvm-max">{daily.temperature_2m_max[idx]}°</span> /
-                <span className="pvm-min">{daily.temperature_2m_min[idx]}°</span>
-              </div>
-              <div className="pvm-meteo-rain">
-                Pioggia: {daily.precipitation_sum[idx]} mm
-              </div>
+        <div className="pvm-meteo-content">
+          {loading && (
+            <div className="text-center py-4">Caricamento dati meteo...</div>
+          )}
+          {error && (
+            <div className="text-center py-4 text-red-500">{error}</div>
+          )}
+          {weatherData && weatherData.time && (
+            <div className="pvm-meteo-row">
+            {weatherData.time.map((date, idx) => {
+              const weatherCode = weatherData.weathercode[idx];
+              const weatherInfo = weatherDesc[weatherCode] || { icon: "❓", text: "Non disponibile" };
+              
+              return (
+                <div
+                  key={date}
+                  className={`pvm-meteo-day${selectedDateIdx === idx ? " pvm-selected" : ""}`}
+                  onClick={() => setSelectedDateIdx(idx)}
+                >
+                  <div className="pvm-meteo-icon">{weatherInfo.icon}</div>
+                  <div className="pvm-meteo-date">{new Date(date).toLocaleDateString("it-IT", { weekday: "short", day: "numeric", month: "short" })}</div>
+                  <div className="pvm-meteo-text">{weatherInfo.text}</div>
+                  <div className="pvm-meteo-temp">
+                    <span className="pvm-max">{weatherData.temperature_2m_max[idx]}°</span> /
+                    <span className="pvm-min">{weatherData.temperature_2m_min[idx]}°</span>
+                  </div>
+                  <div className="pvm-meteo-rain">
+                    Pioggia: {weatherData.precipitation_sum[idx]} mm
+                  </div>
+                </div>
+              );
+            })}
             </div>
-          ))}
+          )}
         </div>
         <div className="pvm-time-row">
           <label htmlFor="visit-time" className="pvm-label">Orario:</label>

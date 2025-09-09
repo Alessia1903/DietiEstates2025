@@ -310,9 +310,10 @@ public class BuyerService {
     public Object getWeatherForecast(WeatherRequest request) {
         try {
             String city = request.getCity();
-            String startDate = request.getDate();
-            java.time.LocalDate start = java.time.LocalDate.parse(startDate);
-            java.time.LocalDate end = start.plusDays(7);
+            // Usa la data corrente del server
+            java.time.LocalDate start = java.time.LocalDate.now();
+            java.time.LocalDate end = start.plusDays(6); // Include il giorno iniziale
+            String startDate = start.toString();
             String endDate = end.toString();
 
             // Step 1: Geocoding con Nominatim
@@ -393,26 +394,38 @@ public class BuyerService {
         String time = request.getTime();
 
         RealEstate estate = realEstateRepository.findById(realEstateId)
-            .orElseThrow(() -> new RealEstateNotFoundException("Immobile non trovato"));
+            .orElseThrow(() -> new RealEstateNotFoundException("Immobile non trovato con id: " + realEstateId));
 
         Buyer buyer = getProfile();
         EstateAgent agent = estate.getAgent();
 
-        Timestamp visitTimestamp = Timestamp.valueOf(date + " " + time + ":00");
-        boolean exists = bookedVisitRepository.existsByEstateAndRequestDate(estate, visitTimestamp);
+        try {
+            // Validazione e formattazione data e ora
+            java.time.LocalDate.parse(date); // Verifica formato data
+            if (!time.matches("^([0-1][0-9]|2[0-3]):[0-5][0-9]$")) {
+                throw new IllegalArgumentException("Formato ora non valido");
+            }
+            
+            String timestamp = String.format("%s %s:00", date, time);
+            Timestamp visitTimestamp = Timestamp.valueOf(timestamp);
+            boolean exists = bookedVisitRepository.existsByEstateAndRequestDate(estate, visitTimestamp);
 
-        if (exists) {
-            throw new DuplicateResourceException("Visita già prenotata per questo immobile, data e orario");
+            if (exists) {
+                throw new DuplicateResourceException("Visita già prenotata per questo immobile, data e orario");
+            }
+
+            BookedVisit visit = new BookedVisit();
+            visit.setStatus("In attesa");
+            visit.setRequestDate(visitTimestamp);
+            visit.setRealEstate(estate);
+            visit.setBuyer(buyer);
+            visit.setAgent(agent);
+
+            bookedVisitRepository.save(visit);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Formato data/ora non valido: " + e.getMessage());
         }
 
-        BookedVisit visit = new BookedVisit();
-        visit.setStatus("In attesa");
-        visit.setRequestDate(visitTimestamp);
-        visit.setRealEstate(estate);
-        visit.setBuyer(buyer);
-        visit.setAgent(agent);
-
-        bookedVisitRepository.save(visit);
     }
 
     public PageResponse getNotificationsForCurrentBuyer(int page, int size) {
