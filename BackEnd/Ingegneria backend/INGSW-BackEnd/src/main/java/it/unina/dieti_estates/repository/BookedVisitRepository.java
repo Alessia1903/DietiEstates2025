@@ -4,13 +4,14 @@ import it.unina.dieti_estates.model.BookedVisit;
 import it.unina.dieti_estates.model.dto.BookedVisitDTO;
 import it.unina.dieti_estates.model.RealEstate;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 @Repository
 public interface BookedVisitRepository extends JpaRepository<BookedVisit, Long> {
@@ -20,7 +21,7 @@ public interface BookedVisitRepository extends JpaRepository<BookedVisit, Long> 
        "JOIN b.buyer bu " +  
        "JOIN b.estate p " +
        "WHERE b.agent.id = :agentId")
-    List<BookedVisitDTO> findByEstateAgent(@Param("agentId") Long agentId);
+    Page<BookedVisitDTO> findByEstateAgent(@Param("agentId") Long agentId, Pageable pageable);
 
     boolean existsByEstateAndRequestDate(RealEstate estate, Timestamp requestDate);
 }

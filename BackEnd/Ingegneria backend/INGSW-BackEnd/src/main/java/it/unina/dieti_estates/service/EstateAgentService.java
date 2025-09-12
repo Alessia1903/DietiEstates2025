@@ -42,7 +42,6 @@ public class EstateAgentService {
     private final NotificationRepository notificationRepository;
     private final FavoriteSearchRepository favoriteSearchRepository;
 
-
     @Autowired
     public EstateAgentService(
             EstateAgentRepository agentRepository,
@@ -88,12 +87,19 @@ public class EstateAgentService {
         return agent;
     }
 
-    public List<BookedVisitDTO> getAllBookedVisits() {
+    public PageResponse<BookedVisitDTO> getAllBookedVisits(int page, int size) {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (agent == null) {
             throw new UnauthorizedAccessException("User not authenticated or invalid session");
         }
-        return visitRepository.findByEstateAgent(agent.getId());
+        Page<BookedVisitDTO> visitPage = visitRepository.findByEstateAgent(agent.getId(), PageRequest.of(page, size));
+        return new PageResponse<>(
+            visitPage.getContent(),
+            visitPage.getNumber(),
+            visitPage.getSize(),
+            visitPage.getTotalElements(),
+            visitPage.hasNext()
+        );
     }
 
     public String acceptVisit(Long visitId) {
@@ -218,7 +224,6 @@ public class EstateAgentService {
 
         return mapToResponseDTO(savedEstate);
     }
-
 
     private RealEstateResponseDTO mapToResponseDTO(RealEstate realEstate) {
         RealEstateResponseDTO dto = new RealEstateResponseDTO();

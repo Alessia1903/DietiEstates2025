@@ -1,6 +1,5 @@
 package it.unina.dieti_estates.controller;
 import java.io.IOException;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -42,8 +41,11 @@ public class EstateAgentController {
 
     @PreAuthorize("hasRole('AGENT')")
     @GetMapping("/all-booked-visits")
-    public ResponseEntity<List<BookedVisitDTO>> getAllBookedVisits() {
-        return ResponseEntity.ok(agentService.getAllBookedVisits());
+    public ResponseEntity<PageResponse<BookedVisitDTO>> getAllBookedVisits(
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "5") int size
+    ) {
+        return ResponseEntity.ok(agentService.getAllBookedVisits(page, size));
     }
 
     @PreAuthorize("hasRole('AGENT')")
