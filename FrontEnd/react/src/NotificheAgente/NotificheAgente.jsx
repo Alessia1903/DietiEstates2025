@@ -1,64 +1,105 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import CardVisita from "../components/CardVisita/CardVisita";
 import "./NotificheAgente.css";
 
-// Mock delle richieste di visita
-const MOCK_RICHIESTE = [
-  {
-    id: 1,
-    richiedente: { nome: "Mario", cognome: "Rossi" },
-    dataRichiesta: "2025-08-05 10:30",
-    stato: "in-attesa",
-    address: "Via Roma 10, Napoli"
-  },
-  {
-    id: 2,
-    richiedente: { nome: "Giuseppe", cognome: "Verdi" },
-    dataRichiesta: "2025-08-04 15:45",
-    stato: "in-attesa",
-    address: "Corso Umberto 22, Milano"
-  },
-  {
-    id: 3,
-    richiedente: { nome: "Anna", cognome: "Bianchi" },
-    dataRichiesta: "2025-08-03 11:20",
-    stato: "accettata",
-    address: "Via Garibaldi 5, Torino"
-  },
-  {
-    id: 4,
-    richiedente: { nome: "Luigi", cognome: "Neri" },
-    dataRichiesta: "2025-08-02 14:15",
-    stato: "rifiutata",
-    address: "Piazza Dante 3, Firenze"
-  }
-];
-
 const NotificheAgente = () => {
   const navigate = useNavigate();
-  const [richieste, setRichieste] = useState(MOCK_RICHIESTE);
+  const [richieste, setRichieste] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchRichieste = async () => {
+      setLoading(true);
+      try {
+        const token = localStorage.getItem("jwtToken");
+        const response = await axios.get(
+          "http://localhost:8080/api/estate-agents/all-booked-visits",
+          {
+            headers: {
+              "Authorization": `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
+          }
+        );
+        
+        const mapped = response.data.map((visit) => ({
+          id: visit.id,
+          richiedente: {
+            nome: visit.buyerName || ""
+          },
+          dataRichiesta: visit.requestDate
+            ? new Date(visit.requestDate).toLocaleString("it-IT", {
+                hour: "2-digit",
+                minute: "2-digit",
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric"
+              })
+            : "",
+          stato: visit.status === "In attesa" ? "in-attesa" : (visit.status === "accettata" ? "accettata" : "rifiutata"),
+          address: visit.realEstateAddress || ""
+        }));
+        setRichieste(mapped);
+      } catch (error) {
+        setRichieste([]);
+      }
+      setLoading(false);
+    };
+    fetchRichieste();
+  }, []);
 
   // Gestione accettazione richiesta
-  const handleAccetta = (id) => {
-    setRichieste(prevRichieste =>
-      prevRichieste.map(richiesta =>
-        richiesta.id === id
-          ? { ...richiesta, stato: "accettata" }
-          : richiesta
-      )
-    );
+  const handleAccetta = async (id) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      await axios.post(
+        "http://localhost:8080/api/estate-agents/visits/accept",
+        { visitId: id },
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      setRichieste(prevRichieste =>
+        prevRichieste.map(richiesta =>
+          richiesta.id === id
+            ? { ...richiesta, stato: "accettata" }
+            : richiesta
+        )
+      );
+    } catch (error) {
+      // Gestisci errore se necessario
+    }
   };
 
   // Gestione rifiuto richiesta
-  const handleRifiuta = (id) => {
-    setRichieste(prevRichieste =>
-      prevRichieste.map(richiesta =>
-        richiesta.id === id
-          ? { ...richiesta, stato: "rifiutata" }
-          : richiesta
-      )
-    );
+  const handleRifiuta = async (id) => {
+    try {
+      const token = localStorage.getItem("jwtToken");
+      await axios.post(
+        "http://localhost:8080/api/estate-agents/visits/reject",
+        { visitId: id },
+        {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        }
+      );
+      setRichieste(prevRichieste =>
+        prevRichieste.map(richiesta =>
+          richiesta.id === id
+            ? { ...richiesta, stato: "rifiutata" }
+            : richiesta
+        )
+      );
+    } catch (error) {
+      // Gestisci errore se necessario
+    }
   };
 
   return (

@@ -8,7 +8,7 @@ const CardVisita = ({ richiedente, dataRichiesta, stato, address, onAccetta, onR
         <div className="visit-row">
           <span className="visit-label">Richiedente</span>
           <span className="visit-value">
-            {richiedente.nome} {richiedente.cognome}
+            {richiedente.nome}
           </span>
         </div>
 
