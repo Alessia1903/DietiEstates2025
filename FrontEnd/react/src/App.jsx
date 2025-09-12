@@ -1,5 +1,4 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import HomeNoLogin from "./HomeNoLogin/HomeNoLogin";
 import HomeLogin from "./HomeLogin/HomeLogin";
 import LoginUtente from "./AreaUtente/LoginUtente";
 import AreaAgenzia from "./AreaAgenzia/AreaAgenzia";
@@ -24,7 +23,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomeNoLogin />} />
+        <Route path="/" element={<HomeLogin />} />
         <Route path="/login" element={<LoginUtente />} />
         <Route path="/home" element={<HomeLogin />} />
         <Route path="/area-agenzia" element={<AreaAgenzia />} />

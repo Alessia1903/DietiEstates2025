@@ -163,3 +163,52 @@
 .hidden {
     display: none;
 }
+
+/* --- Auth Buttons (da HomeNoLogin) --- */
+.auth-buttons {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.auth-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    border: 2px solid #073B4C;
+    border-radius: 6px;
+    background: white;
+    color: #073B4C;
+    font-weight: 500;
+    transition: all 0.2s;
+    cursor: pointer;
+}
+
+.auth-btn:hover {
+    background: #06D6A0;
+    color: white;
+    border-color: #06D6A0;
+}
+
+.auth-btn svg {
+    width: 24px;
+    height: 24px;
+}
+
+@media (max-width: 800px) {
+    .auth-btn span {
+        display: none;
+    }
+
+    .auth-btn {
+        padding: 8px;
+    }
+}
+
+@media (max-width: 500px) {
+    .auth-btn svg {
+        width: 20px;
+        height: 20px;
+    }
+}
