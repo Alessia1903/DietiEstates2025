@@ -38,6 +38,7 @@ const LoginUtente = () => {
       );
       localStorage.setItem("jwtToken", response.data);
       localStorage.setItem("userEmail", email);
+      localStorage.setItem("isBuyer", "true");
       navigate("/home");
     } catch (error) {
       if (error.response && error.response.status === 401) {

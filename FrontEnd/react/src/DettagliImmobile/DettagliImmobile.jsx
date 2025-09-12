@@ -10,26 +10,11 @@ const DettagliImmobile = () => {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showVisitMenu, setShowVisitMenu] = useState(false);
   const [showMappa, setShowMappa] = useState(false);
-  const [isBuyer, setIsBuyer] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Verifica se l'utente è un buyer basandosi sul path e il token
-  useEffect(() => {
-    const token = localStorage.getItem("jwtToken");
-    const currentPath = location.pathname;
-    const referrer = document.referrer;
-    
-    // Percorsi tipici del buyer
-    const buyerPaths = ["/home", "/cronologia", "/preferiti", "/notifiche-utente", "/profilo-utente"];
-    
-    // Controlla se il percorso corrente o il referrer sono di un buyer
-    const isBuyerPath = buyerPaths.some(path => 
-      referrer.includes(path) || currentPath === path
-    );
-
-    setIsBuyer(!!token && isBuyerPath);
-  }, [location]);
+  // Determina se l'utente è buyer leggendo da localStorage
+  const isBuyer = localStorage.getItem("isBuyer") === "true";
 
   useEffect(() => {
     // Recupera i dati dell'immobile da sessionStorage
