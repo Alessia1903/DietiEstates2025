@@ -30,6 +30,8 @@ const NotificheUtente = () => {
   // PAGINAZIONE
   const NOTIFICHE_PER_PAGINA = 5;
   const [pagina, setPagina] = useState(1);
+  const [totalePagine, setTotalePagine] = useState(1);
+  const [hasNext, setHasNext] = useState(false);
 
   useEffect(() => {
     const fetchNotifiche = async () => {
@@ -38,7 +40,7 @@ const NotificheUtente = () => {
         const token = localStorage.getItem("jwtToken");
         const axios = (await import("axios")).default;
         const response = await axios.get(
-          "http://localhost:8080/api/buyers/notifications?page=0&size=5",
+          `http://localhost:8080/api/buyers/notifications?page=${pagina - 1}&size=${NOTIFICHE_PER_PAGINA}`,
           {
             headers: {
               "Authorization": `Bearer ${token}`,
@@ -55,22 +57,24 @@ const NotificheUtente = () => {
           data: n.createdAt ? n.createdAt.replace("T", " ").substring(0, 16) : "",
         }));
         setNotifiche(mapped);
+        setTotalePagine(
+          response.data.pageSize && response.data.totalElements
+            ? Math.ceil(response.data.totalElements / response.data.pageSize)
+            : 1
+        );
+        setHasNext(response.data.hasNext || false);
       } catch (error) {
         setNotifiche([]);
       }
       setLoading(false);
     };
     fetchNotifiche();
-  }, []);
+  }, [pagina]);
 
   // Filtra notifiche in base ai toggle attivi
   const notificheFiltrate = notifiche.filter((n) => attive[n.categoria]);
 
-  const totalePagine = Math.ceil(notificheFiltrate.length / NOTIFICHE_PER_PAGINA);
-  const notificheDaMostrare = notificheFiltrate.slice(
-    (pagina - 1) * NOTIFICHE_PER_PAGINA,
-    pagina * NOTIFICHE_PER_PAGINA
-  );
+  const notificheDaMostrare = notificheFiltrate;
 
   // Cambia stato toggle
   const handleToggle = (cat) => {
@@ -206,8 +210,8 @@ const NotificheUtente = () => {
         </button>
         <button
           className="pagination-button"
-          onClick={() => setPagina((p) => Math.min(totalePagine, p + 1))}
-          disabled={pagina === totalePagine || totalePagine === 0}
+          onClick={() => setPagina((p) => p + 1)}
+          disabled={!hasNext}
         >
           <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M10.4166 27.0833H33.6874L23.5208 37.25C22.7083 38.0625 22.7083 39.3958 23.5208 40.2083C24.3333 41.0208 25.6458 41.0208 26.4583 40.2083L40.1874 26.4791C40.9999 25.6666 40.9999 24.3541 40.1874 23.5416L26.4791 9.79163C25.6666 8.97913 24.3541 8.97913 23.5416 9.79163C22.7291 10.6041 22.7291 11.9166 23.5416 12.7291L33.6874 22.9166H10.4166C9.27075 22.9166 8.33325 23.8541 8.33325 25C8.33325 26.1458 9.27075 27.0833 10.4166 27.0833Z" fill="white"/>
