@@ -48,9 +48,12 @@ const DettagliImmobile = () => {
     </div>
   );
 
-  const images = annuncio.foto && annuncio.foto.length > 0
-    ? annuncio.foto
-    : ["https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"];
+  const images =
+    (Array.isArray(annuncio.imageUrls) && annuncio.imageUrls.length > 0)
+      ? annuncio.imageUrls
+      : (Array.isArray(annuncio.foto) && annuncio.foto.length > 0)
+        ? annuncio.foto
+        : ["https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"];
 
   const prevImg = () => setImgIndex((i) => Math.max(i - 1, 0));
   const nextImg = () => setImgIndex((i) => Math.min(i + 1, images.length - 1));

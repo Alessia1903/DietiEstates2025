@@ -2,10 +2,14 @@ package it.unina.dieti_estates.model.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import org.springframework.web.multipart.MultipartFile;
 
 public class CreateRealEstateRequest {
-    private MultipartFile image;
+    @NotNull
+    @Size(min = 1, max = 7, message = "Devi caricare da 1 a 7 immagini")
+    private MultipartFile[] images;
+
     @NotBlank
     private String city;
     @NotBlank
@@ -39,8 +43,8 @@ public class CreateRealEstateRequest {
     @NotNull
     private Float price;
 
-    public MultipartFile getImage() { return image; }
-    public void setImage(MultipartFile image) { this.image = image; }
+    public MultipartFile[] getImages() { return images; }
+    public void setImages(MultipartFile[] images) { this.images = images; }
 
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }

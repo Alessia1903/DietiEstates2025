@@ -452,7 +452,7 @@ const HomeLogin = () => {
                     citta: immobile.city,
                     comune: immobile.district,
                     descrizione: immobile.description,
-                    foto: immobile.images || [immobile.imageUrl],
+                    foto: immobile.imageUrls || [immobile.imageUrl],
                     piano: immobile.floor,
                     totalePiani: immobile.totalBuildingFloors,
                     numeroStanze: immobile.rooms,

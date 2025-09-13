@@ -32,7 +32,8 @@ const HomeAgente = () => {
         // Mappa i dati backend -> frontend per CardImmobile
         const immobili = response.data.content.map((immobile) => ({
           idAnnuncio: immobile.id,
-          immagine: immobile.imageUrl,
+          immagine: immobile.imageUrls?.[0] || "https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true",
+          foto: immobile.imageUrls || [],
           prezzo: immobile.price,
           stanze: immobile.rooms,
           superficie: immobile.commercialArea,
@@ -42,7 +43,6 @@ const HomeAgente = () => {
           comune: immobile.district,
           descrizione: immobile.description,
           // Campi aggiuntivi per DettagliImmobile
-          foto: immobile.images || (immobile.imageUrl ? [immobile.imageUrl] : []),
           piano: immobile.floor,
           totalePiani: immobile.totalBuildingFloors,
           numeroStanze: immobile.rooms,

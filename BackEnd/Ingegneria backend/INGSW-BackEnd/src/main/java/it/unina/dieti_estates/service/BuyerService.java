@@ -28,6 +28,7 @@ import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.JsonNode;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -208,6 +209,7 @@ public class BuyerService {
         buyerRepository.save(buyer);
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<RealEstateResponseDTO> searchRealEstates(FavoriteRequest request, int page, int size) {
         Page<RealEstate> realEstates = realEstateRepository.searchRealEstates(
             request.getCity(),
@@ -223,7 +225,8 @@ public class BuyerService {
             .map(re -> {
                 RealEstateResponseDTO dto = new RealEstateResponseDTO();
                 dto.setId(re.getId());
-                dto.setImageUrl(re.getImageUrl());
+                List<String> imageUrls = new ArrayList<>(re.getImageUrls());
+                dto.setImageUrls(imageUrls);
                 dto.setCity(re.getCity());
                 dto.setDistrict(re.getDistrict());
                 dto.setAddress(re.getAddress());

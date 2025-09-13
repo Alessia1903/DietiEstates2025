@@ -1,8 +1,10 @@
 package it.unina.dieti_estates.model;
 
 import jakarta.persistence.*;
+import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "\"real_estate\"")
@@ -11,7 +13,11 @@ public class RealEstate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String imageUrl;
+    @ElementCollection
+    @CollectionTable(name = "real_estate_images", joinColumns = @JoinColumn(name = "real_estate_id"))
+    @Column(name = "image_url")
+    private List<String> imageUrls;
+
     private String city;
     private String district;
     private String address;
@@ -38,11 +44,11 @@ public class RealEstate {
 
     public RealEstate() {}
 
-    public RealEstate(String imageUrl, String city, String district, String address, String streetNumber, Integer floor,
+    public RealEstate(List<String> imageUrls, String city, String district, String address, String streetNumber, Integer floor,
                       Integer totalBuildingFloors, Float commercialArea, Boolean elevator, Integer rooms,
                       String energyClass, String furnishing, String heating, String propertyStatus,
                       String contractType, String description, Float price, EstateAgent agent) {
-        this.imageUrl = imageUrl;
+        this.imageUrls = imageUrls;
         this.city = city;
         this.district = district;
         this.address = address;
@@ -65,8 +71,8 @@ public class RealEstate {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public String getImageUrl() { return imageUrl; }
-    public void setImageUrl(String imageUrl) { this.imageUrl = imageUrl; }
+    public List<String> getImageUrls() { return imageUrls; }
+    public void setImageUrls(List<String> imageUrls) { this.imageUrls = imageUrls; }
 
     public String getCity() { return city; }
     public void setCity(String city) { this.city = city; }

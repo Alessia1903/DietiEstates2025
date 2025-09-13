@@ -20,13 +20,13 @@ const initialForm = {
   contratto: "",
   description: "",
   price: "",
-  file: null,
+  files: [],
 };
 
 const AggiungiImmobile = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState(initialForm);
-  const [fileName, setFileName] = useState("");
+  const [fileNames, setFileNames] = useState([]);
   const [showWarning, setShowWarning] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState("");
@@ -49,17 +49,17 @@ const AggiungiImmobile = () => {
     }));
   };
 
-  // Gestione file upload
+  // Gestione file upload multiplo
   const handleFile = (e) => {
-    const file = e.target.files[0];
+    const files = Array.from(e.target.files).slice(0, 7);
     setForm((prev) => ({
       ...prev,
-      file,
+      files,
     }));
-    setFileName(file ? file.name : "");
+    setFileNames(files.map(f => f.name));
   };
 
-  // Validazione base
+  // Validazione base + immagini
   const validate = () => {
     const requiredFields = [
       "city", "town", "address", "civicNumber", "floor", "totalFloors", "surface",
@@ -71,6 +71,14 @@ const AggiungiImmobile = () => {
         setError("⚠ Tutti i campi sono obbligatori!");
         return false;
       }
+    }
+    if (!form.files || form.files.length < 1) {
+      setError("⚠ Devi caricare almeno una foto (max 7)!");
+      return false;
+    }
+    if (form.files.length > 7) {
+      setError("⚠ Puoi caricare al massimo 7 foto!");
+      return false;
     }
     return true;
   };
@@ -107,8 +115,10 @@ const AggiungiImmobile = () => {
     formData.append("contractType", form.contratto);
     formData.append("description", form.description);
     formData.append("price", form.price);
-    if (form.file) {
-      formData.append("image", form.file);
+    if (form.files && form.files.length > 0) {
+      for (let i = 0; i < form.files.length; i++) {
+        formData.append("images", form.files[i]);
+      }
     }
 
     try {
@@ -201,9 +211,18 @@ const AggiungiImmobile = () => {
             </defs>
           </svg>
           <label htmlFor="aggiungiimmobile-file-upload" className="aggiungiimmobile-upload-label">Carica delle Foto</label>
-          <input type="file" id="aggiungiimmobile-file-upload" hidden onChange={handleFile} />
+          <input
+            type="file"
+            id="aggiungiimmobile-file-upload"
+            hidden
+            onChange={handleFile}
+            multiple
+            accept="image/*"
+          />
         </div>
-          <p className="aggiungiimmobile-file-name-display text-center mt-4 text-gray-600">{fileName}</p>
+          <p className="aggiungiimmobile-file-name-display text-center mt-4 text-gray-600">
+            {fileNames.length > 0 ? fileNames.join(", ") : ""}
+          </p>
           <fieldset className="aggiungiimmobile-fieldset">
             <legend className="aggiungiimmobile-legend">Dati Immobile</legend>
             <label className="aggiungiimmobile-label">Città: <input type="text" name="city" value={form.city} onChange={handleChange} required /></label>

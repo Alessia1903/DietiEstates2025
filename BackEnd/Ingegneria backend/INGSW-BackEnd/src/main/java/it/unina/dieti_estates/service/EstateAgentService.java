@@ -1,6 +1,7 @@
 package it.unina.dieti_estates.service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,9 +9,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import it.unina.dieti_estates.exception.auth.UnauthorizedAccessException;
 import it.unina.dieti_estates.exception.storage.FileStorageException;
+import it.unina.dieti_estates.exception.validation.InvalidRealEstateDataException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -26,6 +29,7 @@ import it.unina.dieti_estates.repository.NotificationRepository;
 import it.unina.dieti_estates.repository.FavoriteSearchRepository;
 import it.unina.dieti_estates.exception.resource.BookedVisitNotFoundException;
 import it.unina.dieti_estates.exception.auth.InvalidCredentialsException;
+import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDateTime;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -169,18 +173,38 @@ public class EstateAgentService {
             throw new UnauthorizedAccessException("User not authenticated or invalid session");
         }
 
-        // Upload dell'immagine su Azure Blob Storage
-        String imageUrl = null;
-        if (request.getImage() != null && !request.getImage().isEmpty()) {
-            try {
-                imageUrl = blobStorageService.uploadFile(request.getImage());
-            } catch (Exception e) {
-                throw FileStorageException.uploadFailed(request.getImage().getOriginalFilename(), e.getMessage());
+        // Verifica che ci sia almeno un'immagine
+        if (request.getImages() == null || request.getImages().length == 0) {
+            throw new InvalidRealEstateDataException("Devi caricare almeno una foto!");
+        }
+
+        // Verifica il numero massimo di immagini
+        if (request.getImages().length > 7) {
+            throw new InvalidRealEstateDataException("Puoi caricare al massimo 7 foto!");
+        }
+
+        // Upload delle immagini su Azure Blob Storage
+        List<String> imageUrls = new java.util.ArrayList<>();
+        for (MultipartFile img : request.getImages()) {
+            if (img != null && !img.isEmpty()) {
+                try {
+                    String url = blobStorageService.uploadFile(img);
+                    if (url != null && !url.isEmpty()) {
+                        imageUrls.add(url);
+                    }
+                } catch (Exception e) {
+                    throw FileStorageException.uploadFailed(img.getOriginalFilename(), e.getMessage());
+                }
             }
         }
 
+        // Verifica che almeno un'immagine sia stata caricata con successo
+        if (imageUrls.isEmpty()) {
+            throw new FileStorageException("Nessuna immagine è stata caricata correttamente");
+        }
+
         RealEstate realEstate = new RealEstate(
-            imageUrl,
+            imageUrls,
             request.getCity(),
             request.getDistrict(),
             request.getAddress(),
@@ -228,7 +252,8 @@ public class EstateAgentService {
     private RealEstateResponseDTO mapToResponseDTO(RealEstate realEstate) {
         RealEstateResponseDTO dto = new RealEstateResponseDTO();
         dto.setId(realEstate.getId());
-        dto.setImageUrl(realEstate.getImageUrl());
+        List<String> imageUrls = new ArrayList<>(realEstate.getImageUrls());
+        dto.setImageUrls(imageUrls);
         dto.setCity(realEstate.getCity());
         dto.setDistrict(realEstate.getDistrict());
         dto.setAddress(realEstate.getAddress());
@@ -248,6 +273,7 @@ public class EstateAgentService {
         return dto;
     }
 
+    @Transactional(readOnly = true)
     public PageResponse<RealEstateResponseDTO> getMyProperties(int page, int size) {
         EstateAgent agent = getProfile();
         Page<RealEstate> realEstatePage = realEstateRepository.findByAgentId(

@@ -75,7 +75,8 @@ public class EstateAgentController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "5") int size
     ) {
-        return ResponseEntity.ok(agentService.getMyProperties(page, size));
+        PageResponse<RealEstateResponseDTO> response = agentService.getMyProperties(page, size);
+        return ResponseEntity.ok(response);
     }
 
     @PreAuthorize("hasRole('AGENT')")

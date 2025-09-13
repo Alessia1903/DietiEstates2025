@@ -16,7 +16,11 @@ const CardImmobile = ({ immobile, onClick }) => {
   return (
     <div className="annuncio" onClick={handleClick}>
       <img
-        src={immobile.img || immobile.immagine || "https://via.placeholder.com/100"}
+        src={
+          (immobile.foto && Array.isArray(immobile.foto) && immobile.foto.length > 0)
+            ? immobile.foto[0]
+            : immobile.img || immobile.immagine || "https://via.placeholder.com/100"
+        }
         alt={immobile.titolo || "Immobile"}
       />
       <div className="info">
