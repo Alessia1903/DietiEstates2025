@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import "./DettagliImmobile.css";
+import MappaImmobile from "../components/MappaImmobile";
 import PrenotaVisitaMeteo from "../components/PrenotaVisitaMeteo/PrenotaVisitaMeteo";
 
 
@@ -211,9 +212,13 @@ const DettagliImmobile = () => {
       {/* Modale mappa */}
       {showMappa && (
         <div id="mappaModal" className="mappa-modal" style={{ display: "flex" }}>
-          <div className="modal-contenuto">
-            <button onClick={() => setShowMappa(false)}>Chiudi Mappa</button>
-            <div id="mappa" className="mappa-grande"></div>
+          <div className="modal-contenuto" style={{ width: "100%", maxWidth: 600 }}>
+            <MappaImmobile
+              indirizzo={`${annuncio.indirizzo}${annuncio.numeroCivico ? ' ' + annuncio.numeroCivico : ''}`}
+              citta={annuncio.citta}
+              comune={annuncio.comune}
+              onClose={() => setShowMappa(false)}
+            />
           </div>
         </div>
       )}
