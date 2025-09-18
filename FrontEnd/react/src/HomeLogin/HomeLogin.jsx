@@ -110,6 +110,16 @@ const HomeLogin = () => {
 
   // Avvio automatico ricerca se arrivo da Cronologia o se flag avviaRicerca è presente
   useEffect(() => {
+    // Se il ruolo non è user, forzare logout e redirect a HomeLogin
+    const ruolo = localStorage.getItem("role");
+    if (ruolo && ruolo !== "user") {
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("role");
+      window.location.href = "/home";
+      return;
+    }
+
     const sessionCitta = sessionStorage.getItem("citta");
     const avviaRicerca = sessionStorage.getItem("avviaRicerca");
 

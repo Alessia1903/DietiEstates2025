@@ -33,7 +33,7 @@ const AreaAgenzia = () => {
       );
       // Se va a buon fine, salva token e vai a home admin
       localStorage.setItem("jwtToken", adminResp.data);
-      localStorage.setItem("isBuyer", "false");
+      localStorage.setItem("role", "admin");
       navigate("/cambio-credenziali");
       return;
     } catch (errAdmin) {
@@ -44,7 +44,7 @@ const AreaAgenzia = () => {
           { email, password }
         );
         localStorage.setItem("jwtToken", agentResp.data);
-        localStorage.setItem("isBuyer", "false");
+        localStorage.setItem("role", "agent");
         navigate("/home-agente");
         return;
       } catch (errAgent) {

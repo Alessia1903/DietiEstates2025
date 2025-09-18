@@ -15,7 +15,7 @@ const DettagliImmobile = () => {
   const location = useLocation();
 
   // Determina se l'utente è buyer leggendo da localStorage
-  const isBuyer = localStorage.getItem("isBuyer") === "true";
+  const isBuyer = localStorage.getItem("role") === "user";
 
   useEffect(() => {
     // Recupera i dati dell'immobile da sessionStorage
