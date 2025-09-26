@@ -29,7 +29,6 @@ const ProfiloAdmin = () => {
           nome: backendAdmin.firstName,
           cognome: backendAdmin.lastName,
           email: backendAdmin.email,
-          password: backendAdmin.password,
           partitaIVA: backendAdmin.vatNumber
         });
       } catch (error) {
@@ -111,13 +110,6 @@ const ProfiloAdmin = () => {
             <div className="field"><strong>Nome:</strong> <span>{admin.nome}</span></div>
             <div className="field"><strong>Cognome:</strong> <span>{admin.cognome}</span></div>
             <div className="field"><strong>Email:</strong> <span>{admin.email}</span></div>
-            <div className="field">
-              <strong>Password:</strong>
-              <span>{showPassword ? admin.password : "********"}</span>
-              <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
-                {showPassword ? "X" : "MOSTRA"}
-              </button>
-            </div>
             <div className="field"><strong>Partita IVA:</strong> <span>{admin.partitaIVA}</span></div>
           </>
         ) : null}

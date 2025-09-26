@@ -34,7 +34,6 @@ const ProfiloAgente = () => {
           email: backendAgent.email,
           telefono: backendAgent.telephoneNumber,
           qualifiche: backendAgent.qualifications,
-          password: backendAgent.password
         });
         setFormData({
           nome: backendAgent.firstName,
@@ -42,7 +41,6 @@ const ProfiloAgente = () => {
           email: backendAgent.email,
           telefono: backendAgent.telephoneNumber,
           qualifiche: backendAgent.qualifications,
-          password: backendAgent.password
         });
       } catch (error) {
         if (error.response && error.response.status === 401) {
@@ -62,7 +60,7 @@ const ProfiloAgente = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
-      // Prepara i dati da inviare, omettendo la password se non modificata
+
       const payload = {
         firstName: formData.nome,
         lastName: formData.cognome,
@@ -70,10 +68,7 @@ const ProfiloAgente = () => {
         telephoneNumber: formData.telefono,
         qualifications: formData.qualifiche
       };
-      // Invia la password solo se è stata modificata
-      if (formData.password && formData.password !== agent.password) {
-        payload.password = formData.password;
-      }
+
       await axios.patch(
         "http://localhost:8080/api/estate-agents/profile",
         payload,
@@ -238,22 +233,6 @@ const ProfiloAgente = () => {
               ) : (
                 <span>{agent.qualifiche}</span>
               )}
-            </div>
-            <div className="field">
-              <strong>Password:</strong>
-              {isEditing ? (
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="edit-input"
-                />
-              ) : (
-                <span>{showPassword ? agent.password : "********"}</span>
-              )}
-              <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
-                {showPassword ? "X" : "MOSTRA"}
-              </button>
             </div>
             <div className="edit-action">
               <button 

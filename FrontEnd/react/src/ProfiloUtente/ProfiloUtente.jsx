@@ -7,7 +7,6 @@ import "./ProfiloUtente.css";
 const ProfiloUtente = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
-  const [showPassword, setShowPassword] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
@@ -32,15 +31,13 @@ const ProfiloUtente = () => {
           nome: backendUser.firstName,
           cognome: backendUser.lastName,
           datanascita: backendUser.birthdate,
-          email: backendUser.email,
-          password: backendUser.password 
+          email: backendUser.email
         });
         setFormData({
           nome: backendUser.firstName,
           cognome: backendUser.lastName,
           datanascita: backendUser.birthdate,
-          email: backendUser.email,
-          password: backendUser.password
+          email: backendUser.email
         });
       } catch (error) {
         if (error.response && error.response.status === 401) {
@@ -60,17 +57,13 @@ const ProfiloUtente = () => {
   const handleSave = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
-      // Prepara i dati da inviare, omettendo la password se non modificata
+
       const payload = {
         firstName: formData.nome,
         lastName: formData.cognome,
         birthdate: formData.datanascita,
         email: formData.email
       };
-      // Invia la password solo se è stata modificata
-      if (formData.password && formData.password !== user.password) {
-        payload.password = formData.password;
-      }
       await axios.patch(
         "http://localhost:8080/api/buyers/profile",
         payload,
@@ -247,22 +240,6 @@ const ProfiloUtente = () => {
               ) : (
                 <span>{user.email}</span>
               )}
-            </div>
-            <div className="field">
-              <strong>Password:</strong>
-              {isEditing ? (
-                <input
-                  type={showPassword ? "text" : "password"}
-                  value={formData.password}
-                  onChange={(e) => setFormData({ ...formData, password: e.target.value })}
-                  className="edit-input"
-                />
-              ) : (
-                <span>{showPassword ? user.password : "********"}</span>
-              )}
-              <button className="toggle-btn" onClick={() => setShowPassword((v) => !v)}>
-                {showPassword ? "X" : "MOSTRA"}
-              </button>
             </div>
             <div className="edit-action">
               <button 
