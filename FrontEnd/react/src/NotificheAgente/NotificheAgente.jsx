@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import CardVisita from "../components/CardVisita/CardVisita";
+import { toast } from "react-toastify";
 import "./NotificheAgente.css";
 
 const NotificheAgente = () => {
@@ -53,6 +54,7 @@ const NotificheAgente = () => {
         setHasNext(response.data.hasNext || false);
       } catch (error) {
         setRichieste([]);
+        toast.error("Errore nel caricamento delle richieste.");
       }
       setLoading(false);
     };
@@ -81,7 +83,7 @@ const NotificheAgente = () => {
         )
       );
     } catch (error) {
-      // Gestisci errore se necessario
+      toast.error("Errore nell'accettazione della richiesta.");
     }
   };
 
@@ -107,7 +109,7 @@ const NotificheAgente = () => {
         )
       );
     } catch (error) {
-      // Gestisci errore se necessario
+      toast.error("Errore nel rifiuto della richiesta.");
     }
   };
 

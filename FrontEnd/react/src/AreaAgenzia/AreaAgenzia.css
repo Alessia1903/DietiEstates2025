@@ -13,8 +13,8 @@ body {
     align-items: center;
     width: 100%;
     padding: 10px 20px;
-    flex-wrap: nowrap; /* Impedisce che gli elementi vadano sotto */
-    min-width: 0; /* Evita sovrapposizioni */
+    flex-wrap: nowrap;
+    min-width: 0; 
 }
 
 /* Sezione Logo + Titolo */
@@ -80,7 +80,6 @@ body {
     color: white;
 }
 
-/* Nuova classe per login agenzia */
 .login-box-agenzia {
     border: 5px solid #073B4C;
     border-radius: 15px;
@@ -99,7 +98,7 @@ body {
 
 .agency-icon-container {
     position: relative;
-    width: 150px; /* Ridotto proporzionalmente */
+    width: 150px; 
     height: 150px;
     display: inline-block;
     margin: 20px;
@@ -114,9 +113,9 @@ body {
 /* Cerchio bianco ridotto */
 .circle {
     position: absolute;
-    bottom: 15px; /* Regolato per centrare */
+    bottom: 15px;
     right: 15px;
-    width: 32px; /* Ridotto proporzionalmente */
+    width: 32px; 
     height: 32px;
     background: white;
     border-radius: 50%;
@@ -156,15 +155,6 @@ input[type="password"] {
     color: #000;
 }
 
-.error-message {
-    color: #B6000F; /* Rosso personalizzato */
-    text-align: center;
-    background-color: #ffffff; /* Sfondo rosa chiaro */
-    border: 5px solid #d62828; /* Bordo rosso scuro */
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
-}
 
 .btn-custom {
     padding: 12px;

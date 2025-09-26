@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./AggiungiCollaboratore.css";
 
 const AggiungiCollaboratore = () => {
@@ -10,7 +11,6 @@ const AggiungiCollaboratore = () => {
   const [nomeCo, setNomeCo] = useState("");
   const [cognomeCo, setCognomeCo] = useState("");
   const [emailCo, setEmailCo] = useState("");
-  const [erroreMessaggio, setErroreMessaggio] = useState("");
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [qrCodeBase64, setQrCodeBase64] = useState("");
@@ -25,10 +25,8 @@ const AggiungiCollaboratore = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErroreMessaggio("");
-
     if (!nomeCo || !cognomeCo || !emailCo) {
-      setErroreMessaggio("⚠ Tutti i campi sono obbligatori!");
+      toast.error("⚠ Tutti i campi sono obbligatori!");
       return;
     }
 
@@ -64,13 +62,13 @@ const AggiungiCollaboratore = () => {
         setQrCodeBase64(result.base64QRCode);
         setShowSuccessModal(true);
       } else {
-        setErroreMessaggio("❌ Errore imprevisto. Riprova più tardi.");
+        toast.error("❌ Errore imprevisto. Riprova più tardi.");
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        setErroreMessaggio("⚠ Email già esistente");
+        toast.error("⚠ Email già esistente");
       } else {
-        setErroreMessaggio("❌ Errore di connessione. Controlla la tua rete.");
+        toast.error("❌ Errore di connessione. Controlla la tua rete.");
       }
     }
     setPendingData(null);
@@ -194,11 +192,6 @@ const AggiungiCollaboratore = () => {
               onChange={e => setEmailCo(e.target.value)}
             />
           </div>
-          {erroreMessaggio && (
-            <div className="error-message" style={{ display: "block" }}>
-              {erroreMessaggio}
-            </div>
-          )}
         </form>
       </div>
 

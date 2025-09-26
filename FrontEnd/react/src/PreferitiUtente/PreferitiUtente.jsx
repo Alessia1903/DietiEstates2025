@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import CardPreferiti from "../components/CardPreferiti/CardPreferiti";
+import { toast } from "react-toastify";
 import "./PreferitiUtente.css";
 
 const PreferitiUtente = () => {
@@ -67,10 +68,11 @@ const PreferitiUtente = () => {
           }
         }
       );
-      // Dopo la rimozione, ricarica la pagina corrente
-      setPagina(1);
+      // Aggiorna la lista locale rimuovendo la ricerca cancellata
+      setRicerche(prev => prev.filter(r => r.id !== favoriteId));
+      toast.success("Ricerca preferita rimossa con successo!");
     } catch (error) {
-      alert("Errore nella rimozione della ricerca preferita.");
+      toast.error("Errore nella rimozione della ricerca preferita.");
       console.error(error);
     }
   };

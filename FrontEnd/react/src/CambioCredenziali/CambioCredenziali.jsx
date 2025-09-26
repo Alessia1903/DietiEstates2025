@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import "./CambioCredenziali.css";
 
 const validatePassword = (password) => {
@@ -12,8 +13,6 @@ const CambioCredenziali = () => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [showError, setShowError] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const handleLogoClick = () => {
@@ -24,24 +23,19 @@ const CambioCredenziali = () => {
     e.preventDefault();
 
     if (!currentPassword.trim()) {
-      setErrorMsg("Inserisci la password attuale.");
-      setShowError(true);
+      toast.error("Inserisci la password attuale.");
       return;
     }
     if (newPassword !== confirmPassword) {
-      setErrorMsg("Le password non coincidono");
-      setShowError(true);
+      toast.error("Le password non coincidono");
       return;
     }
     if (!validatePassword(newPassword)) {
-      setErrorMsg(
+      toast.error(
         "La password deve avere almeno 8 caratteri, una maiuscola, una minuscola e un numero."
       );
-      setShowError(true);
       return;
     }
-
-    setShowError(false);
 
     try {
       const token = localStorage.getItem("jwtToken");
@@ -64,14 +58,12 @@ const CambioCredenziali = () => {
         setShowModal(true);
       } else {
         const responseData = await response.json();
-        setErrorMsg(
+        toast.error(
           responseData.message || "Errore nel salvare la password, ritenta"
         );
-        setShowError(true);
       }
     } catch (error) {
-      setErrorMsg("Errore di connessione. Riprova.");
-      setShowError(true);
+      toast.error("Errore di connessione. Riprova.");
     }
   };
 
@@ -145,9 +137,6 @@ const CambioCredenziali = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
-          <p id="error-message" className={`error-message${showError ? "" : " hidden"}`}>
-            {errorMsg}
-          </p>
           <button className="registrabutton mx-auto" type="submit">
             SALVA PASSWORD
           </button>

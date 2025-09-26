@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./AggiungiAgente.css";
-
-// SVG e immagini sono inclusi direttamente come nel file originale
 
 const AggiungiAgente = () => {
   const navigate = useNavigate();
@@ -13,7 +12,6 @@ const AggiungiAgente = () => {
   const [cognomeAg, setCognomeAg] = useState("");
   const [emailAg, setEmailAg] = useState("");
   const [telefonoAg, setTelefonoAg] = useState("");
-  const [erroreMessaggio, setErroreMessaggio] = useState("");
   const [showWarningModal, setShowWarningModal] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [qrCodeBase64, setQrCodeBase64] = useState("");
@@ -28,10 +26,8 @@ const AggiungiAgente = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    setErroreMessaggio("");
-
     if (!nomeAg || !cognomeAg || !emailAg || !telefonoAg) {
-      setErroreMessaggio("⚠ Tutti i campi sono obbligatori!");
+      toast.error("⚠ Tutti i campi sono obbligatori!");
       return;
     }
 
@@ -68,13 +64,13 @@ const AggiungiAgente = () => {
         setQrCodeBase64(result.base64QRCode);
         setShowSuccessModal(true);
       } else {
-        setErroreMessaggio("❌ Errore imprevisto. Riprova più tardi.");
+        toast.error("❌ Errore imprevisto. Riprova più tardi.");
       }
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        setErroreMessaggio("⚠ Email già esistente");
+        toast.error("⚠ Email già esistente");
       } else {
-        setErroreMessaggio("❌ Errore di connessione. Controlla la tua rete.");
+        toast.error("❌ Errore di connessione. Controlla la tua rete.");
       }
     }
     setPendingData(null);
@@ -215,11 +211,6 @@ const AggiungiAgente = () => {
               onChange={e => setTelefonoAg(e.target.value)}
             />
           </div>
-          {erroreMessaggio && (
-            <div className="error-message" style={{ display: "block" }}>
-              {erroreMessaggio}
-            </div>
-          )}
         </form>
       </div>
 

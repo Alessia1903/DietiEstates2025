@@ -1,14 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./AreaAgenzia.css";
 
 const AreaAgenzia = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [showError, setShowError] = useState(false);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -18,12 +17,9 @@ const AreaAgenzia = () => {
     e.preventDefault();
 
     if (!email.trim() || !password.trim()) {
-      setErrorMsg("Inserisci email e password.");
-      setShowError(true);
+      toast.error("Inserisci email e password.");
       return;
     }
-
-    setShowError(false);
 
     try {
       // Prova login admin
@@ -48,8 +44,7 @@ const AreaAgenzia = () => {
         navigate("/home-agente");
         return;
       } catch (errAgent) {
-        setErrorMsg("Credenziali non valide.");
-        setShowError(true);
+        toast.error("Credenziali non valide.");
       }
     }
   };
@@ -126,9 +121,6 @@ const AreaAgenzia = () => {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
               />
-              <p id="error-message" className={`error-message${showError ? "" : " hidden"}`}>
-                {errorMsg}
-              </p>
             </div>
             <div className="flex justify-center mt-2">
               <button type="submit" className="btn-custom">

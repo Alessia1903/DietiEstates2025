@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 import axios from "axios";
 import CardImmobile from "../components/CardImmobile";
 import "./HomeLogin.css";
@@ -14,7 +15,6 @@ const HomeLogin = () => {
   const [numLocali, setNumLocali] = useState("");
   const [prezzoMin, setPrezzoMin] = useState("");
   const [prezzoMax, setPrezzoMax] = useState("");
-  const [inputError, setInputError] = useState(false);
 
   // Stato per mostrare risultati e loader
   const [showResults, setShowResults] = useState(false);
@@ -47,10 +47,9 @@ const HomeLogin = () => {
   // Gestione ricerca
   const cerca = useCallback(() => {
     if (!citta.trim()) {
-      setInputError(true);
+      toast.error("Inserire un comune o una città");
       return;
     }
-    setInputError(false);
 
     // Salva la ricerca in localStorage (max 10) per utente
     const userEmail = localStorage.getItem("userEmail") || "anonimo";
@@ -84,7 +83,7 @@ const HomeLogin = () => {
     
     // Ricarica la pagina per avviare la ricerca
     window.location.reload();
-  }, [citta, contratto, classeEnergetica, numLocali, prezzoMin, prezzoMax, setInputError]);
+  }, [citta, contratto, classeEnergetica, numLocali, prezzoMin, prezzoMax]);
 
   // Gestione input numerici
   const handleNumLocali = (e) => {
@@ -324,15 +323,11 @@ const HomeLogin = () => {
             <input
               type="text"
               id="citta"
-              placeholder={inputError ? "Inserire un comune o una città" : "Cerca un Comune o una Città"}
-              className={`w-full${inputError ? " input-error" : ""}`}
+              placeholder="Cerca un Comune o una Città"
+              className="w-full"
               value={citta}
               onChange={(e) => setCitta(e.target.value)}
-              onFocus={() => setInputError(false)}
             />
-            <span id="error-msg" className={`error-message${inputError ? "" : " hidden"}`}>
-              Inserire un comune o una città
-            </span>
           </div>
           <button type="button" onClick={cerca}>
             CERCA
@@ -434,9 +429,9 @@ const HomeLogin = () => {
                       }
                     )
                   );
-                  alert("Ricerca salvata nei preferiti!");
+                  toast.success("Ricerca salvata nei preferiti!");
                 } catch (error) {
-                  alert("Errore nel salvataggio della ricerca preferita.");
+                  toast.error("Errore nel salvataggio della ricerca preferita.");
                   console.error(error);
                 }
               }}

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./PrenotaVisitaMeteo.css";
 
 const PrenotaVisitaMeteo = ({
@@ -13,14 +14,12 @@ const PrenotaVisitaMeteo = ({
   const [selectedTime, setSelectedTime] = useState("");
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchWeather = async () => {
       if (!show || !city) return;
       
       setLoading(true);
-      setError(null);
       
       try {
         const token = localStorage.getItem("jwtToken");
@@ -38,7 +37,7 @@ const PrenotaVisitaMeteo = ({
         setWeatherData(response.data);
       } catch (err) {
         const errorMsg = err.response?.data?.message || err.message;
-        setError(`Errore nel caricamento dei dati meteo: ${errorMsg}`);
+        toast.error(`Errore nel caricamento dei dati meteo: ${errorMsg}`);
       } finally {
         setLoading(false);
       }
@@ -59,7 +58,7 @@ const PrenotaVisitaMeteo = ({
 
   const handleConfirm = async () => {
     if (!selectedDateIdx || !selectedTime || !weatherData?.time?.[selectedDateIdx]) {
-      setError("Seleziona una data e un orario validi");
+      toast.error("Seleziona una data e un orario validi");
       return;
     }
 
@@ -69,7 +68,7 @@ const PrenotaVisitaMeteo = ({
       const numericId = Number(realEstateId);
 
       if (!realEstateId || isNaN(numericId) || numericId <= 0) {
-        setError("ID immobile non valido o mancante");
+        toast.error("ID immobile non valido o mancante");
         return;
       }
 
@@ -95,7 +94,7 @@ const PrenotaVisitaMeteo = ({
       setSelectedTime("");
     } catch (err) {
       const errorMsg = err.response?.data?.message || err.message;
-      setError(`Errore nella prenotazione della visita: ${errorMsg}`);
+      toast.error(`Errore nella prenotazione della visita: ${errorMsg}`);
     }
   };
 
@@ -107,9 +106,6 @@ const PrenotaVisitaMeteo = ({
         <div className="pvm-meteo-content">
           {loading && (
             <div className="text-center py-4">Caricamento dati meteo...</div>
-          )}
-          {error && (
-            <div className="text-center py-4 text-red-500">{error}</div>
           )}
           {weatherData && weatherData.time && (
             <div className="pvm-meteo-row">

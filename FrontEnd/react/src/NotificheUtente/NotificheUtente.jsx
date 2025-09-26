@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import CardNotifica from "../components/CardNotifica/CardNotifica";
+import { toast } from "react-toastify";
 import "./NotificheUtente.css";
 
 const CATEGORIE = [
@@ -27,7 +28,6 @@ const NotificheUtente = () => {
     visite: true,
   });
 
-  // PAGINAZIONE
   const NOTIFICHE_PER_PAGINA = 5;
   const [pagina, setPagina] = useState(1);
   const [totalePagine, setTotalePagine] = useState(1);
@@ -65,6 +65,7 @@ const NotificheUtente = () => {
         setHasNext(response.data.hasNext || false);
       } catch (error) {
         setNotifiche([]);
+        toast.error("Errore nel caricamento delle notifiche.");
       }
       setLoading(false);
     };
@@ -76,7 +77,6 @@ const NotificheUtente = () => {
 
   const notificheDaMostrare = notificheFiltrate;
 
-  // Cambia stato toggle
   const handleToggle = (cat) => {
     setAttive((prev) => ({ ...prev, [cat]: !prev[cat] }));
     setPagina(1); // resetta a pagina 1 se cambi filtro

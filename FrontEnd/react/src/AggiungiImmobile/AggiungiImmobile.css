@@ -185,16 +185,6 @@
     background-color: #04b889;
 }
 
-.error-message {
-    color: #B6000F; 
-    text-align: center;
-    background-color: #ffffff; 
-    border: 5px solid #d62828; 
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
-    font-weight: bold;
-}
 
 .aggiungiimmobile-green-symbol {
     color: #06D6A0;

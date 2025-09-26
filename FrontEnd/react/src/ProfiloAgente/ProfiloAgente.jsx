@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./ProfiloAgente.css";
 
 const ProfiloAgente = () => {
@@ -10,12 +11,10 @@ const ProfiloAgente = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
-      setErrorMsg("");
       try {
         const token = localStorage.getItem("jwtToken");
         const response = await axios.get(
@@ -47,12 +46,12 @@ const ProfiloAgente = () => {
         });
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          setErrorMsg("Sessione scaduta. Effettua di nuovo il login.");
+          toast.error("Sessione scaduta. Effettua di nuovo il login.");
           setTimeout(() => {
             navigate("/home-agente");
           }, 2000);
         } else {
-          setErrorMsg("Errore nel caricamento del profilo.");
+          toast.error("Errore nel caricamento del profilo.");
         }
       }
       setLoading(false);
@@ -87,13 +86,13 @@ const ProfiloAgente = () => {
       );
       setAgent(formData);
       setIsEditing(false);
-      alert("Profilo aggiornato con successo! Devi effettuare nuovamente il login.");
+      toast.success("Profilo aggiornato con successo! Devi effettuare nuovamente il login.");
       // Logout e redirect al login
       localStorage.removeItem("jwtToken");
       navigate("/area-agenzia");
 
     } catch (error) {
-      alert("Errore nell'aggiornamento del profilo.");
+      toast.error("Errore nell'aggiornamento del profilo.");
       console.error(error);
     }
   };
@@ -173,8 +172,6 @@ const ProfiloAgente = () => {
         </div>
         {loading ? (
           <div className="field">Caricamento profilo agente...</div>
-        ) : errorMsg ? (
-          <div className="field error">{errorMsg}</div>
         ) : agent ? (
           <>
             <div className="field">

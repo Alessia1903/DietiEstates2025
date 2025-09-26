@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./LoginUtente.css";
 
 const validateEmail = (email) => {
@@ -12,8 +13,6 @@ const LoginUtente = () => {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [showError, setShowError] = useState(false);
 
   const handleLogoClick = () => {
     navigate("/");
@@ -23,13 +22,11 @@ const LoginUtente = () => {
     e.preventDefault();
 
     if (!validateEmail(email) || password.length < 6) {
-      setErrorMsg("Email o password non valide.");
-      setShowError(true);
+      toast.error("Email o password non valide.");
       return;
     }
 
     try {
-      setShowError(false);
       // Chiamata al backend per login
       const response = await axios.post(
         "http://localhost:8080/api/buyers/login",
@@ -42,16 +39,15 @@ const LoginUtente = () => {
       navigate("/home");
     } catch (error) {
       if (error.response && error.response.status === 401) {
-        setErrorMsg("Credenziali non valide.");
+        toast.error("Credenziali non valide.");
       } else {
-        setErrorMsg("Errore di connessione. Riprova.");
+        toast.error("Errore di connessione. Riprova.");
       }
-      setShowError(true);
     }
   };
 
   const handleGoogleLogin = () => {
-    alert("Funzionalità Google Sign-In da integrare.");
+    toast.info("Funzionalità Google Sign-In da integrare.");
   };
 
   const handleGoToRegister = (e) => {
@@ -128,9 +124,6 @@ const LoginUtente = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-            <p id="error-message" className={`error-message${showError ? "" : " hidden"}`}>
-              {errorMsg}
-            </p>
             <button type="submit" className="accesso px-6 py-2 mt-6 rounded-md text-lg bg-blue-500 text-white">
               Accedi
             </button>

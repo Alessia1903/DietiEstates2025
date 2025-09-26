@@ -346,13 +346,13 @@ body {
     align-items: center;
     width: 100%;
     padding: 10px 20px;
-    flex-wrap: nowrap; /* Impedisce che gli elementi vadano sotto */
-    min-width: 0; /* Evita sovrapposizioni */
+    flex-wrap: nowrap;
+    min-width: 0;
 }
 
 /* Stile del modale */
 .modal {
-    display: none; /* Inizialmente nascosto */
+    display: none;
     position: fixed;
     z-index: 1000;
     left: 0;
@@ -379,7 +379,7 @@ body {
 
 .modal-outer {
     background: #FFD943;
-    padding: 15px; /* Uniforme su tutti i lati */
+    padding: 15px;
     border-radius: 25px;
     display: flex;
     justify-content: center;
@@ -389,7 +389,7 @@ body {
 .modal-inner {
     background: #FFF;
     padding: 40px;
-    width: 600px; /* Dimensione fissa per uniformità */
+    width: 600px;
     text-align: center;
     border-radius: 15px;
     display: flex;
@@ -408,10 +408,9 @@ body {
     font-size: 20px;
     color: #333;
     margin-top: 15px;
-    text-align: center; /* Assicura il testo centrato */
+    text-align: center;
 }
 
-/* Spazio extra tra testo e bottoni */
 .modal-spacer {
     height: 20px; 
 }
@@ -511,8 +510,8 @@ body {
         width: 90%;
     }
     .modal-content {
-        width: 95%; /* Adatta la larghezza */
-        max-width: 350px; /* Limita la dimensione massima */
+        width: 95%; 
+        max-width: 350px; 
     }
 
     .modal-buttons {
@@ -521,18 +520,6 @@ body {
     }
 
     .modal-buttons button {
-        width: 100%; /* Bottoni a tutta larghezza su schermi piccoli */
+        width: 100%; 
     }
-}
-
-.error-message {
-    color: #B6000F; 
-    text-align: center;
-    background-color: #ffffff; 
-    border: 5px solid #d62828; 
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
-    font-weight: bold;
-    display: none; 
 }

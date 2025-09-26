@@ -1,19 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./ProfiloAdmin.css";
 
 const ProfiloAdmin = () => {
   const navigate = useNavigate();
   const [admin, setAdmin] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
-      setErrorMsg("");
       try {
         const token = localStorage.getItem("jwtToken");
         const response = await axios.get(
@@ -35,12 +34,12 @@ const ProfiloAdmin = () => {
         });
       } catch (error) {
         if (error.response && error.response.status === 401) {
-          setErrorMsg("Sessione scaduta. Effettua di nuovo il login.");
+          toast.error("Sessione scaduta. Effettua di nuovo il login.");
           setTimeout(() => {
             navigate("/home-admin");
           }, 2000);
         } else {
-          setErrorMsg("Errore nel caricamento del profilo.");
+          toast.error("Errore nel caricamento del profilo.");
         }
       }
       setLoading(false);
@@ -107,8 +106,6 @@ const ProfiloAdmin = () => {
         </div>
         {loading ? (
           <div className="field">Caricamento profilo admin...</div>
-        ) : errorMsg ? (
-          <div className="field error">{errorMsg}</div>
         ) : admin ? (
           <>
             <div className="field"><strong>Nome:</strong> <span>{admin.nome}</span></div>

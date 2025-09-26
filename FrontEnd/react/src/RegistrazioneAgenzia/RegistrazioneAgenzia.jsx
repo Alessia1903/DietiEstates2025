@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./RegistrazioneAgenzia.css";
 
 function validaPartitaIVA(piva) {
@@ -28,8 +29,6 @@ const RegistrazioneAgenzia = () => {
   const [nomeAdmin, setNomeAdmin] = useState("");
   const [cognomeAdmin, setCognomeAdmin] = useState("");
   const [emailAdmin, setEmailAdmin] = useState("");
-  const [erroreMessaggio, setErroreMessaggio] = useState("");
-  const [showError, setShowError] = useState(false);
 
   // Modal state
   const [showSuccessModal, setShowSuccessModal] = useState(false);
@@ -47,9 +46,6 @@ const RegistrazioneAgenzia = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setShowError(false);
-    setErroreMessaggio("");
-
     if (
       !nomeAgenzia.trim() ||
       !partitaIVA.trim() ||
@@ -57,18 +53,14 @@ const RegistrazioneAgenzia = () => {
       !cognomeAdmin.trim() ||
       !emailAdmin.trim()
     ) {
-      setErroreMessaggio("⚠ Tutti i campi sono obbligatori!");
-      setShowError(true);
+      toast.error("⚠ Tutti i campi sono obbligatori!");
       return;
     }
 
     if (!validaPartitaIVA(partitaIVA)) {
-      setErroreMessaggio("⚠ La partita IVA inserita non è valida");
-      setShowError(true);
+      toast.error("⚠ La partita IVA inserita non è valida");
       return;
     }
-
-    // Chiamata reale al backend per registrazione agenzia
     try {
       const response = await axios.post(
         "http://localhost:8080/api/admins/create-agency",
@@ -83,8 +75,7 @@ const RegistrazioneAgenzia = () => {
       setQrCodeBase64(response.data.base64QRCode || "");
       setShowSuccessModal(true);
     } catch (error) {
-      setErroreMessaggio("Errore nella registrazione: " + (error.response?.data?.message || "Controlla i dati inseriti."));
-      setShowError(true);
+      toast.error("Errore nella registrazione: " + (error.response?.data?.message || "Controlla i dati inseriti."));
     }
   };
 
@@ -200,9 +191,6 @@ const RegistrazioneAgenzia = () => {
               required
               autoComplete="off"
             />
-          </div>
-          <div className={`reg-agenzia-error-message${showError ? "" : " hidden"}`}>
-            {erroreMessaggio}
           </div>
           <button type="submit" className="reg-agenzia-button">
             REGISTRA

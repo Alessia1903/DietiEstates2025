@@ -1,4 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import HomeLogin from "./HomeLogin/HomeLogin";
 import LoginUtente from "./AreaUtente/LoginUtente";
 import AreaAgenzia from "./AreaAgenzia/AreaAgenzia";
@@ -22,6 +24,7 @@ import AggiungiImmobile from "./AggiungiImmobile/AggiungiImmobile";
 function App() {
   return (
     <BrowserRouter>
+      <ToastContainer />
       <Routes>
         <Route path="/" element={<HomeLogin />} />
         <Route path="/login" element={<LoginUtente />} />

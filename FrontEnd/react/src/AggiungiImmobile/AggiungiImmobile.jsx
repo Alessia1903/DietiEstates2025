@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./AggiungiImmobile.css";
 
 const initialForm = {
@@ -29,7 +30,6 @@ const AggiungiImmobile = () => {
   const [fileNames, setFileNames] = useState([]);
   const [showWarning, setShowWarning] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
-  const [error, setError] = useState("");
 
   // Gestione input generico
   const handleChange = (e) => {
@@ -68,16 +68,16 @@ const AggiungiImmobile = () => {
     
     for (const key of requiredFields) {
       if (!form[key]) {
-        setError("⚠ Tutti i campi sono obbligatori!");
+        toast.error("⚠ Tutti i campi sono obbligatori!");
         return false;
       }
     }
     if (!form.files || form.files.length < 1) {
-      setError("⚠ Devi caricare almeno una foto (max 7)!");
+      toast.error("⚠ Devi caricare almeno una foto (max 7)!");
       return false;
     }
     if (form.files.length > 7) {
-      setError("⚠ Puoi caricare al massimo 7 foto!");
+      toast.error("⚠ Puoi caricare al massimo 7 foto!");
       return false;
     }
     return true;
@@ -86,7 +86,6 @@ const AggiungiImmobile = () => {
   // Gestione submit
   const handleSubmit = (e) => {
     e.preventDefault();
-    setError("");
     if (!validate()) {
       return;
     }
@@ -96,7 +95,6 @@ const AggiungiImmobile = () => {
   // Conferma modale warning
   const handleConfirmWarning = async () => {
     setShowWarning(false);
-    setError("");
     // Mappa i campi frontend -> backend
     const formData = new FormData();
     formData.append("city", form.city);
@@ -135,7 +133,7 @@ const AggiungiImmobile = () => {
       );
       setShowSuccess(true);
     } catch (err) {
-      setError("❌ Errore nell'invio dell'annuncio. Riprova.");
+      toast.error("❌ Errore nell'invio dell'annuncio. Riprova.");
     }
   };
 
@@ -300,7 +298,6 @@ const AggiungiImmobile = () => {
             <label className="aggiungiimmobile-label">Prezzo: <input type="number" name="price" value={form.price} onChange={handleChange} required /></label>
           </fieldset>
 
-          {error && <div className="error-message">{error}</div>}
 
           <button type="submit" className="aggiungiimmobile-accesso px-6 py-2 mt-6 rounded-md">PROSEGUI</button>
         </form>

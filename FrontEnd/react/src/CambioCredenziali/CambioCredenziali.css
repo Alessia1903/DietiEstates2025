@@ -19,8 +19,8 @@ body {
     align-items: center;
     width: 100%;
     padding: 10px 20px;
-    flex-wrap: nowrap; /* Impedisce che gli elementi vadano sotto */
-    min-width: 0; /* Evita sovrapposizioni */
+    flex-wrap: nowrap; 
+    min-width: 0; 
 }
 
 /* Sezione Logo + Titolo */
@@ -169,16 +169,6 @@ button:hover {
     font-size: 0.9em;
 }
 
-.error-message {
-    color: #B6000F;
-    text-align: center;
-    background-color: #ffffff; 
-    border: 5px solid #d62828;
-    border-radius: 5px;
-    padding: 10px;
-    margin-top: 10px;
-    font-weight: bold;
-}
 
 /* Stile del modale */
 .modal {
@@ -285,8 +275,8 @@ button:hover {
         width: 90%;
     }
     .modal-content {
-        width: 95%; /* Adatta la larghezza */
-        max-width: 350px; /* Limita la dimensione massima */
+        width: 95%; 
+        max-width: 350px; 
     }
 
     .modal-buttons {
@@ -295,7 +285,7 @@ button:hover {
     }
 
     .modal-buttons button {
-        width: 100%; /* Bottoni a tutta larghezza su schermi piccoli */
+        width: 100%; 
     }
 }
 

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./RegistrazioneUtente.css";
 
 const validateEmail = (email) => {
@@ -16,8 +17,6 @@ const RegistrazioneUtente = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [errorMsg, setErrorMsg] = useState("");
-  const [showError, setShowError] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
   const handleLogoClick = () => {
@@ -35,24 +34,19 @@ const RegistrazioneUtente = () => {
       !password ||
       !confirmPassword
     ) {
-      setErrorMsg("Tutti i campi sono obbligatori.");
-      setShowError(true);
+      toast.error("Tutti i campi sono obbligatori.");
       return;
     }
 
     if (!validateEmail(email)) {
-      setErrorMsg("Inserisci un'email valida.");
-      setShowError(true);
+      toast.error("Inserisci un'email valida.");
       return;
     }
 
     if (password !== confirmPassword) {
-      setErrorMsg("Le password non coincidono.");
-      setShowError(true);
+      toast.error("Le password non coincidono.");
       return;
     }
-
-    setShowError(false);
 
     // Chiamata al backend per registrazione
     try {
@@ -70,11 +64,10 @@ const RegistrazioneUtente = () => {
       setShowModal(true);
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        setErrorMsg("Email già registrata.");
+        toast.error("Email già registrata.");
       } else {
-        setErrorMsg("Errore di connessione. Riprova.");
+        toast.error("Errore di connessione. Riprova.");
       }
-      setShowError(true);
     }
   };
 
@@ -85,7 +78,7 @@ const RegistrazioneUtente = () => {
 
   // Google Sign-In placeholder
   const handleGoogleLogin = () => {
-    alert("Funzionalità Google Sign-In da integrare.");
+    toast.info("Funzionalità Google Sign-In da integrare.");
   };
 
   return (
@@ -190,9 +183,6 @@ const RegistrazioneUtente = () => {
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
-            <p id="error-message" className={`error-message${showError ? "" : " hidden"} text-red-500`}>
-              {errorMsg}
-            </p>
             <button type="submit" className="accesso px-6 py-2 mt-6 rounded-md text-lg bg-blue-500 text-white">
               REGISTRATI
             </button>
