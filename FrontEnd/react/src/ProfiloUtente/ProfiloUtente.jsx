@@ -254,6 +254,20 @@ const ProfiloUtente = () => {
               >
                 {isEditing ? 'Salva' : 'Modifica dati'}
               </button>
+              {!isEditing && (
+                <button
+                  className="logout-btn"
+                  style={{ marginLeft: "12px" }}
+                  onClick={() => {
+                    localStorage.removeItem("jwtToken");
+                    localStorage.removeItem("userEmail");
+                    localStorage.removeItem("role");
+                    window.location.href = "/home";
+                  }}
+                >
+                  Esci
+                </button>
+              )}
               {isEditing && (
                 <button 
                   className="cancel-btn" 

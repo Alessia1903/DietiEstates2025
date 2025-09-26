@@ -74,6 +74,21 @@ body {
     color: #073B4C;
 }
 
+.logout-btn {
+  background-color: #e63946;
+  color: #fff;
+  border: none;
+  padding: 8px 20px;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.logout-btn:hover {
+  background-color: #b71c1c;
+}
+
 /* Media query per schermi piccoli */
 @media (max-width: 800px) {
     .logo {

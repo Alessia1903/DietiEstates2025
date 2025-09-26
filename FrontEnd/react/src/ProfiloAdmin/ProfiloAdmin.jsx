@@ -113,6 +113,19 @@ const ProfiloAdmin = () => {
             <div className="field"><strong>Partita IVA:</strong> <span>{admin.partitaIVA}</span></div>
           </>
         ) : null}
+        <div style={{ marginTop: "24px", textAlign: "right" }}>
+          <button
+            className="logout-btn"
+            onClick={() => {
+              localStorage.removeItem("jwtToken");
+              localStorage.removeItem("userEmail");
+              localStorage.removeItem("role");
+              window.location.href = "/home";
+            }}
+          >
+            Esci
+          </button>
+        </div>
       </div>
     </div>
   );
