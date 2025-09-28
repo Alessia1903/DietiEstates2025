@@ -431,7 +431,11 @@ const HomeLogin = () => {
                   );
                   toast.success("Ricerca salvata nei preferiti!");
                 } catch (error) {
-                  toast.error("Errore nel salvataggio della ricerca preferita.");
+                  if (error.response && error.response.status === 409) {
+                    toast.error("Hai già salvato questa ricerca tra i preferiti.");
+                  } else {
+                    toast.error("Errore nel salvataggio della ricerca preferita.");
+                  }
                   console.error(error);
                 }
               }}

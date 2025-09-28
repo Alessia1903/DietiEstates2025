@@ -128,6 +128,12 @@ public class BuyerService {
     public String addFavorite(FavoriteRequest request) {
         Buyer buyer = getProfile();
 
+        // Controllo se gia tra i preferiti
+        boolean exists = favoriteSearchRepository.existsByBuyerAndRequest(buyer, request);
+        if (exists) {
+            throw new DuplicateResourceException("La ricerca è già tra i preferiti.");
+        }
+
         FavoriteSearch favoriteSearch = new FavoriteSearch();
         favoriteSearch.setBuyer(buyer);
         favoriteSearch.setCity(request.getCity());

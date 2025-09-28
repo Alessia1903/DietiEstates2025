@@ -1,6 +1,8 @@
 package it.unina.dieti_estates.repository;
 
 import it.unina.dieti_estates.model.FavoriteSearch;
+import it.unina.dieti_estates.model.dto.FavoriteRequest;
+import it.unina.dieti_estates.model.Buyer;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import org.springframework.data.domain.Page;
@@ -21,4 +23,7 @@ public interface FavoriteSearchRepository extends JpaRepository<FavoriteSearch, 
         @Param("rooms") Integer rooms,
         @Param("price") Double price
     );
+    
+    @Query("SELECT COUNT(f) > 0 FROM FavoriteSearch f WHERE f.buyer = :buyer AND f.city = :#{#request.city} AND f.contractType = :#{#request.contractType} AND f.energyClass = :#{#request.energyClass} AND f.rooms = :#{#request.rooms} AND f.minPrice = :#{#request.minPrice} AND f.maxPrice = :#{#request.maxPrice}")
+    boolean existsByBuyerAndRequest(@Param("buyer") Buyer buyer, @Param("request") FavoriteRequest request);
 }
