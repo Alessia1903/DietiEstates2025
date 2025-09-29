@@ -175,10 +175,6 @@ body {
     min-width: 320px;
 }
 
-.hidden { 
-    display: none; 
-}
-
 .profilePicture {
     color: #9c9c9c;
     justify-content: center;

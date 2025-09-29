@@ -89,16 +89,3 @@
     width: 100%;
 }
 
-/* Back link styles */
-.back-link {
-    color: #06D6A0;
-    text-decoration: none;
-    font-weight: 500;
-    display: flex;
-    align-items: center;
-    transition: all 0.2s;
-}
-
-.back-link:hover {
-    opacity: 0.8;
-}

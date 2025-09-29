@@ -38,6 +38,8 @@ import it.unina.dieti_estates.model.dto.WeatherRequest;
 import it.unina.dieti_estates.model.BookedVisit;
 import it.unina.dieti_estates.repository.BookedVisitRepository;
 import it.unina.dieti_estates.repository.NotificationRepository;
+import it.unina.dieti_estates.model.Notification;
+import java.util.List;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.InputStream;
@@ -437,11 +439,22 @@ public class BuyerService {
 
     }
 
-    public PageResponse getNotificationsForCurrentBuyer(int page, int size) {
+    public PageResponse<NotificationDTO> getNotificationsForCurrentBuyer(int page, int size) {
         Buyer buyer = getProfile();
         Page<Notification> notificationPage = notificationRepository.findByBuyer(buyer, PageRequest.of(page, size));
+        List<NotificationDTO> dtos = notificationPage.getContent()
+            .stream()
+            .map(n -> new it.unina.dieti_estates.model.dto.NotificationDTO(
+                n.getId(),
+                n.getTitle(),
+                n.getType(),
+                n.getMessage(),
+                n.getCreatedAt(),
+                n.getRealEstate() != null ? n.getRealEstate().getAddress() : null
+            ))
+            .collect(java.util.stream.Collectors.toList());
         return new PageResponse<>(
-            notificationPage.getContent(),
+            dtos,
             notificationPage.getNumber(),
             notificationPage.getSize(),
             notificationPage.getTotalElements(),

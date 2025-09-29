@@ -147,11 +147,6 @@ body {
     }
 }
 
-.green-symbol {
-    color: #06D6A0;
-    font-weight: bold; 
-}
-
 .header-container {
     display: flex;
     justify-content: space-between;

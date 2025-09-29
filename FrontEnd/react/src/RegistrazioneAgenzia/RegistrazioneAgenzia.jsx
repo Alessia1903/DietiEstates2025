@@ -75,7 +75,7 @@ const RegistrazioneAgenzia = () => {
       setQrCodeBase64(response.data.base64QRCode || "");
       setShowSuccessModal(true);
     } catch (error) {
-      toast.error("Errore nella registrazione: " + (error.response?.data?.message || "Controlla i dati inseriti."));
+      toast.error("Errore: partita IVA già registrata)");
     }
   };
 

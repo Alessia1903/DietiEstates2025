@@ -3,6 +3,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import "./DettagliImmobile.css";
 import MappaImmobile from "../components/MappaImmobile";
 import PrenotaVisitaMeteo from "../components/PrenotaVisitaMeteo/PrenotaVisitaMeteo";
+import Navbar from "../components/Navbar/Navbar";
+import "../components/Navbar/Navbar.css";
 
 
 const DettagliImmobile = () => {
@@ -36,15 +38,7 @@ const DettagliImmobile = () => {
 
   if (!annuncio) return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
-      <div className="header-container">
-        <div className="logo-title cursor-pointer" id="logo-title" onClick={() => navigate("/")}>
-          <img
-            src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"
-            alt="Logo DietiEstates"
-            className="logo"
-          />
-        </div>
-      </div>
+      <Navbar />
       <div className="text-gray-500 text-lg mt-8">Nessun dettaglio immobile disponibile.</div>
     </div>
   );
@@ -61,20 +55,7 @@ const DettagliImmobile = () => {
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
-      {/* Solo Logo */}
-      <div className="header-container">
-        <div className="logo-title cursor-pointer" id="logo-title" onClick={() => navigate("/")}>
-          <img
-            src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"
-            alt="Logo DietiEstates"
-            className="logo"
-          />
-          <div>
-            <h1 className="title custom-text-color">DîetîEstates25</h1>
-            <p className="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
-          </div>
-        </div>
-      </div>
+      <Navbar />
 
       {/* Back link */}
       <div className="flex justify-start w-full mb-4 pl-8 mt-8">

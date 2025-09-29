@@ -32,7 +32,7 @@ function App() {
         <Route path="/home" element={<HomeLogin />} />
         <Route path="/area-agenzia" element={<AreaAgenzia />} />
         <Route path="/cambio-credenziali" element={
-          <ProtectedRoute requiredRole="user" redirectTo="/area-agenzia">
+          <ProtectedRoute requiredRole="admin" redirectTo="/area-agenzia">
             <CambioCredenziali />
           </ProtectedRoute>
         } />
@@ -70,7 +70,7 @@ function App() {
           </ProtectedRoute>
         } />
         <Route path="/aggiungi-collaboratore" element={
-          <ProtectedRoute requiredRole="agency" redirectTo="/area-agenzia">
+          <ProtectedRoute requiredRole="admin" redirectTo="/area-agenzia">
             <AggiungiCollaboratore />
           </ProtectedRoute>
         } />

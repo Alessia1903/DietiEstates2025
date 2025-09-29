@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Navbar from "../components/Navbar/Navbar";
+import "../components/Navbar/Navbar.css";
 import "./AreaAgenzia.css";
 
 const AreaAgenzia = () => {
@@ -51,19 +53,7 @@ const AreaAgenzia = () => {
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
-      <div className="header-container">
-        <div className="logo-title cursor-pointer" id="logo-title" onClick={handleLogoClick}>
-          <img
-            src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"
-            alt="Logo DietiEstates"
-            className="logo"
-          />
-          <div>
-            <h1 className="title custom-text-color">DîetîEstates25</h1>
-            <p className="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
-          </div>
-        </div>
-      </div>
+      <Navbar />
 
       <div className="flex flex-col md:flex-row gap-24 items-center justify-center w-full sm:w-auto mt-6">
         {/* Registra Agenzia */}

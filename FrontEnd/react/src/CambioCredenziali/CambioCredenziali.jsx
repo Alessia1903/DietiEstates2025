@@ -57,10 +57,7 @@ const CambioCredenziali = () => {
       if (response.ok) {
         setShowModal(true);
       } else {
-        const responseData = await response.json();
-        toast.error(
-          responseData.message || "Errore nel salvare la password, ritenta"
-        );
+        toast.error("Password attuale errata. Riprova.");
       }
     } catch (error) {
       toast.error("Errore di connessione. Riprova.");

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./RegistrazioneUtente.css";
+import Navbar from "../components/Navbar/Navbar";
+import "../components/Navbar/Navbar.css";
 
 const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -83,19 +85,7 @@ const RegistrazioneUtente = () => {
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
-      <div className="header-container">
-        <div className="logo-title cursor-pointer" id="logo-title" onClick={handleLogoClick}>
-          <img
-            src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"
-            alt="Logo DietiEstates"
-            className="logo"
-          />
-          <div>
-            <h1 className="title custom-text-color">DîetîEstates25</h1>
-            <p className="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
-          </div>
-        </div>
-      </div>
+      <Navbar />
 
       <div className="flex flex-col md:flex-row gap-10 w-full max-w-4xl">
         <div className="registration-info-box">
