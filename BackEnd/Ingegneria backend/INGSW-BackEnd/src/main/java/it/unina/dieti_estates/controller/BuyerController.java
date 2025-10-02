@@ -101,7 +101,6 @@ public class BuyerController {
         RegistrationResponse response = buyerService.registerBuyerWithGoogle(body);
         return ResponseEntity.ok(response);
     }
-    }
 
     @PreAuthorize("hasRole('BUYER')")
     @PostMapping("/weather")

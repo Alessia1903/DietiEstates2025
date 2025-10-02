@@ -293,10 +293,10 @@ public class BuyerService {
             .authorities("ROLE_BUYER")
             .build();
         return jwtService.generateToken(userDetails);
-    }
+    }    
 
-
-public String getGoogleIdTokenFromCode(String code, String redirectUri) {
+    
+    public String getGoogleIdTokenFromCode(String code, String redirectUri) {
         RestTemplate restTemplate = new RestTemplate();
 
         Map<String, String> params = new HashMap<>();
@@ -330,9 +330,7 @@ public String getGoogleIdTokenFromCode(String code, String redirectUri) {
         return (String) response.getBody().get("id_token");
     }
 
-
-
-public RegistrationResponse registerBuyerWithGoogle(Map<String, String> body) {
+    public RegistrationResponse registerBuyerWithGoogle(Map<String, String> body) {
         String code = body.get("code");
         String redirectUri = body.getOrDefault("redirectUri", "http://localhost:5173/auth/callback");
         String idTokenString = getGoogleIdTokenFromCode(code, redirectUri);
@@ -353,11 +351,6 @@ public RegistrationResponse registerBuyerWithGoogle(Map<String, String> body) {
         return new RegistrationResponse("Registrazione Google andata a buon fine");
     }
 
-
-aggiungere una riga di codice al metodo verifyGoogleIdToken (guarda foto mandate sul gruppo)
-
-.setAudience(Collections.singletonList(googleClientId))
-
     // Helper for Google ID token verification
     private GoogleIdToken verifyGoogleIdToken(String idTokenString) {
         try {
@@ -365,7 +358,7 @@ aggiungere una riga di codice al metodo verifyGoogleIdToken (guarda foto mandate
                 GoogleNetHttpTransport.newTrustedTransport(),
                 JacksonFactory.getDefaultInstance()
             )
-            .setAudience(Collections.singletonList(System.getenv("GOOGLE_CLIENT_ID")))
+            .setAudience(Collections.singletonList(googleClientId))
             .build();
             return verifier.verify(idTokenString);
         } catch (GeneralSecurityException | IOException e) {
