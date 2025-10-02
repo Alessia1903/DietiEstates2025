@@ -1,32 +1,34 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import HomeLogin from "./HomeLogin/HomeLogin";
-import LoginUtente from "./AreaUtente/LoginUtente";
-import AreaAgenzia from "./AreaAgenzia/AreaAgenzia";
-import CambioCredenziali from "./CambioCredenziali/CambioCredenziali";
-import NotificheAgente from "./NotificheAgente/NotificheAgente";
-import RegistrazioneUtente from "./AreaUtente/RegistrazioneUtente";
-import ProfiloUtente from "./ProfiloUtente/ProfiloUtente";
-import ProfiloAdmin from "./ProfiloAdmin/ProfiloAdmin";
-import Cronologia from "./Cronologia/Cronologia";
-import NotificheUtente from "./NotificheUtente/NotificheUtente";
-import DettagliImmobile from "./DettagliImmobile/DettagliImmobile";
-import RegistrazioneAgenzia from "./RegistrazioneAgenzia/RegistrazioneAgenzia";
-import HomeAdmin from "./HomeAdmin/HomeAdmin";
 import AggiungiAgente from "./AggiungiAgente/AggiungiAgente";
 import AggiungiCollaboratore from "./AggiungiCollaboratore/AggiungiCollaboratore";
-import PreferitiUtente from "./PreferitiUtente/PreferitiUtente";
-import HomeAgente from "./HomeAgente/HomeAgente";
-import ProfiloAgente from "./ProfiloAgente/ProfiloAgente";
 import AggiungiImmobile from "./AggiungiImmobile/AggiungiImmobile";
+import AreaAgenzia from "./AreaAgenzia/AreaAgenzia";
+import AuthCallback from "./AreaUtente/AuthCallback";
+import LoginUtente from "./AreaUtente/LoginUtente";
+import RegistrazioneUtente from "./AreaUtente/RegistrazioneUtente";
+import CambioCredenziali from "./CambioCredenziali/CambioCredenziali";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Cronologia from "./Cronologia/Cronologia";
+import DettagliImmobile from "./DettagliImmobile/DettagliImmobile";
+import HomeAdmin from "./HomeAdmin/HomeAdmin";
+import HomeAgente from "./HomeAgente/HomeAgente";
+import HomeLogin from "./HomeLogin/HomeLogin";
+import NotificheAgente from "./NotificheAgente/NotificheAgente";
+import NotificheUtente from "./NotificheUtente/NotificheUtente";
+import PreferitiUtente from "./PreferitiUtente/PreferitiUtente";
+import ProfiloAdmin from "./ProfiloAdmin/ProfiloAdmin";
+import ProfiloAgente from "./ProfiloAgente/ProfiloAgente";
+import ProfiloUtente from "./ProfiloUtente/ProfiloUtente";
+import RegistrazioneAgenzia from "./RegistrazioneAgenzia/RegistrazioneAgenzia";
 
 function App() {
   return (
     <BrowserRouter>
       <ToastContainer />
       <Routes>
+        <Route path="/auth/callback" element={<AuthCallback />} />
         <Route path="/" element={<HomeLogin />} />
         <Route path="/login" element={<LoginUtente />} />
         <Route path="/home" element={<HomeLogin />} />

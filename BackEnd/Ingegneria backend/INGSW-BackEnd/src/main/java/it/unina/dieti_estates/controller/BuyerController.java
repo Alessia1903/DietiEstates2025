@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/buyers")
@@ -89,16 +90,17 @@ public class BuyerController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/google-login")
-    public ResponseEntity<String> loginBuyerWithGoogle(@RequestBody String idToken) {
-        String jwt = buyerService.loginBuyerWithGoogle(idToken);
-        return ResponseEntity.ok(jwt);
+    @PostMapping("/auth/google/callback")
+    public ResponseEntity<?> googleAuthCallback(@RequestBody Map<String, String> body) {
+        String jwt = buyerService.loginBuyerWithGoogleCode(body);
+        return ResponseEntity.ok(Map.of("jwt", jwt, "role", "user"));
     }
 
-    @PostMapping("/google-register")
-    public ResponseEntity<RegistrationResponse> registerBuyerWithGoogle(@RequestBody String idToken) {
-        RegistrationResponse response = buyerService.registerBuyerWithGoogle(idToken);
+    @PostMapping("/auth/google/register")
+    public ResponseEntity<?> googleRegisterCallback(@RequestBody Map<String, String> body) {
+        RegistrationResponse response = buyerService.registerBuyerWithGoogle(body);
         return ResponseEntity.ok(response);
+    }
     }
 
     @PreAuthorize("hasRole('BUYER')")

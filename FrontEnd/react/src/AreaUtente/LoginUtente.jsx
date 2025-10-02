@@ -1,10 +1,10 @@
+import axios from "axios";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import { toast } from "react-toastify";
-import "./LoginUtente.css";
 import Navbar from "../components/Navbar/Navbar";
 import "../components/Navbar/Navbar.css";
+import "./LoginUtente.css";
 
 const validateEmail = (email) => {
   const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -49,7 +49,16 @@ const LoginUtente = () => {
   };
 
   const handleGoogleLogin = () => {
-    toast.info("Funzionalità Google Sign-In da integrare.");
+    const clientId = "1094630668431-m9m9jci7cih64htg0tt8cr6qod7iclvp.apps.googleusercontent.com";
+    const redirectUri = "http://localhost:5173/auth/callback";
+    const scope = "openid email profile";
+    const state = "login";
+    const url =
+      `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}` +
+      `&redirect_uri=${encodeURIComponent(redirectUri)}` +
+      `&response_type=code&scope=${encodeURIComponent(scope)}` +
+      `&state=${state}`;
+    window.location.href = url;
   };
 
   const handleGoToRegister = (e) => {

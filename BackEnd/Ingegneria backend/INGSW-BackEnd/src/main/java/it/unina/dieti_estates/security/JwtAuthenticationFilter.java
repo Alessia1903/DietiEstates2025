@@ -34,6 +34,22 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request, @NonNull HttpServletResponse response, @NonNull FilterChain filterChain)
             throws ServletException, IOException {
+                
+        String path = request.getRequestURI();
+        if (path.equals("/api/buyers/auth/google/register") ||
+            path.equals("/api/buyers/auth/google/callback") ||
+            path.equals("/api/buyers/register") ||
+            path.equals("/api/buyers/login") ||
+            path.equals("/api/buyers/google-login") ||
+            path.equals("/api/buyers/google-register") ||
+            path.equals("/api/buyers/search") ||
+            path.equals("/api/admins/login") ||
+            path.equals("/api/estate-agents/login") ||
+            path.equals("/api/admins/create-agency")) {
+            filterChain.doFilter(request, response);
+            return;
+        }
+
         final String authHeader = request.getHeader("Authorization");
         final String jwt;
         final String email;

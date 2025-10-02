@@ -51,6 +51,8 @@ public class SecurityConfig {
                             "/api/buyers/login", 
                             "/api/buyers/google-login",
                             "/api/buyers/google-register",
+                            "/api/buyers/auth/google/callback",
+                            "/api/buyers/auth/google/register",
                             "/api/buyers/search",
                             "/api/admins/login",
                             "/api/estate-agents/login",

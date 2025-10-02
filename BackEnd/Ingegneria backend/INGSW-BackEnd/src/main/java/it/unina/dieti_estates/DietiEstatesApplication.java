@@ -17,9 +17,10 @@ public class DietiEstatesApplication {
         String azureStorageConnection = dotenv.get("AZURE_STORAGE_CONNECTION_STRING");
         String azureContainerName = dotenv.get("AZURE_CONTAINER_NAME");
         String googleClientId = dotenv.get("GOOGLE_CLIENT_ID");
+        String googleClientSecret = dotenv.get("GOOGLE_CLIENT_SECRET");
 
         if (dbUrl == null || dbUsername == null || dbPassword == null || jwtSecret == null 
-            || azureStorageConnection == null || azureContainerName == null || googleClientId == null) {
+            || azureStorageConnection == null || azureContainerName == null || googleClientId == null || googleClientSecret == null) {
             throw new IllegalArgumentException("One or more environment variables are not set");
         }
 
@@ -30,6 +31,7 @@ public class DietiEstatesApplication {
         System.setProperty("AZURE_STORAGE_CONNECTION_STRING", azureStorageConnection);
         System.setProperty("AZURE_CONTAINER_NAME", azureContainerName);
         System.setProperty("GOOGLE_CLIENT_ID", googleClientId);
+        System.setProperty("GOOGLE_CLIENT_SECRET", googleClientSecret);
 
         SpringApplication.run(DietiEstatesApplication.class, args);
     }

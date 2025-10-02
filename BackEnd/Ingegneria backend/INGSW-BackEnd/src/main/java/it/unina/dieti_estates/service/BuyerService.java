@@ -21,6 +21,9 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.http.*;
 import it.unina.dieti_estates.repository.RealEstateRepository;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
@@ -45,6 +48,8 @@ import java.net.HttpURLConnection;
 import java.io.InputStream;
 import java.util.Scanner;
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.Map;
 import it.unina.dieti_estates.exception.business.WeatherApiException;
 import it.unina.dieti_estates.exception.resource.RealEstateNotFoundException;
 import it.unina.dieti_estates.exception.validation.DuplicateResourceException;
@@ -61,6 +66,13 @@ public class BuyerService {
     private final RealEstateRepository realEstateRepository;
     private final BookedVisitRepository bookedVisitRepository;
     private final NotificationRepository notificationRepository;
+
+
+    @Value("${google.clientId}")
+    private String googleClientId;
+
+    @Value("${google.clientSecret}")
+    private String googleClientSecret;      
 
     @Autowired
     public BuyerService(BuyerRepository buyerRepository, 
@@ -264,19 +276,17 @@ public class BuyerService {
         );
     }
 
-    public String loginBuyerWithGoogle(String idTokenString) {
+    public String loginBuyerWithGoogleCode(Map<String, String> body) {
+        String code = body.get("code");
+        String redirectUri = body.getOrDefault("redirectUri", "http://localhost:5173/auth/callback");
+        String idTokenString = getGoogleIdTokenFromCode(code, redirectUri);
         GoogleIdToken idToken = verifyGoogleIdToken(idTokenString);
         if (idToken == null) {
             throw new InvalidCredentialsException("ID token Google non valido");
         }
         String email = idToken.getPayload().getEmail();
         Buyer buyer = buyerRepository.findByEmail(email)
-            .orElseThrow(new java.util.function.Supplier<UserNotFoundException>() {
-                @Override
-                public UserNotFoundException get() {
-                    return new UserNotFoundException("Buyer non trovato per email Google");
-                }
-            });
+            .orElseThrow(() -> new UserNotFoundException("Buyer non trovato per email Google"));
         UserDetails userDetails = org.springframework.security.core.userdetails.User
             .withUsername(buyer.getEmail())
             .password(buyer.getPassword())
@@ -285,7 +295,47 @@ public class BuyerService {
         return jwtService.generateToken(userDetails);
     }
 
-    public RegistrationResponse registerBuyerWithGoogle(String idTokenString) {
+
+public String getGoogleIdTokenFromCode(String code, String redirectUri) {
+        RestTemplate restTemplate = new RestTemplate();
+
+        Map<String, String> params = new HashMap<>();
+        params.put("client_id", googleClientId);
+        params.put("client_secret", googleClientSecret);
+        params.put("code", code);
+        params.put("redirect_uri", redirectUri);
+        params.put("grant_type", "authorization_code");
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+
+        StringBuilder requestBody = new StringBuilder();
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            if (requestBody.length() > 0) requestBody.append("&");
+            requestBody.append(entry.getKey()).append("=").append(entry.getValue());
+        }
+
+        HttpEntity<String> request = new HttpEntity<>(requestBody.toString(), headers);
+
+        ResponseEntity<Map> response = restTemplate.postForEntity(
+            "https://oauth2.googleapis.com/token",
+            request,
+            Map.class
+        );
+
+        if (response.getStatusCode() != HttpStatus.OK || !response.getBody().containsKey("id_token")) {
+            throw new InvalidCredentialsException("Google token exchange failed");
+        }
+
+        return (String) response.getBody().get("id_token");
+    }
+
+
+
+public RegistrationResponse registerBuyerWithGoogle(Map<String, String> body) {
+        String code = body.get("code");
+        String redirectUri = body.getOrDefault("redirectUri", "http://localhost:5173/auth/callback");
+        String idTokenString = getGoogleIdTokenFromCode(code, redirectUri);
         GoogleIdToken idToken = verifyGoogleIdToken(idTokenString);
         if (idToken == null) {
             throw new InvalidCredentialsException("ID token Google non valido");
@@ -302,6 +352,11 @@ public class BuyerService {
         buyerRepository.save(buyer);
         return new RegistrationResponse("Registrazione Google andata a buon fine");
     }
+
+
+aggiungere una riga di codice al metodo verifyGoogleIdToken (guarda foto mandate sul gruppo)
+
+.setAudience(Collections.singletonList(googleClientId))
 
     // Helper for Google ID token verification
     private GoogleIdToken verifyGoogleIdToken(String idTokenString) {
