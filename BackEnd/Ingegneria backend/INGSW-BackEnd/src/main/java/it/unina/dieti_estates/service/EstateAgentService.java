@@ -86,7 +86,7 @@ public class EstateAgentService {
     public EstateAgent getProfile() {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (agent == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
         return agent;
     }
@@ -94,7 +94,7 @@ public class EstateAgentService {
     public PageResponse<BookedVisitDTO> getAllBookedVisits(int page, int size) {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (agent == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
         Page<BookedVisitDTO> visitPage = visitRepository.findByEstateAgent(agent.getId(), PageRequest.of(page, size));
         return new PageResponse<>(
@@ -109,14 +109,14 @@ public class EstateAgentService {
     public String acceptVisit(Long visitId) {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (agent == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
 
         BookedVisit visit = visitRepository.findById(visitId)
-            .orElseThrow(() -> new BookedVisitNotFoundException("Visit not found with id: " + visitId));
+            .orElseThrow(() -> new BookedVisitNotFoundException("Visita non trovata con id: " + visitId));
 
         if (!visit.getAgent().getId().equals(agent.getId())) {
-            throw new UnauthorizedAccessException("Estate agent can only manage their own visits");
+            throw new UnauthorizedAccessException("L'agente immobiliare può gestire solo le proprie visite");
         }
 
         visit.setStatus("accettata");
@@ -139,14 +139,14 @@ public class EstateAgentService {
     public String rejectVisit(Long visitId) {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (agent == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
 
         BookedVisit visit = visitRepository.findById(visitId)
-            .orElseThrow(() -> new BookedVisitNotFoundException("Visit not found with id: " + visitId));
+            .orElseThrow(() -> new BookedVisitNotFoundException("Visita non trovata con id: " + visitId));
 
         if (!visit.getAgent().getId().equals(agent.getId())) {
-            throw new UnauthorizedAccessException("Estate agent can only manage their own visits");
+            throw new UnauthorizedAccessException("L'agente immobiliare può gestire solo le proprie visite");
         }
 
         visit.setStatus("rifiutata");
@@ -170,7 +170,7 @@ public class EstateAgentService {
         // Ottiene l'agente dal SecurityContext
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (agent == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
 
         // Verifica che ci sia almeno un'immagine

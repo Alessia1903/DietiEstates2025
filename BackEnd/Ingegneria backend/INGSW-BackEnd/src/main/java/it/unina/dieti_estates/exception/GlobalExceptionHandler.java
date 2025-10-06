@@ -49,11 +49,13 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PropertyNotAvailableException.class)
-    public ResponseEntity<ErrorResponse> handlePropertyNotAvailableException(PropertyNotAvailableException ex) {
-        ErrorResponse error = new ErrorResponse(ex.getErrorCode(), ex.getMessage());
-        return new ResponseEntity<>(error, HttpStatus.CONFLICT);
+    @ExceptionHandler(FavoriteSearchNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleFavoriteSearchNotFoundException(FavoriteSearchNotFoundException ex) {
+        ErrorResponse error = new ErrorResponse("FAVORITE_SEARCH_NOT_FOUND", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
     }
+
+    
 
     @ExceptionHandler(FileStorageException.class)
     public ResponseEntity<ErrorResponse> handleFileStorageException(FileStorageException ex) {
@@ -77,7 +79,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         ErrorResponse error = new ErrorResponse(
             "DATA_INTEGRITY_VIOLATION",
-            "A conflict occurred while processing your request. Please check your data."
+            "Si è verificato un conflitto durante l'elaborazione della richiesta. Controlla i dati inseriti."
         );
         return new ResponseEntity<>(error, HttpStatus.CONFLICT);
     }
@@ -86,7 +88,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<ErrorResponse> handleGenericException(Exception ex) {
         ErrorResponse error = new ErrorResponse(
             "INTERNAL_SERVER_ERROR",
-            "An unexpected error occurred. Please try again later."
+            "Si è verificato un errore inatteso. Riprova più tardi."
         );
         return new ResponseEntity<>(error, HttpStatus.INTERNAL_SERVER_ERROR);
     }

@@ -109,7 +109,7 @@ public class AdminService {
         String qrCodeBase64 = QRCodeGenerator.generateQRCodeBase64(qrDataJson, 200, 200);
 
         return new QRCodeResponse(
-            "Admin account created successfully",
+            "Account per admin creato con successo",
             qrCodeBase64
         );
     }
@@ -117,7 +117,7 @@ public class AdminService {
     public Admin getProfile() {
         Admin admin = (Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (admin == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
         return admin;
     }
@@ -125,11 +125,11 @@ public class AdminService {
     public void changeAmministrationPassword(ChangePasswordRequest request) {
         Admin admin = (Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (admin == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), admin.getPassword())) {
-            throw new InvalidCredentialsException("Current password is incorrect");
+            throw new InvalidCredentialsException("La password attuale non è corretta");
         }
 
         admin.setPassword(passwordEncoder.encode(request.getNewPassword()));
@@ -164,7 +164,7 @@ public class AdminService {
         String qrCodeBase64 = QRCodeGenerator.generateQRCodeBase64(qrDataJson, 200, 200);
 
         return new QRCodeResponse(
-            "Estate agent account created successfully",
+            "Account per agente immobiliare creato con successo",
             qrCodeBase64
         );
     }

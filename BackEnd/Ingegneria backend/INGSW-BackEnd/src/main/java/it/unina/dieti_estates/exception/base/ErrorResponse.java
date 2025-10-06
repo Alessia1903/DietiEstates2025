@@ -17,12 +17,7 @@ public class ErrorResponse {
         this.code = code;
         this.message = message;
         this.timestamp = LocalDateTime.now();
-    }
-
-    public ErrorResponse(String code, String message, Map<String, Object> details) {
-        this(code, message);
-        this.details = details;
-    }
+    }  
 
     public String getStatus() {
         return status;

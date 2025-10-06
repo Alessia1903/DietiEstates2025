@@ -37,7 +37,7 @@ public class AdminController {
     @PostMapping("/change-amministration-password")
     public ResponseEntity<String> changeAmministrationPassword(@RequestBody ChangePasswordRequest request) {
         adminService.changeAmministrationPassword(request);
-        return ResponseEntity.ok("Password changed successfully");
+        return ResponseEntity.ok("Password cambiata con successo");
     }
 
     @PreAuthorize("hasRole('ADMIN')")

@@ -53,6 +53,7 @@ import java.util.Map;
 import it.unina.dieti_estates.exception.business.WeatherApiException;
 import it.unina.dieti_estates.exception.resource.RealEstateNotFoundException;
 import it.unina.dieti_estates.exception.validation.DuplicateResourceException;
+import it.unina.dieti_estates.exception.resource.FavoriteSearchNotFoundException;
 
 
 @Service
@@ -101,7 +102,6 @@ public class BuyerService {
 
     public String loginBuyer(LoginRequest loginRequest) {
         try {
-            
             Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                     loginRequest.getEmail(),
@@ -109,10 +109,8 @@ public class BuyerService {
                 )
             );
 
-            // 2. Recupera i dettagli dell'utente autenticato (sarà un Buyer)
             Buyer buyer = (Buyer) authentication.getPrincipal();
 
-            // Generazione random notifica promozionale (10% probabilità)
             if (Math.random() < 0.10) {
                 String[] promoMessages = {
                     "Scopri le nuove proprietà in evidenza!",
@@ -134,7 +132,7 @@ public class BuyerService {
             }
 
             return jwtService.generateToken(buyer);
-        } catch (AuthenticationException e) {
+        } catch (Exception e) {
             throw new InvalidCredentialsException("Email o password non valida");
         }
     }
@@ -170,7 +168,7 @@ public class BuyerService {
 
         FavoriteSearch favoriteSearch = favoriteSearchRepository.findById(favoriteSearchId).orElse(null);
         if (favoriteSearch == null || !favoriteSearch.getBuyer().getId().equals(buyer.getId())) {
-            return "Ricerca non trovata tra i tuoi preferiti";
+            throw new FavoriteSearchNotFoundException("Ricerca non trovata tra i tuoi preferiti");
         }
         favoriteSearchRepository.deleteById(favoriteSearchId);
         return "Ricerca rimossa dai preferiti";
@@ -211,7 +209,7 @@ public class BuyerService {
     public Buyer getProfile() {
         Buyer buyer = (Buyer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         if (buyer == null) {
-            throw new UnauthorizedAccessException("User not authenticated or invalid session");
+            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
         }
         return buyer;
     }
@@ -340,7 +338,7 @@ public class BuyerService {
         }
         String email = idToken.getPayload().getEmail();
         if (buyerRepository.findByEmail(email).isPresent()) {
-            throw new InvalidCredentialsException("Buyer già registrato con questa email Google");
+            throw new DuplicateResourceException("Buyer già registrato con questa email Google");
         }
         Buyer buyer = new Buyer();
         buyer.setEmail(email);
@@ -352,7 +350,7 @@ public class BuyerService {
     }
 
     // Helper for Google ID token verification
-    private GoogleIdToken verifyGoogleIdToken(String idTokenString) {
+    public GoogleIdToken verifyGoogleIdToken(String idTokenString) {
         try {
             GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(
                 GoogleNetHttpTransport.newTrustedTransport(),
@@ -458,33 +456,24 @@ public class BuyerService {
         Buyer buyer = getProfile();
         EstateAgent agent = estate.getAgent();
 
-        try {
-            // Validazione e formattazione data e ora
-            java.time.LocalDate.parse(date); // Verifica formato data
-            if (!time.matches("^([0-1][0-9]|2[0-3]):[0-5][0-9]$")) {
-                throw new IllegalArgumentException("Formato ora non valido");
-            }
-            
-            String timestamp = String.format("%s %s:00", date, time);
-            Timestamp visitTimestamp = Timestamp.valueOf(timestamp);
-            boolean exists = bookedVisitRepository.existsByEstateAndRequestDate(estate, visitTimestamp);
+        java.time.LocalDate.parse(date);
+        
+        String timestamp = String.format("%s %s:00", date, time);
+        Timestamp visitTimestamp = Timestamp.valueOf(timestamp);
+        boolean exists = bookedVisitRepository.existsByEstateAndRequestDate(estate, visitTimestamp);
 
-            if (exists) {
-                throw new DuplicateResourceException("Visita già prenotata per questo immobile, data e orario");
-            }
-
-            BookedVisit visit = new BookedVisit();
-            visit.setStatus("In attesa");
-            visit.setRequestDate(visitTimestamp);
-            visit.setRealEstate(estate);
-            visit.setBuyer(buyer);
-            visit.setAgent(agent);
-
-            bookedVisitRepository.save(visit);
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Formato data/ora non valido: " + e.getMessage());
+        if (exists) {
+            throw new DuplicateResourceException("Visita già prenotata per questo immobile, data e orario");
         }
 
+        BookedVisit visit = new BookedVisit();
+        visit.setStatus("In attesa");
+        visit.setRequestDate(visitTimestamp);
+        visit.setRealEstate(estate);
+        visit.setBuyer(buyer);
+        visit.setAgent(agent);
+
+        bookedVisitRepository.save(visit);
     }
 
     public PageResponse<NotificationDTO> getNotificationsForCurrentBuyer(int page, int size) {

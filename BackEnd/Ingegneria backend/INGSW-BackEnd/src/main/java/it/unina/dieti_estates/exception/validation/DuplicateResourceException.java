@@ -12,14 +12,4 @@ public class DuplicateResourceException extends DietiEstatesException {
             String.format("A user with email '%s' already exists", email)
         );
     }
-
-    public static DuplicateResourceException reaNumberAlreadyExists(String reaNumber) {
-        return new DuplicateResourceException(
-            String.format("An agent with REA number '%s' already exists", reaNumber)
-        );
-    }
-
-    public DuplicateResourceException(String message, Throwable cause) {
-        super(message, "DUPLICATE_RESOURCE", cause);
-    }
 }
