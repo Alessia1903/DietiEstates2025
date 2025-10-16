@@ -1,5 +1,10 @@
 package it.unina.dieti_estates.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class WeatherRequest {
     private String city;
     private String date;
@@ -8,22 +13,6 @@ public class WeatherRequest {
 
     public WeatherRequest(String city, String date) {
         this.city = city;
-        this.date = date;
-    }
-
-    public String getCity() {
-        return city;
-    }
-
-    public void setCity(String city) {
-        this.city = city;
-    }
-
-    public String getDate() {
-        return date;
-    }
-
-    public void setDate(String date) {
         this.date = date;
     }
 }

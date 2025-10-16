@@ -1,13 +1,10 @@
 package it.unina.dieti_estates.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class FavoriteSearchDeleteRequest {
     private Long favoriteSearchId;
-
-    public Long getFavoriteSearchId() {
-        return favoriteSearchId;
-    }
-
-    public void setFavoriteSearchId(Long favoriteSearchId) {
-        this.favoriteSearchId = favoriteSearchId;
-    }
 }

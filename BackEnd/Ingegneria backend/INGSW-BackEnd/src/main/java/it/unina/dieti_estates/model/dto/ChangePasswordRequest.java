@@ -1,7 +1,11 @@
 package it.unina.dieti_estates.model.dto;
 
+import lombok.Getter;
+import lombok.Setter;
 import jakarta.validation.constraints.NotBlank;
 
+@Getter
+@Setter
 public class ChangePasswordRequest {
     @NotBlank(message = "Current password is required")
     private String currentPassword;
@@ -9,20 +13,4 @@ public class ChangePasswordRequest {
     @NotBlank(message = "New password is required")
     private String newPassword;
 
-    // Getters and Setters
-    public String getCurrentPassword() {
-        return currentPassword;
-    }
-
-    public void setCurrentPassword(String currentPassword) {
-        this.currentPassword = currentPassword;
-    }
-
-    public String getNewPassword() {
-        return newPassword;
-    }
-
-    public void setNewPassword(String newPassword) {
-        this.newPassword = newPassword;
-    }
 }
