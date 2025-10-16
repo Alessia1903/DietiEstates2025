@@ -15,11 +15,14 @@ import java.util.UUID;
 @Service
 public class BlobStorageService {
 
-    @Autowired
-    private BlobServiceClient blobServiceClient;
+    private final BlobServiceClient blobServiceClient;
 
     @Value("${azure.storage.container-name}")
     private String containerName;
+
+    public BlobStorageService(BlobServiceClient blobServiceClient) {
+        this.blobServiceClient = blobServiceClient;
+    }
 
     public String uploadFile(MultipartFile multipartFile) throws IOException {
         // Ottieni il container
@@ -39,8 +42,12 @@ public class BlobStorageService {
     }
 
     private String generateFileName(MultipartFile multiPart) {
+        String originalFilename = multiPart.getOriginalFilename();
+        if (originalFilename == null) {
+            throw new IllegalArgumentException("Il file non ha un nome originale valido");
+        }
         return String.format("real-estates/%s-%s", 
             UUID.randomUUID().toString(),
-            multiPart.getOriginalFilename().replace(" ", "_"));
+            originalFilename.replace(" ", "_"));
     }
 }

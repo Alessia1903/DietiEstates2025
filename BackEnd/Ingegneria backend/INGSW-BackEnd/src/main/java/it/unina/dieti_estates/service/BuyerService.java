@@ -46,6 +46,8 @@ import java.util.List;
 import java.net.URL;
 import java.net.HttpURLConnection;
 import java.io.InputStream;
+import java.security.SecureRandom;
+import java.util.UUID;
 import java.util.Scanner;
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -111,7 +113,8 @@ public class BuyerService {
 
             Buyer buyer = (Buyer) authentication.getPrincipal();
 
-            if (Math.random() < 0.10) {
+            SecureRandom secureRandom = new SecureRandom();
+            if (secureRandom.nextDouble() < 0.10) {
                 String[] promoMessages = {
                     "Scopri le nuove proprietà in evidenza!",
                     "Solo per te: sconto sulle commissioni questa settimana!",
@@ -119,7 +122,7 @@ public class BuyerService {
                     "Nuove promozioni disponibili, non perderle!",
                     "DietiEstates ti premia: controlla le offerte speciali!"
                 };
-                int idx = (int)(Math.random() * promoMessages.length);
+                int idx = secureRandom.nextInt(promoMessages.length);
                 Notification promo = new Notification(
                     "Promozione speciale!",
                     "PROMOZIONALE",
@@ -321,11 +324,16 @@ public class BuyerService {
             Map.class
         );
 
-        if (response.getStatusCode() != HttpStatus.OK || !response.getBody().containsKey("id_token")) {
+        Map body = response.getBody();
+        if (body == null) {
+            throw new InvalidCredentialsException("Google token exchange failed: risposta vuota");
+        }
+
+        if (response.getStatusCode() != HttpStatus.OK || !body.containsKey("id_token")) {
             throw new InvalidCredentialsException("Google token exchange failed");
         }
 
-        return (String) response.getBody().get("id_token");
+        return (String) body.get("id_token");
     }
 
     public RegistrationResponse registerBuyerWithGoogle(Map<String, String> body) {
@@ -344,7 +352,7 @@ public class BuyerService {
         buyer.setEmail(email);
         buyer.setFirstName((String) idToken.getPayload().get("given_name"));
         buyer.setLastName((String) idToken.getPayload().get("family_name"));
-        buyer.setPassword(passwordEncoder.encode("google-auth")); // Placeholder password
+        buyer.setPassword(passwordEncoder.encode(UUID.randomUUID().toString())); // Password temporanea randomica
         buyerRepository.save(buyer);
         return new RegistrationResponse("Registrazione Google andata a buon fine");
     }
@@ -455,8 +463,6 @@ public class BuyerService {
 
         Buyer buyer = getProfile();
         EstateAgent agent = estate.getAgent();
-
-        java.time.LocalDate.parse(date);
         
         String timestamp = String.format("%s %s:00", date, time);
         Timestamp visitTimestamp = Timestamp.valueOf(timestamp);
