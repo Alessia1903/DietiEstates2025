@@ -72,18 +72,6 @@ const HomeAgente = () => {
   // Non serve più slice, i dati sono già paginati dal backend
   const annunciDaMostrare = annunci;
 
-  const handleLogoClick = () => {
-    navigate("/");
-  };
-
-  const handleNotificheClick = () => {
-    navigate("/notifiche-agente");
-  };
-
-  const handleProfiloClick = () => {
-    navigate("/profilo-agente");
-  };
-
   const handleAggiungiAnnuncio = () => {
     navigate("/aggiungi-immobile");
   };
