@@ -6,6 +6,14 @@
   padding: 10px 20px;
   flex-wrap: nowrap;
   min-width: 0;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  box-sizing: border-box;
+  z-index: 1000;
+  background-color: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .logo-title {
@@ -76,7 +84,7 @@
   align-items: center;
   gap: 8px;
   padding: 8px 16px;
-  border: 2px solid #073B4C;
+  border: 3px solid #073B4C;
   border-radius: 6px;
   background: white;
   color: #073B4C;
@@ -89,6 +97,7 @@
   background: #06D6A0;
   color: white;
   border-color: #06D6A0;
+  transform: scale(1.1);
 }
 
 .auth-btn svg {

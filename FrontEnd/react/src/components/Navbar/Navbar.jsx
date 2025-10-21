@@ -77,18 +77,18 @@ const Navbar = ({ role }) => {
         </div>
       </div>
       <div className="top-right-icons">
-        {isHomeLogin && (!isTokenValid || !role) ? (
+        {isHomeLogin && (!isTokenValid || !role) ? (  //l'utente non è autenticato
           <div className="auth-buttons">
             <button className="auth-btn" onClick={() => navigate("/login")}>
               <svg width="24" height="24" viewBox="0 0 160 160" fill="none"><g><path d="M80 80C94.7333 80 106.667 68.0667 106.667 53.3334C106.667 38.6 94.7333 26.6667 80 26.6667C65.2667 26.6667 53.3333 38.6 53.3333 53.3334C53.3333 68.0667 65.2667 80 80 80ZM80 93.3334C62.2 93.3334 26.6667 102.267 26.6667 120V126.667C26.6667 130.333 29.6667 133.333 33.3333 133.333H126.667C130.333 133.333 133.333 130.333 133.333 126.667V120C133.333 102.267 97.8 93.3334 80 93.3334Z" fill="currentColor"/></g></svg>
               <span>Area Privata</span>
             </button>
-            <button className="auth-btn" onClick={() => navigate("/area-agenzia")}>
+            <button className="auth-btn" onClick={() => navigate("/area-agenzia")} style={{ border: "4px solid #06D6A0" }}>
               <svg width="24" height="24" viewBox="0 0 160 160" fill="none"><g><path d="M75 43.75V31.25C75 24.375 69.375 18.75 62.5 18.75H25C18.125 18.75 12.5 24.375 12.5 31.25V118.75C12.5 125.625 18.125 131.25 25 131.25H125C131.875 131.25 137.5 125.625 137.5 118.75V56.25C137.5 49.375 131.875 43.75 125 43.75H75ZM37.5 118.75H25V106.25H37.5V118.75ZM37.5 93.75H25V81.25H37.5V93.75ZM37.5 68.75H25V56.25H37.5V68.75ZM37.5 43.75H25V31.25H37.5V43.75ZM62.5 118.75H50V106.25H62.5V118.75ZM62.5 93.75H50V81.25H62.5V93.75ZM62.5 68.75H50V56.25H62.5V68.75ZM62.5 43.75H50V31.25H62.5V43.75ZM118.75 118.75H75V106.25H87.5V93.75H75V81.25H87.5V68.75H75V56.25H118.75C122.188 56.25 125 59.0625 125 62.5V112.5C125 115.938 122.188 118.75 118.75 118.75ZM112.5 68.75H100V81.25H112.5V68.75ZM112.5 93.75H100V106.25H112.5V93.75Z" fill="currentColor"/></g></svg>
               <span>Area Agenzia</span>
             </button>
           </div>
-        ) : (
+        ) : (   //l'utente è autenticato
           menu[role]?.map((item, idx) => (
             <div className="icon-text" key={idx} onClick={item.onClick}>
               {item.icon}

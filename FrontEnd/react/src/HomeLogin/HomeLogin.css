@@ -18,8 +18,6 @@
     padding: 10px 20px; 
 }
 
-
-
 .hidden {
     display: none;
 }
@@ -28,20 +26,6 @@
     display: flex;
     gap: 16px;
     align-items: center;
-}
-
-.auth-btn {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 16px;
-    border: 2px solid #073B4C;
-    border-radius: 6px;
-    background: white;
-    color: #073B4C;
-    font-weight: 500;
-    transition: all 0.2s;
-    cursor: pointer;
 }
 
 .auth-btn:hover {
