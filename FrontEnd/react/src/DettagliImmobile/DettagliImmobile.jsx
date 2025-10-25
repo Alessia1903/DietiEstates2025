@@ -58,7 +58,7 @@ const DettagliImmobile = () => {
       <Navbar />
 
       {/* Back link */}
-      <div className="flex justify-start w-full mb-4 pl-8 mt-8">
+      <div className="self-start mb-4 pl-10 mt-8">
         <a
           href="#"
           className="back-link"
@@ -74,7 +74,7 @@ const DettagliImmobile = () => {
       </div>
 
       {/* Slider immagini */}
-      <div className="image-slider" style={{ position: "relative", maxWidth: "600px", margin: "0 auto 24px auto" }}>
+      <div className="image-slider" style={{ margin: "0 auto 24px auto" }}>
         <button
           className="prev-btn"
           onClick={prevImg}
@@ -92,7 +92,7 @@ const DettagliImmobile = () => {
           src={images[imgIndex]}
           alt="Immagine annuncio"
           className="max-w-full h-auto"
-          style={{ maxHeight: "400px", borderRadius: "10px", display: "block", margin: "0 auto" }}
+          style={{ borderRadius: "10px", display: "block", margin: "0 auto" }}
         />
         <button
           className="next-btn"
@@ -109,25 +109,27 @@ const DettagliImmobile = () => {
       </div>
 
       {/* Dettagli annuncio */}
-      <div className="container w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%] mt-2">
+      <div className="container w-[90%] sm:w-[90%] md:w-[90%] lg:w-[60%] mt-2 items-center">
         <div className="flex w-full justify-between items-center">
           <h2 id="annuncio-prezzo" className="custom-text">
             € {annuncio.prezzo?.toLocaleString?.() || annuncio.prezzo}
           </h2>
-          <div id="mappaContainer">
-            <a
-              href="#"
-              onClick={e => { e.preventDefault(); setShowMappa(true); }}
-              style={{
-                color: "#006D90",
-                fontFamily: "Lexend",
-                fontWeight: 500,
-                textDecoration: "underline"
-              }}
-            >
-              Visualizza la mappa
-            </a>
-          </div>
+          {/* Mappa solo per BUYER */}
+          {isBuyer && (
+            <div id="mappaContainer">
+              <a
+                href="#"
+                onClick={e => { e.preventDefault(); setShowMappa(true); }}
+                style={{
+                  color: "#006D90",
+                  fontFamily: "Lexend",
+                  fontWeight: 500,
+                  textDecoration: "underline"
+                }}
+              >
+                Visualizza la mappa
+              </a>
+            </div>)}
         </div>
         <p id="annuncio-titolo">
           In {annuncio.contratto} in {annuncio.indirizzo}, {annuncio.citta}, {annuncio.comune}

@@ -90,7 +90,7 @@ const ProfiloUtente = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
+    <div className="w-full flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
       <Navbar role="user" />    
 
       {/* Profilo */}

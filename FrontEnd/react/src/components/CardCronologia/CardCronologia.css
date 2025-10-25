@@ -8,6 +8,7 @@
   transition: all 0.3s ease;
   border: 1px solid #e5f7f2;
   margin-bottom: 24px;
+  width: 70dvi;
 }
 
 .search-card-container:hover {

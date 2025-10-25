@@ -114,7 +114,7 @@ const NotificheAgente = () => {
   };
 
   return (
-    <div className="p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
+    <div className="w-full p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
       <Navbar role="agent" />
 
       {/* Lista richieste */}

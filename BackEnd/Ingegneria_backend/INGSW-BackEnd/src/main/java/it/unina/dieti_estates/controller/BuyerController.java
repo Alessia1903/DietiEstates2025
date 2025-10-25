@@ -18,6 +18,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.Map;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/buyers")
@@ -28,6 +29,12 @@ public class BuyerController {
     @Autowired
     public BuyerController(BuyerService buyerService) {
         this.buyerService = buyerService;
+    }
+
+    @GetMapping("/homepage")
+    public ResponseEntity<List<RealEstateResponseDTO>> getHomePageEstates() {
+        List<RealEstateResponseDTO> estates = buyerService.getHomePageEstates();
+        return ResponseEntity.ok(estates);
     }
 
     @PostMapping("/register")

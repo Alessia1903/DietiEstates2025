@@ -158,7 +158,7 @@ body {
 }
 
 .container-profilo-utente {
-    width: 85%;
+    width: 50dvi;
     background: white;
     padding: 40px;
     border-radius: 10px;
@@ -166,7 +166,6 @@ body {
     justify-items: center;
     border: solid 5px #073B4C;
     margin-top: 20px;
-    max-width: 1200px;
     min-width: 320px;
 }
 

@@ -57,6 +57,7 @@ public class SecurityConfig {
                             "/api/buyers/auth/google/register",
                             "/api/buyers/search",
                             "/api/admins/login",
+                            "/api/buyers/homepage",
                             "/api/estate-agents/login",
                             "/api/admins/create-agency").permitAll()
                         .anyRequest().authenticated())

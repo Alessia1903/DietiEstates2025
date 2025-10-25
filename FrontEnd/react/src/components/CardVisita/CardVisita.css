@@ -89,13 +89,13 @@
 }
 
 .btn-accept {
-    background-color: #4DC538;
+    background-color: #2b881b;
     color: white;
     border: none;
 }
 
 .btn-accept:hover {
-    background-color: #45b232;
+    background-color: rgb(71, 199, 49);
     transform: translateY(-2px);
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }

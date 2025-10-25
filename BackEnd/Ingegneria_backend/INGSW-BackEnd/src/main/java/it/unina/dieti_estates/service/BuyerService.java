@@ -96,6 +96,37 @@ public class BuyerService {
         this.notificationRepository = notificationRepository;
     }
 
+    @Transactional(readOnly = true)
+    public List<RealEstateResponseDTO> getHomePageEstates() {
+        // Prende i primi 5 immobili più recenti direttamente dal DB
+        List<RealEstate> estates = realEstateRepository.findTop5ByOrderByIdDesc();
+
+        return estates.stream()
+            .map(re -> {
+                RealEstateResponseDTO dto = new RealEstateResponseDTO();
+                dto.setId(re.getId());
+                dto.setImageUrls(new ArrayList<>(re.getImageUrls()));
+                dto.setCity(re.getCity());
+                dto.setDistrict(re.getDistrict());
+                dto.setAddress(re.getAddress());
+                dto.setStreetNumber(re.getStreetNumber());
+                dto.setFloor(re.getFloor());
+                dto.setTotalBuildingFloors(re.getTotalBuildingFloors());
+                dto.setCommercialArea(re.getCommercialArea());
+                dto.setElevator(re.getElevator());
+                dto.setRooms(re.getRooms());
+                dto.setEnergyClass(re.getEnergyClass());
+                dto.setFurnishing(re.getFurnishing());
+                dto.setHeating(re.getHeating());
+                dto.setPropertyStatus(re.getPropertyStatus());
+                dto.setContractType(re.getContractType());
+                dto.setDescription(re.getDescription());
+                dto.setPrice(re.getPrice());
+                return dto;
+            })
+            .collect(Collectors.toList());
+    }
+
     public RegistrationResponse registerNewBuyer(Buyer buyer) {
         buyer.setPassword(passwordEncoder.encode(buyer.getPassword()));
         buyerRepository.save(buyer);

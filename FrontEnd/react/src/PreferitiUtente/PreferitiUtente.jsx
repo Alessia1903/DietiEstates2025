@@ -82,7 +82,7 @@ const PreferitiUtente = () => {
       <Navbar role="user" />  
 
       <h2 className="mt-8 mb-6 text-2xl font-bold custom-text-color">Le tue ricerche preferite</h2>
-      <div className="w-full max-w-4xl space-y-6">
+      <div className="items-center flex flex-col max-w-4xl space-y-6" style={{ width: "100%" }}>
         {loading ? (
           <div className="text-center text-lg custom-text-color">Caricamento preferiti...</div>
         ) : ricerche.length === 0 ? (

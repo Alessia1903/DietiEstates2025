@@ -3,7 +3,7 @@ import "./CardVisita.css";
 
 const CardVisita = ({ richiedente, dataRichiesta, stato, address, onAccetta, onRifiuta }) => {
   return (
-    <div className="visit-card">
+    <div className="visit-card w-full">
       <div className="visit-info">
         <div className="visit-row">
           <span className="visit-label">Richiedente</span>

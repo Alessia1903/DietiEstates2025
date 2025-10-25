@@ -102,7 +102,7 @@ const NotificheUtente = () => {
       </div>
 
       {/* Lista notifiche */}
-      <div className="notifiche-list w-full max-w-3xl flex flex-col gap-6">
+      <div className="notifiche-list w-full flex flex-col gap-6">
         {loading ? (
           <div className="text-gray-500 text-lg text-center">Caricamento notifiche...</div>
         ) : notificheFiltrate.length === 0 ? (
