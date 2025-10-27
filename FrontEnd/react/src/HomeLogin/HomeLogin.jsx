@@ -25,6 +25,8 @@ const HomeLogin = () => {
   const [pagina, setPagina] = useState(1);
   const [totalePagine, setTotalePagine] = useState(1);
   const [hasNext, setHasNext] = useState(false);
+  const [attivo, setAttivo] = useState(false);
+  const [hover, setHover] = useState(false);
 
   // Determina se l'utente è buyer leggendo da localStorage
   const isBuyer = localStorage.getItem("role") === "user";
@@ -114,94 +116,82 @@ const HomeLogin = () => {
 
   // Avvio automatico ricerca se arrivo da Cronologia o se flag avviaRicerca è presente
   useEffect(() => {
-    // Se il ruolo non è user, forzare logout e redirect a HomeLogin
-    const ruolo = localStorage.getItem("role");
-    if (ruolo && ruolo !== "user") {
-      localStorage.removeItem("jwtToken");
-      localStorage.removeItem("userEmail");
-      localStorage.removeItem("role");
-      window.location.href = "/home";
-      return;
-    }
+  const ruolo = localStorage.getItem("role");
+  if (ruolo && ruolo !== "user") {
+    localStorage.removeItem("jwtToken");
+    localStorage.removeItem("userEmail");
+    localStorage.removeItem("role");
+    window.location.href = "/home";
+    return;
+  }
 
-    const sessionCitta = sessionStorage.getItem("citta");
-    const avviaRicerca = sessionStorage.getItem("avviaRicerca");
+  const sessionCitta = sessionStorage.getItem("citta");
+  const avviaRicerca = sessionStorage.getItem("avviaRicerca");
 
-    if (sessionCitta && avviaRicerca === "true") {
-      // Imposta i parametri di ricerca dagli stati
-      setCitta(sessionCitta);
-      setContratto(sessionStorage.getItem("contratto") || "");
-      setClasseEnergetica(sessionStorage.getItem("classeEnergetica") || "");
-      setNumLocali(sessionStorage.getItem("numLocali") || "");
-      setPrezzoMin(sessionStorage.getItem("prezzoMin") || "");
-      setPrezzoMax(sessionStorage.getItem("prezzoMax") || "");
+  const eseguiRicerca = async () => {
+    setLoading(true);
+    setShowResults(false);
 
-      // Rimuovi il flag prima di eseguire la ricerca
-      sessionStorage.removeItem("avviaRicerca");
-
-      // Avvia la ricerca API
-      setLoading(true);
-      setShowResults(false);
-
-      const searchParams = {
-        city: sessionCitta.trim(),
-        contractType: sessionStorage.getItem("contratto") || null,
-        energyClass: sessionStorage.getItem("classeEnergetica") || null,
-        rooms: sessionStorage.getItem("numLocali") ? parseInt(sessionStorage.getItem("numLocali")) : null,
-        minPrice: sessionStorage.getItem("prezzoMin") ? parseFloat(sessionStorage.getItem("prezzoMin")) : null,
-        maxPrice: sessionStorage.getItem("prezzoMax") ? parseFloat(sessionStorage.getItem("prezzoMax")) : null
-      };
-
-      // Esegui la ricerca con un minimo di tempo di caricamento
-      const executeSearch = async () => {
-        try {
-          const response = await axios.post(
-            "http://localhost:8080/api/buyers/search",
-            searchParams,
-            {
-              params: {
-                page: pagina - 1,
-                size: 5
-              }
-            }
-          );
-
-          setRisultati(response.data.content);
-          setTotalePagine(
-            response.data.pageSize && response.data.totalElements
-              ? Math.ceil(response.data.totalElements / response.data.pageSize)
-              : 1
-          );
-          setHasNext(response.data.hasNext || false);
-        } catch (error) {
-          console.error("Errore nella ricerca:", error);
-          setRisultati([]);
-        }
-      };
-      
-      const startTime = Date.now();
-      executeSearch().then(() => {
-        const elapsedTime = Date.now() - startTime;
-        // Se il tempo trascorso è minore di 3 secondi, aspetta la differenza
-        setTimeout(() => {
-          setLoading(false);
-          setShowResults(true);
-        }, Math.max(0, 3000 - elapsedTime));
-      });
-
-    } else {
-      const showoffImmobili = async () => {
-      try {
-        const response = await axios.get("http://localhost:8080/api/buyers/homepage");
-        setRisultati(response.data || []);
-      } catch (error) {
-        console.error("Errore nel caricamento degli immobili:", error);
-        setRisultati([]);
-      } 
+    const searchParams = {
+      city: sessionCitta?.trim() || null,
+      contractType: sessionStorage.getItem("contratto") || null,
+      energyClass: sessionStorage.getItem("classeEnergetica") || null,
+      rooms: sessionStorage.getItem("numLocali") ? parseInt(sessionStorage.getItem("numLocali")) : null,
+      minPrice: sessionStorage.getItem("prezzoMin") ? parseFloat(sessionStorage.getItem("prezzoMin")) : null,
+      maxPrice: sessionStorage.getItem("prezzoMax") ? parseFloat(sessionStorage.getItem("prezzoMax")) : null,
     };
-    showoffImmobili();
+
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/buyers/search",
+        searchParams,
+        { params: { page: pagina - 1, size: 5 } }
+      );
+
+      const risultatiRicerca = response.data.content || [];
+
+      setRisultati(risultatiRicerca);
+      setTotalePagine(response.data.pageSize && response.data.totalElements ? Math.ceil(response.data.totalElements / response.data.pageSize) : 1);
+      setHasNext(response.data.hasNext || false);
+    } catch (error) {
+      console.error("Errore nella ricerca:", error);
+      setRisultati([]);
+    } finally {
+      setLoading(false);
+      setShowResults(true);
     }
-  }, [pagina]); // Esegui al mount e quando cambia pagina
+  };
+
+  const mostraHomepage = async () => {
+    try {
+      const response = await axios.get("http://localhost:8080/api/buyers/homepage");
+      setRisultati(response.data || []);
+    } catch (error) {
+      console.error("Errore nel caricamento degli immobili:", error);
+      setRisultati([]);
+    }
+  };
+
+  // Se c'è una ricerca attiva, eseguila
+  if (sessionCitta && avviaRicerca === "true") {
+
+    // Mostra i valori nei campi input
+    setCitta(sessionCitta);
+    setContratto(sessionStorage.getItem("contratto") || "");
+    setClasseEnergetica(sessionStorage.getItem("classeEnergetica") || "");
+    setNumLocali(sessionStorage.getItem("numLocali") || "");
+    setPrezzoMin(sessionStorage.getItem("prezzoMin") || "");
+    setPrezzoMax(sessionStorage.getItem("prezzoMax") || "");
+
+    eseguiRicerca();
+    eseguiRicerca().then(() => {
+      sessionStorage.removeItem("avviaRicerca"); 
+    });
+  } else {
+    // Nessuna ricerca attiva -> mostra homepage
+    mostraHomepage();
+  }
+}, [pagina]); // Esegui al mount e quando cambia pagina
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
@@ -296,9 +286,14 @@ const HomeLogin = () => {
           <div className="flex justify-end mb-2">
             <button
               className="accesso flex items-center justify-center gap-2"
-              style={{ minWidth: "180px", fontWeight: "bold" }}
+              style={{
+                minWidth: "180px",
+                fontWeight: "bold",
+                cursor: "pointer",
+              }}
+              onMouseEnter={() => setHover(true)}
+              onMouseLeave={() => setHover(false)}
               onClick={async () => {
-                // Chiamata backend per salvataggio ricerca preferita
                 try {
                   const token = localStorage.getItem("jwtToken");
                   const payload = {
@@ -307,20 +302,19 @@ const HomeLogin = () => {
                     energyClass: classeEnergetica,
                     rooms: numLocali,
                     minPrice: prezzoMin,
-                    maxPrice: prezzoMax
+                    maxPrice: prezzoMax,
                   };
-                  await import("axios").then(({default: axios}) =>
-                    axios.post(
-                      "http://localhost:8080/api/buyers/favorites/add",
-                      payload,
-                      {
-                        headers: {
-                          "Authorization": `Bearer ${token}`,
-                          "Content-Type": "application/json"
-                        }
-                      }
-                    )
+
+                  await import("axios").then(({ default: axios }) =>
+                    axios.post("http://localhost:8080/api/buyers/favorites/add", payload, {
+                      headers: {
+                        Authorization: `Bearer ${token}`,
+                        "Content-Type": "application/json",
+                      },
+                    })
                   );
+
+                  setAttivo(true);
                   toast.success("Ricerca salvata nei preferiti!");
                 } catch (error) {
                   if (error.response && error.response.status === 409) {
@@ -337,15 +331,15 @@ const HomeLogin = () => {
                 width="28"
                 height="28"
                 viewBox="0 0 50 50"
-                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
+                style={{ transition: "fill 0.3s ease" }}
               >
                 <path
                   d="M25 45.8333C23.9583 45.8333 22.9167 45.4167 22.0833 44.6875L7.29167 31.25C4.16667 28.5417 2.08333 24.8958 2.08333 20.8333C2.08333 13.2292 8.22917 7.08333 15.8333 7.08333C19.6875 7.08333 23.2292 8.95833 25 12.0833C26.7708 8.95833 30.3125 7.08333 34.1667 7.08333C41.7708 7.08333 47.9167 13.2292 47.9167 20.8333C47.9167 24.8958 45.8333 28.5417 42.7083 31.25L27.9167 44.6875C27.0833 45.4167 26.0417 45.8333 25 45.8333Z"
-                  fill="#FFFFFF"
+                  fill={attivo ? "#e01717" : hover ? "#ff6666" : "#ffffff"}
                 />
               </svg>
-              <span>Salva la ricerca</span>
+              <span style={{ color: "#fff" }}>Salva la ricerca</span>
             </button>
           </div>
         </div>

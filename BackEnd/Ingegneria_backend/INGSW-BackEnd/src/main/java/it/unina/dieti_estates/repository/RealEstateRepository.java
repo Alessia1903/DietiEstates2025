@@ -31,5 +31,6 @@ public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {
         @Param("maxPrice") Double maxPrice,
         Pageable pageable
     );
+    
     List<RealEstate> findTop5ByOrderByIdDesc();
 }

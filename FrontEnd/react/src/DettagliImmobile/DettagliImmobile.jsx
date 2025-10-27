@@ -180,7 +180,7 @@ const DettagliImmobile = () => {
                     </svg>
                   </div>
                   <h2>Complimenti!</h2>
-                  <p>La richiesta è stata inviata con successo.</p>
+                  <p>La tua richiesta è stata inviata con successo. <u>Controlla le notifiche per scoprire l'esito!</u></p>
                   <div className="modal-spacer"></div>
                   <button id="confirmSuccessButton" onClick={() => setShowSuccess(false)}>
                     PROSEGUI

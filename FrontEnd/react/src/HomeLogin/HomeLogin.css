@@ -29,19 +29,6 @@ input[type="number"] {
     padding: 9px 15px; 
 }
 
-.icona-cuore path {
-  fill: #ffffff;
-  transition: fill 0.3s ease;
-}
-
-.accesso:hover .icona-cuore path {
-  fill: #ff6666;
-}
-
-.accesso.attivo .icona-cuore path {
-  fill: #d32323;
-}
-
 .hidden {
     display: none;
 }

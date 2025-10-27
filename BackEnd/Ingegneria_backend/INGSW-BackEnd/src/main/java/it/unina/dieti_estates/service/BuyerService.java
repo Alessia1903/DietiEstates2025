@@ -96,9 +96,9 @@ public class BuyerService {
         this.notificationRepository = notificationRepository;
     }
 
+    // Prende i primi 5 immobili più recenti da esporre nella homepage
     @Transactional(readOnly = true)
     public List<RealEstateResponseDTO> getHomePageEstates() {
-        // Prende i primi 5 immobili più recenti direttamente dal DB
         List<RealEstate> estates = realEstateRepository.findTop5ByOrderByIdDesc();
 
         return estates.stream()

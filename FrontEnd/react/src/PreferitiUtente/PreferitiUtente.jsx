@@ -11,6 +11,10 @@ const PreferitiUtente = () => {
   const [pagina, setPagina] = useState(1);
   const [totalePagine, setTotalePagine] = useState(1);
   const [hasNext, setHasNext] = useState(false);
+  // Stato per modale per la cancellazione dei preferiti
+  const [showWarningModal, setShowWarningModal] = useState(false);
+  // Gestione chiamata backend
+  const [pendingData, setPendingData] = useState(null);
 
   useEffect(() => {
     const fetchFavorites = async () => {
@@ -55,12 +59,25 @@ const PreferitiUtente = () => {
   }, [pagina]);
 
   const handleDeleteSearch = async (favoriteId) => {
+    setPendingData({
+      favoriteSearchId: favoriteId
+    });
+    setShowWarningModal(true);
+  };
+
+  const handleCancelWarning = () => {
+    setShowWarningModal(false);
+    setPendingData(null);
+  };
+
+  // Chiamata backend solo dopo conferma
+  const handleConfirmWarning = async () => {
     try {
       const token = localStorage.getItem("jwtToken");
       const axios = (await import("axios")).default;
       await axios.post(
         "http://localhost:8080/api/buyers/favorites/remove",
-        { favoriteSearchId: favoriteId },
+        pendingData,
         {
           headers: {
             "Authorization": `Bearer ${token}`,
@@ -69,13 +86,15 @@ const PreferitiUtente = () => {
         }
       );
       // Aggiorna la lista locale rimuovendo la ricerca cancellata
-      setRicerche(prev => prev.filter(r => r.id !== favoriteId));
+      setRicerche(prev => prev.filter(r => r.id !== pendingData.favoriteSearchId));
+      setShowWarningModal(false);
+      setPendingData(null);
       toast.success("Ricerca preferita rimossa con successo!");
     } catch (error) {
       toast.error("Errore nella rimozione della ricerca preferita.");
       console.error(error);
     }
-  };
+  }
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
@@ -118,6 +137,32 @@ const PreferitiUtente = () => {
           </svg>
         </button>
       </div>
+
+      {/* Modale di Avviso */}
+      {showWarningModal && (
+        <div id="warningModal" style={{
+          display: "flex",
+          position: "fixed",
+          top: 0, left: 0, width: "100%", height: "100%",
+          background: "rgba(0,0,0,0.5)", justifyContent: "center", alignItems: "center", zIndex: 1000
+        }}>
+          <div className="modal-outer">
+            <div className="modal-inner">
+              <div data-svg-wrapper>
+                <svg width="120" height="120" viewBox="0 0 120 120" fill="none">
+                  <path d="M22.35 105H97.65C105.35 105 110.15 96.6499 106.3 89.9999L68.65 24.9499C64.8 18.2999 55.2 18.2999 51.35 24.9499L13.7 89.9999C9.85 96.6499 14.65 105 22.35 105ZM60 69.9999C57.25 69.9999 55 67.7499 55 64.9999V54.9999C55 52.2499 57.25 49.9999 60 49.9999C62.75 49.9999 65 52.2499 65 54.9999V64.9999C65 67.7499 62.75 69.9999 60 69.9999ZM65 89.9999H55V79.9999H65V89.9999Z" fill="#FFD943"/>
+                </svg>
+              </div>
+              <p className="modal-text"> Eliminando questa ricerca dai preferiti, non riceverai più notifiche sui nuovi immobili che corrispondono a questi criteri.</p>
+              <div className="modal-spacer"></div>
+              <div className="modal-buttons">
+                <button id="cancelButton" onClick={handleCancelWarning}>INDIETRO</button>
+                <button id="confirmWarningButton" onClick={handleConfirmWarning}>PROSEGUI</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
