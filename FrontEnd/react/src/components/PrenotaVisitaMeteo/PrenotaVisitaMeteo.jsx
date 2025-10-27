@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./PrenotaVisitaMeteo.css";
+import TimeSelect from "../TimeSelect";
 
 const PrenotaVisitaMeteo = ({
   show,
@@ -136,14 +137,7 @@ const PrenotaVisitaMeteo = ({
           )}
         </div>
         <div className="pvm-time-row">
-          <label htmlFor="visit-time" className="pvm-label">Orario:</label>
-          <input
-            id="visit-time"
-            type="time"
-            value={selectedTime}
-            onChange={e => setSelectedTime(e.target.value)}
-            className="pvm-time-input"
-          />
+          <TimeSelect value={selectedTime} onChange={setSelectedTime} />
         </div>
         <div className="pvm-buttons">
           <button

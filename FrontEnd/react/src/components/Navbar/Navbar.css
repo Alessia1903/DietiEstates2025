@@ -73,6 +73,16 @@
   transform: scale(1.1);
 }
 
+.nav-text {
+  font-weight: 600;
+  color: #073b4c; 
+  transition: color 0.3s ease;
+}
+
+.nav-text-active {
+  color: #06d6a0; 
+}
+
 .auth-buttons {
   display: flex;
   gap: 16px;
