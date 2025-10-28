@@ -32,6 +32,7 @@ const CardPreferiti = ({ ricerca, onDelete }) => {
     sessionStorage.setItem("prezzoMin", ricerca.prezzoMin ? ricerca.prezzoMin : "");
     sessionStorage.setItem("prezzoMax", ricerca.prezzoMax ? ricerca.prezzoMax : "");
     sessionStorage.setItem("avviaRicerca", "true");
+    sessionStorage.setItem("showSearchLoader", "true");
     navigate("/home");
   };
 

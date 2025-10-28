@@ -419,10 +419,6 @@ public class BuyerService {
             geoConn.setRequestMethod("GET");
             geoConn.setRequestProperty("User-Agent", "DietiEstates/1.0");
             geoConn.connect();
-            int geoResponseCode = geoConn.getResponseCode();
-            if (geoResponseCode != 200) {
-                throw new WeatherApiException("Errore chiamata Nominatim: codice " + geoResponseCode);
-            }
             InputStream geoIs = geoConn.getInputStream();
             Scanner geoScanner = new Scanner(geoIs).useDelimiter("\\A");
             String geoResult = geoScanner.hasNext() ? geoScanner.next() : "";
@@ -456,28 +452,19 @@ public class BuyerService {
             HttpURLConnection conn = (HttpURLConnection) apiUrl.openConnection();
             conn.setRequestMethod("GET");
             conn.connect();
-            int responseCode = conn.getResponseCode();
-            if (responseCode != 200) {
-                throw new WeatherApiException("Errore chiamata OpenMeteo: codice " + responseCode);
-            }
             InputStream is = conn.getInputStream();
             Scanner s = new Scanner(is).useDelimiter("\\A");
             String result = s.hasNext() ? s.next() : "";
             s.close();
             is.close();
             
-            try {
-                ObjectMapper mapper = new ObjectMapper();
-                JsonNode root = mapper.readTree(result);
-                if (root.has("daily")) {
-                    return root.get("daily");
-                } else {
-                    throw new WeatherApiException("Risposta OpenMeteo non contiene dati 'daily'");
-                }
-            } catch (Exception ex) {
-                throw new WeatherApiException("Errore parsing JSON meteo: " + ex.getMessage());
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode root = mapper.readTree(result);
+            if (root.has("daily")) {
+                return root.get("daily");
+            } else {
+                throw new WeatherApiException("Risposta OpenMeteo non contiene dati 'daily'");
             }
-
         } catch (Exception e) {
             throw new WeatherApiException("Errore nel recupero delle previsioni meteo: " + e.getMessage());
         }

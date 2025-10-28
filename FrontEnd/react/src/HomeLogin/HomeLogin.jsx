@@ -20,13 +20,29 @@ const HomeLogin = () => {
 
   // Stato per mostrare risultati e loader
   const [showResults, setShowResults] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [searchLoading, setSearchLoading] = useState(false);
   const [risultati, setRisultati] = useState([]);
   const [pagina, setPagina] = useState(1);
   const [totalePagine, setTotalePagine] = useState(1);
   const [hasNext, setHasNext] = useState(false);
   const [attivo, setAttivo] = useState(false);
   const [hover, setHover] = useState(false);
+  const [showLoader, setShowLoader] = useState(false);
+
+  // Ripristina lo stato della pagina al caricamento
+  useEffect(() => {
+    // Sempre inizia dalla prima pagina quando il componente viene caricato
+    setPagina(1);
+    sessionStorage.setItem("pagina", "1");
+
+    // Cleanup al dismount del componente
+    return () => {
+      sessionStorage.removeItem("showSearchLoader");
+      sessionStorage.removeItem("avviaRicerca");
+      sessionStorage.removeItem("pagina");
+      sessionStorage.removeItem("totalePagine");
+    };
+  }, []);
 
   // Determina se l'utente è buyer leggendo da localStorage
   const isBuyer = localStorage.getItem("role") === "user";
@@ -58,6 +74,14 @@ const HomeLogin = () => {
       return;
     }
 
+    // Mostra il loader per la ricerca
+    setSearchLoading(true);
+    setShowLoader(true);
+    
+    // Reset pagina per nuova ricerca
+    setPagina(1);
+    sessionStorage.setItem("pagina", "1");
+
     // Salva la ricerca in localStorage (max 10) per utente per la cronologia
     const userEmail = localStorage.getItem("userEmail") || "anonimo";
     const key = `ricercheSalvate_${userEmail}`;
@@ -87,6 +111,7 @@ const HomeLogin = () => {
     
     // Imposta il flag per avviare la ricerca
     sessionStorage.setItem("avviaRicerca", "true");
+    sessionStorage.setItem("showSearchLoader", "true");
     
     // Ricarica la pagina per avviare la ricerca
     window.location.reload();
@@ -116,82 +141,94 @@ const HomeLogin = () => {
 
   // Avvio automatico ricerca se arrivo da Cronologia o se flag avviaRicerca è presente
   useEffect(() => {
-  const ruolo = localStorage.getItem("role");
-  if (ruolo && ruolo !== "user") {
-    localStorage.removeItem("jwtToken");
-    localStorage.removeItem("userEmail");
-    localStorage.removeItem("role");
-    window.location.href = "/home";
-    return;
-  }
+    const ruolo = localStorage.getItem("role");
+    if (ruolo && ruolo !== "user") {
+      localStorage.removeItem("jwtToken");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("role");
+      window.location.href = "/home";
+      return;
+    }
 
-  const sessionCitta = sessionStorage.getItem("citta");
-  const avviaRicerca = sessionStorage.getItem("avviaRicerca");
+    const sessionCitta = sessionStorage.getItem("citta");
+    const avviaRicerca = sessionStorage.getItem("avviaRicerca");
 
-  const eseguiRicerca = async () => {
-    setLoading(true);
-    setShowResults(false);
+    const eseguiRicerca = async () => {
+      // Controlla se mostrare il loader della ricerca
+      const showSearchLoader = sessionStorage.getItem("showSearchLoader") === "true";
+      if (showSearchLoader) {
+        setSearchLoading(true);
+        setShowLoader(true);
+        sessionStorage.removeItem("showSearchLoader");
+      }
+      setShowResults(false);
 
-    const searchParams = {
-      city: sessionCitta?.trim() || null,
-      contractType: sessionStorage.getItem("contratto") || null,
-      energyClass: sessionStorage.getItem("classeEnergetica") || null,
-      rooms: sessionStorage.getItem("numLocali") ? parseInt(sessionStorage.getItem("numLocali")) : null,
-      minPrice: sessionStorage.getItem("prezzoMin") ? parseFloat(sessionStorage.getItem("prezzoMin")) : null,
-      maxPrice: sessionStorage.getItem("prezzoMax") ? parseFloat(sessionStorage.getItem("prezzoMax")) : null,
+      const searchParams = {
+        city: sessionCitta?.trim() || null,
+        contractType: sessionStorage.getItem("contratto") || null,
+        energyClass: sessionStorage.getItem("classeEnergetica") || null,
+        rooms: sessionStorage.getItem("numLocali") ? parseInt(sessionStorage.getItem("numLocali")) : null,
+        minPrice: sessionStorage.getItem("prezzoMin") ? parseFloat(sessionStorage.getItem("prezzoMin")) : null,
+        maxPrice: sessionStorage.getItem("prezzoMax") ? parseFloat(sessionStorage.getItem("prezzoMax")) : null,
+      };
+
+      try {
+        const response = await axios.post(
+          "http://localhost:8080/api/buyers/search",
+          searchParams,
+          { params: { page: pagina - 1, size: 5 } }
+        );
+
+        const risultatiRicerca = response.data.content || [];
+        const pageSize = response.data.pageSize || 5;
+        const totalElements = response.data.totalElements || 0;
+        const totalPages = Math.ceil(totalElements / pageSize);
+        setRisultati(risultatiRicerca);
+        setTotalePagine(totalPages);
+        setHasNext(pagina < totalPages);
+
+        // Aggiorna i campi del form se necessario
+        if (avviaRicerca === "true") {
+          setCitta(sessionCitta);
+          setContratto(sessionStorage.getItem("contratto") || "");
+          setClasseEnergetica(sessionStorage.getItem("classeEnergetica") || "");
+          setNumLocali(sessionStorage.getItem("numLocali") || "");
+          setPrezzoMin(sessionStorage.getItem("prezzoMin") || "");
+          setPrezzoMax(sessionStorage.getItem("prezzoMax") || "");
+          sessionStorage.removeItem("avviaRicerca");
+        }
+
+        // Imposta un timer per nascondere il loader dopo 2.5 secondi
+        setTimeout(() => {
+          setShowLoader(false);
+        }, 5500);
+      } catch (error) {
+        console.error("Errore nella ricerca:", error);
+        setRisultati([]);
+        setShowLoader(false);
+      } finally {
+        setSearchLoading(false);
+        setShowResults(true);
+      }
     };
 
-    try {
-      const response = await axios.post(
-        "http://localhost:8080/api/buyers/search",
-        searchParams,
-        { params: { page: pagina - 1, size: 5 } }
-      );
+    const mostraHomepage = async () => {
+      try {
+        const response = await axios.get("http://localhost:8080/api/buyers/homepage");
+        setRisultati(response.data || []);
+      } catch (error) {
+        console.error("Errore nel caricamento degli immobili:", error);
+        setRisultati([]);
+      }
+    };
 
-      const risultatiRicerca = response.data.content || [];
-
-      setRisultati(risultatiRicerca);
-      setTotalePagine(response.data.pageSize && response.data.totalElements ? Math.ceil(response.data.totalElements / response.data.pageSize) : 1);
-      setHasNext(response.data.hasNext || false);
-    } catch (error) {
-      console.error("Errore nella ricerca:", error);
-      setRisultati([]);
-    } finally {
-      setLoading(false);
-      setShowResults(true);
+    // Esegui la ricerca se c'è una città in sessione
+    if (sessionCitta) {
+      eseguiRicerca();
+    } else {
+      mostraHomepage();
     }
-  };
-
-  const mostraHomepage = async () => {
-    try {
-      const response = await axios.get("http://localhost:8080/api/buyers/homepage");
-      setRisultati(response.data || []);
-    } catch (error) {
-      console.error("Errore nel caricamento degli immobili:", error);
-      setRisultati([]);
-    }
-  };
-
-  // Se c'è una ricerca attiva, eseguila
-  if (sessionCitta && avviaRicerca === "true") {
-
-    // Mostra i valori nei campi input
-    setCitta(sessionCitta);
-    setContratto(sessionStorage.getItem("contratto") || "");
-    setClasseEnergetica(sessionStorage.getItem("classeEnergetica") || "");
-    setNumLocali(sessionStorage.getItem("numLocali") || "");
-    setPrezzoMin(sessionStorage.getItem("prezzoMin") || "");
-    setPrezzoMax(sessionStorage.getItem("prezzoMax") || "");
-
-    eseguiRicerca();
-    eseguiRicerca().then(() => {
-      sessionStorage.removeItem("avviaRicerca"); 
-    });
-  } else {
-    // Nessuna ricerca attiva -> mostra homepage
-    mostraHomepage();
-  }
-}, [pagina]); // Esegui al mount e quando cambia pagina
+  }, [pagina]); // Esegui al mount e quando cambia pagina
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
@@ -270,8 +307,8 @@ const HomeLogin = () => {
         </div>
       </div>
 
-      {/* Loader video */}
-      {loading && (
+      {/* Loader video - mostrato solo durante la ricerca */}
+      {showLoader && (
         <div id="loadingAnimation" className="fixed top-0 left-0 w-full h-full bg-white flex justify-center items-center z-50">
           <video autoPlay loop muted className="w-[1000px] h-[1000px]">
             <source src="https://raw.githubusercontent.com/Alessia1903/DietiEstates2025/master/Photos/LenteAnimation.mp4" type="video/mp4" />
@@ -390,7 +427,11 @@ const HomeLogin = () => {
             <div className="pagination-container items-center justify-center flex flex-wrap mt-8">
               <button
                 className="pagination-button"
-                onClick={() => setPagina((p) => Math.max(1, p - 1))}
+                onClick={() => {
+                  const newPage = Math.max(1, pagina - 1);
+                  setPagina(newPage);
+                  sessionStorage.setItem("pagina", newPage.toString());
+                }}
                 disabled={pagina === 1}
               >
                 <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -399,8 +440,14 @@ const HomeLogin = () => {
               </button>
               <button
                 className="pagination-button"
-                onClick={() => setPagina((p) => p + 1)}
-                disabled={!hasNext}
+                onClick={() => {
+                  if (pagina < totalePagine) {
+                    const newPage = pagina + 1;
+                    setPagina(newPage);
+                    sessionStorage.setItem("pagina", newPage.toString());
+                  }
+                }}
+                disabled={!hasNext || pagina >= totalePagine}
               >
                 <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M10.4166 27.0833H33.6874L23.5208 37.25C22.7083 38.0625 22.7083 39.3958 23.5208 40.2083C24.3333 41.0208 25.6458 41.0208 26.4583 40.2083L40.1874 26.4791C40.9999 25.6666 40.9999 24.3541 40.1874 23.5416L26.4791 9.79163C25.6666 8.97913 24.3541 8.97913 23.5416 9.79163C22.7291 10.6041 22.7291 11.9166 23.5416 12.7291L33.6874 22.9166H10.4166C9.27075 22.9166 8.33325 23.8541 8.33325 25C8.33325 26.1458 9.27075 27.0833 10.4166 27.0833Z" fill="white"/>

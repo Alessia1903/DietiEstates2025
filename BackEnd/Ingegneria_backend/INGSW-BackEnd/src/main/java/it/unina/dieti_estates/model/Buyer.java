@@ -1,5 +1,5 @@
 package it.unina.dieti_estates.model;
-import java.util.Date;
+import java.time.LocalDate;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Entity;
 import jakarta.persistence.PrimaryKeyJoinColumn;
@@ -16,22 +16,22 @@ import java.util.Collections;
 @PrimaryKeyJoinColumn(name = "id")
 public class Buyer extends User{
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-    private Date birthdate;
+    private LocalDate birthdate;
 
     public Buyer() {
         super();
     }
 
-    public Buyer(String email, String password, String firstName, String lastName, Date birthdate) {
+    public Buyer(String email, String password, String firstName, String lastName, LocalDate birthdate) {
         super(email, password, firstName, lastName);
         this.birthdate = birthdate;
     }
 
-    public Date getBirthdate() {
+    public LocalDate getBirthdate() {
         return birthdate;
     }
 
-    public void setBirthdate(Date birthdate) {
+    public void setBirthdate(LocalDate birthdate) {
         this.birthdate = birthdate;
     }
 

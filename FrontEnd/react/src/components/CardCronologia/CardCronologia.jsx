@@ -22,6 +22,7 @@ const CardCronologia = ({ filtro }) => {
     sessionStorage.setItem("prezzoMin", filtro.prezzoMin);
     sessionStorage.setItem("prezzoMax", filtro.prezzoMax);
     sessionStorage.setItem("avviaRicerca", "true");
+    sessionStorage.setItem("showSearchLoader", "true");
     navigate("/home");
   };
 

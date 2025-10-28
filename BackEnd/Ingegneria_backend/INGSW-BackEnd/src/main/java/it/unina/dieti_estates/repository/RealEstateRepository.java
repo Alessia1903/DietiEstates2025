@@ -21,7 +21,8 @@ public interface RealEstateRepository extends JpaRepository<RealEstate, Long> {
            "AND (:energyClass IS NULL OR r.energyClass = :energyClass) " +
            "AND (:rooms IS NULL OR r.rooms = :rooms) " +
            "AND (:minPrice IS NULL OR r.price >= :minPrice) " +
-           "AND (:maxPrice IS NULL OR r.price <= :maxPrice)")
+           "AND (:maxPrice IS NULL OR r.price <= :maxPrice) " +
+           "ORDER BY r.id DESC")
     Page<RealEstate> searchRealEstates(
         @Param("city") String city,
         @Param("contractType") String contractType,
