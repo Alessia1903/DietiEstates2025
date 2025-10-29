@@ -4,7 +4,6 @@ import it.unina.dieti_estates.exception.auth.InvalidCredentialsException;
 import it.unina.dieti_estates.exception.auth.UnauthorizedAccessException;
 import it.unina.dieti_estates.exception.auth.UserNotFoundException;
 import it.unina.dieti_estates.exception.base.*;
-import it.unina.dieti_estates.exception.business.*;
 import it.unina.dieti_estates.exception.resource.*;
 import it.unina.dieti_estates.exception.storage.*;
 import it.unina.dieti_estates.exception.validation.*;

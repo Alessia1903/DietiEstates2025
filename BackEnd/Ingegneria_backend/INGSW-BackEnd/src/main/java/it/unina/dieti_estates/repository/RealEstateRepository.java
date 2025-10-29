@@ -1,7 +1,6 @@
 package it.unina.dieti_estates.repository;
 
 import it.unina.dieti_estates.model.RealEstate;
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

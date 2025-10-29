@@ -2,7 +2,6 @@ package it.unina.dieti_estates.service;
 
 import it.unina.dieti_estates.model.*;
 import it.unina.dieti_estates.model.dto.*;
-import java.util.List;
 import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -97,33 +96,34 @@ public class BuyerService {
     }
 
     // Prende i primi 5 immobili più recenti da esporre nella homepage
+    private RealEstateResponseDTO mapRealEstateToDTO(RealEstate re) {
+        RealEstateResponseDTO dto = new RealEstateResponseDTO();
+        dto.setId(re.getId());
+        dto.setImageUrls(new ArrayList<>(re.getImageUrls()));
+        dto.setCity(re.getCity());
+        dto.setDistrict(re.getDistrict());
+        dto.setAddress(re.getAddress());
+        dto.setStreetNumber(re.getStreetNumber());
+        dto.setFloor(re.getFloor());
+        dto.setTotalBuildingFloors(re.getTotalBuildingFloors());
+        dto.setCommercialArea(re.getCommercialArea());
+        dto.setElevator(re.getElevator());
+        dto.setRooms(re.getRooms());
+        dto.setEnergyClass(re.getEnergyClass());
+        dto.setFurnishing(re.getFurnishing());
+        dto.setHeating(re.getHeating());
+        dto.setPropertyStatus(re.getPropertyStatus());
+        dto.setContractType(re.getContractType());
+        dto.setDescription(re.getDescription());
+        dto.setPrice(re.getPrice());
+        return dto;
+    }
+
     @Transactional(readOnly = true)
     public List<RealEstateResponseDTO> getHomePageEstates() {
         List<RealEstate> estates = realEstateRepository.findTop5ByOrderByIdDesc();
-
         return estates.stream()
-            .map(re -> {
-                RealEstateResponseDTO dto = new RealEstateResponseDTO();
-                dto.setId(re.getId());
-                dto.setImageUrls(new ArrayList<>(re.getImageUrls()));
-                dto.setCity(re.getCity());
-                dto.setDistrict(re.getDistrict());
-                dto.setAddress(re.getAddress());
-                dto.setStreetNumber(re.getStreetNumber());
-                dto.setFloor(re.getFloor());
-                dto.setTotalBuildingFloors(re.getTotalBuildingFloors());
-                dto.setCommercialArea(re.getCommercialArea());
-                dto.setElevator(re.getElevator());
-                dto.setRooms(re.getRooms());
-                dto.setEnergyClass(re.getEnergyClass());
-                dto.setFurnishing(re.getFurnishing());
-                dto.setHeating(re.getHeating());
-                dto.setPropertyStatus(re.getPropertyStatus());
-                dto.setContractType(re.getContractType());
-                dto.setDescription(re.getDescription());
-                dto.setPrice(re.getPrice());
-                return dto;
-            })
+            .map(this::mapRealEstateToDTO)
             .collect(Collectors.toList());
     }
 
@@ -274,29 +274,7 @@ public class BuyerService {
         );
         List<RealEstateResponseDTO> dtos = realEstates.getContent()
             .stream()
-            .map(re -> {
-                RealEstateResponseDTO dto = new RealEstateResponseDTO();
-                dto.setId(re.getId());
-                List<String> imageUrls = new ArrayList<>(re.getImageUrls());
-                dto.setImageUrls(imageUrls);
-                dto.setCity(re.getCity());
-                dto.setDistrict(re.getDistrict());
-                dto.setAddress(re.getAddress());
-                dto.setStreetNumber(re.getStreetNumber());
-                dto.setFloor(re.getFloor());
-                dto.setTotalBuildingFloors(re.getTotalBuildingFloors());
-                dto.setCommercialArea(re.getCommercialArea());
-                dto.setElevator(re.getElevator());
-                dto.setRooms(re.getRooms());
-                dto.setEnergyClass(re.getEnergyClass());
-                dto.setFurnishing(re.getFurnishing());
-                dto.setHeating(re.getHeating());
-                dto.setPropertyStatus(re.getPropertyStatus());
-                dto.setContractType(re.getContractType());
-                dto.setDescription(re.getDescription());
-                dto.setPrice(re.getPrice());
-                return dto;
-            })
+            .map(this::mapRealEstateToDTO)
             .collect(Collectors.toList());
 
         return new PageResponse<>(
@@ -327,9 +305,12 @@ public class BuyerService {
         return jwtService.generateToken(userDetails);
     }    
 
+    public RestTemplate getRestTemplate() {
+        return new RestTemplate();
+    }
     
     public String getGoogleIdTokenFromCode(String code, String redirectUri) {
-        RestTemplate restTemplate = new RestTemplate();
+        RestTemplate restTemplate = getRestTemplate();
 
         Map<String, String> params = new HashMap<>();
         params.put("client_id", googleClientId);
@@ -343,7 +324,7 @@ public class BuyerService {
 
         StringBuilder requestBody = new StringBuilder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            if (requestBody.length() > 0) requestBody.append("&");
+            if (!requestBody.isEmpty()) requestBody.append("&");
             requestBody.append(entry.getKey()).append("=").append(entry.getValue());
         }
 
@@ -425,8 +406,8 @@ public class BuyerService {
             geoScanner.close();
             geoIs.close();
 
-            // Parsing JSON manuale (solo per lat/lon)
-            String lat = null, lon = null;
+            String lat = null;
+            String lon = null;
             if (geoResult.startsWith("[") && geoResult.length() > 2) {
                 int latIdx = geoResult.indexOf("\"lat\":\"");
                 int lonIdx = geoResult.indexOf("\"lon\":\"");

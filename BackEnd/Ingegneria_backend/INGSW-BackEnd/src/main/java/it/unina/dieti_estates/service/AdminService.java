@@ -37,6 +37,9 @@ import java.util.Map;
 @Service
 public class AdminService {
 
+    private static final String EMAIL = "email";
+    private static final String PASSWORD = "password";
+
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -101,8 +104,8 @@ public class AdminService {
 
         // Creazione dati per QR code
         Map<String, String> qrData = new HashMap<>();
-        qrData.put("email", admin.getEmail());
-        qrData.put("password", generatedPassword); // password non criptata
+        qrData.put(EMAIL, admin.getEmail());
+        qrData.put(PASSWORD, generatedPassword); // password non criptata
         String qrDataJson = objectMapper.writeValueAsString(qrData);
 
         // Generazione QR code
@@ -156,8 +159,8 @@ public class AdminService {
 
         // Creazione dati per QR code
         Map<String, String> qrData = new HashMap<>();
-        qrData.put("email", agent.getEmail());
-        qrData.put("password", generatedPassword); // password non criptata
+        qrData.put(EMAIL, agent.getEmail());
+        qrData.put(PASSWORD, generatedPassword); // password non criptata
         String qrDataJson = objectMapper.writeValueAsString(qrData);
 
         // Generazione QR code
@@ -193,8 +196,8 @@ public class AdminService {
         agencyRepository.save(agency);
 
         Map<String, String> qrData = new HashMap<>();
-        qrData.put("email", admin.getEmail());
-        qrData.put("password", generatedPassword);
+        qrData.put(EMAIL, admin.getEmail());
+        qrData.put(PASSWORD, generatedPassword);
         String qrDataJson = objectMapper.writeValueAsString(qrData);
 
         String qrCodeBase64 = QRCodeGenerator.generateQRCodeBase64(qrDataJson, 200, 200);

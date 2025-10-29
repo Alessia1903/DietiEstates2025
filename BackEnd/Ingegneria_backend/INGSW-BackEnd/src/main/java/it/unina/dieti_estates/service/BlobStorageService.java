@@ -3,7 +3,6 @@ package it.unina.dieti_estates.service;
 import com.azure.storage.blob.BlobServiceClient;
 import com.azure.storage.blob.BlobContainerClient;
 import com.azure.storage.blob.BlobClient;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;

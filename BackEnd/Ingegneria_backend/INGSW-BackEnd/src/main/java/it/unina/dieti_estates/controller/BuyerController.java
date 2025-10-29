@@ -11,7 +11,6 @@ import it.unina.dieti_estates.service.BuyerService;
 import it.unina.dieti_estates.model.dto.RealEstateResponseDTO;
 import it.unina.dieti_estates.model.dto.WeatherRequest;
 import it.unina.dieti_estates.model.dto.VisitRequest;
-import it.unina.dieti_estates.model.Notification;
 import it.unina.dieti_estates.model.dto.NotificationDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
