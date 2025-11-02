@@ -118,18 +118,11 @@ public class AdminService {
     }
 
     public Admin getProfile() {
-        Admin admin = (Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (admin == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
-        return admin;
+        return (Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public void changeAmministrationPassword(ChangePasswordRequest request) {
         Admin admin = (Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (admin == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
 
         if (!passwordEncoder.matches(request.getCurrentPassword(), admin.getPassword())) {
             throw new InvalidCredentialsException("La password attuale non è corretta");

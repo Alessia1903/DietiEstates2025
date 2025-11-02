@@ -55,7 +55,7 @@ import it.unina.dieti_estates.exception.business.WeatherApiException;
 import it.unina.dieti_estates.exception.resource.RealEstateNotFoundException;
 import it.unina.dieti_estates.exception.validation.DuplicateResourceException;
 import it.unina.dieti_estates.exception.resource.FavoriteSearchNotFoundException;
-
+import org.springframework.security.core.userdetails.User;
 
 @Service
 public class BuyerService {
@@ -68,7 +68,7 @@ public class BuyerService {
     private final RealEstateRepository realEstateRepository;
     private final BookedVisitRepository bookedVisitRepository;
     private final NotificationRepository notificationRepository;
-
+    private final WeatherApiService weatherApiService;
 
     @Value("${google.clientId}")
     private String googleClientId;
@@ -84,7 +84,8 @@ public class BuyerService {
                        FavoriteSearchRepository favoriteSearchRepository,
                        RealEstateRepository realEstateRepository,
                        BookedVisitRepository bookedVisitRepository,
-                       NotificationRepository notificationRepository) {
+                       NotificationRepository notificationRepository,
+                       WeatherApiService weatherApiService) {
         this.buyerRepository = buyerRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtService = jwtService;
@@ -93,6 +94,7 @@ public class BuyerService {
         this.realEstateRepository = realEstateRepository;
         this.bookedVisitRepository = bookedVisitRepository;
         this.notificationRepository = notificationRepository;
+        this.weatherApiService = weatherApiService;
     }
 
     // Prende i primi 5 immobili più recenti da esporre nella homepage
@@ -123,8 +125,7 @@ public class BuyerService {
     public List<RealEstateResponseDTO> getHomePageEstates() {
         List<RealEstate> estates = realEstateRepository.findTop5ByOrderByIdDesc();
         return estates.stream()
-            .map(this::mapRealEstateToDTO)
-            .collect(Collectors.toList());
+            .map(this::mapRealEstateToDTO).toList();
     }
 
     public RegistrationResponse registerNewBuyer(Buyer buyer) {
@@ -228,8 +229,7 @@ public class BuyerService {
                 dto.setMaxPrice(fav.getMaxPrice());
                 dto.setFavoritedAt(fav.getFavoritedAt());
                 return dto;
-            })
-            .collect(Collectors.toList());
+            }).toList();
 
         return new PageResponse<>(
             dtos,
@@ -241,11 +241,7 @@ public class BuyerService {
     }
 
     public Buyer getProfile() {
-        Buyer buyer = (Buyer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (buyer == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
-        return buyer;
+        return (Buyer) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public void updateProfile(Buyer updatedBuyer) {
@@ -274,8 +270,7 @@ public class BuyerService {
         );
         List<RealEstateResponseDTO> dtos = realEstates.getContent()
             .stream()
-            .map(this::mapRealEstateToDTO)
-            .collect(Collectors.toList());
+            .map(this::mapRealEstateToDTO).toList();
 
         return new PageResponse<>(
             dtos,
@@ -297,8 +292,7 @@ public class BuyerService {
         String email = idToken.getPayload().getEmail();
         Buyer buyer = buyerRepository.findByEmail(email)
             .orElseThrow(() -> new UserNotFoundException("Buyer non trovato per email Google"));
-        UserDetails userDetails = org.springframework.security.core.userdetails.User
-            .withUsername(buyer.getEmail())
+        UserDetails userDetails = User.withUsername(buyer.getEmail())
             .password(buyer.getPassword())
             .authorities("ROLE_BUYER")
             .build();
@@ -385,70 +379,7 @@ public class BuyerService {
     }
 
     public Object getWeatherForecast(WeatherRequest request) {
-        try {
-            String city = request.getCity();
-            // Usa la data corrente del server
-            java.time.LocalDate start = java.time.LocalDate.now();
-            java.time.LocalDate end = start.plusDays(6); // Include il giorno iniziale
-            String startDate = start.toString();
-            String endDate = end.toString();
-
-            // Step 1: Geocoding con Nominatim
-            String geoUrl = "https://nominatim.openstreetmap.org/search?city=" + java.net.URLEncoder.encode(city, "UTF-8") + "&format=json&limit=1";
-            URL geoApiUrl = new URL(geoUrl);
-            HttpURLConnection geoConn = (HttpURLConnection) geoApiUrl.openConnection();
-            geoConn.setRequestMethod("GET");
-            geoConn.setRequestProperty("User-Agent", "DietiEstates/1.0");
-            geoConn.connect();
-            InputStream geoIs = geoConn.getInputStream();
-            Scanner geoScanner = new Scanner(geoIs).useDelimiter("\\A");
-            String geoResult = geoScanner.hasNext() ? geoScanner.next() : "";
-            geoScanner.close();
-            geoIs.close();
-
-            String lat = null;
-            String lon = null;
-            if (geoResult.startsWith("[") && geoResult.length() > 2) {
-                int latIdx = geoResult.indexOf("\"lat\":\"");
-                int lonIdx = geoResult.indexOf("\"lon\":\"");
-                if (latIdx != -1 && lonIdx != -1) {
-                    lat = geoResult.substring(latIdx + 7, geoResult.indexOf("\"", latIdx + 7));
-                    lon = geoResult.substring(lonIdx + 7, geoResult.indexOf("\"", lonIdx + 7));
-                }
-            }
-            if (lat == null || lon == null) {
-                throw new WeatherApiException("Latitudine/longitudine non trovate per la città: " + city);
-            }
-
-            // Step 2: Chiamata OpenMeteo con lat/lon
-            String url = "https://api.open-meteo.com/v1/forecast?"
-                       + "latitude=" + lat
-                       + "&longitude=" + lon
-                       + "&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,weathercode"
-                       + "&start_date=" + startDate
-                       + "&end_date=" + endDate
-                       + "&timezone=Europe/Rome";
-
-            URL apiUrl = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) apiUrl.openConnection();
-            conn.setRequestMethod("GET");
-            conn.connect();
-            InputStream is = conn.getInputStream();
-            Scanner s = new Scanner(is).useDelimiter("\\A");
-            String result = s.hasNext() ? s.next() : "";
-            s.close();
-            is.close();
-            
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(result);
-            if (root.has("daily")) {
-                return root.get("daily");
-            } else {
-                throw new WeatherApiException("Risposta OpenMeteo non contiene dati 'daily'");
-            }
-        } catch (Exception e) {
-            throw new WeatherApiException("Errore nel recupero delle previsioni meteo: " + e.getMessage());
-        }
+        return weatherApiService.getWeatherForecast(request.getCity(), request.getDate());
     }
 
     @Transactional
@@ -493,8 +424,7 @@ public class BuyerService {
                 n.getMessage(),
                 n.getCreatedAt(),
                 n.getRealEstate() != null ? n.getRealEstate().getAddress() : null
-            ))
-            .collect(java.util.stream.Collectors.toList());
+            )).toList();
         return new PageResponse<>(
             dtos,
             notificationPage.getNumber(),

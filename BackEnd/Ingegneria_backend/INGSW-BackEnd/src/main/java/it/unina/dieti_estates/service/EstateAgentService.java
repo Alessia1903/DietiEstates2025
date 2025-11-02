@@ -84,18 +84,11 @@ public class EstateAgentService {
     }
 
     public EstateAgent getProfile() {
-        EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (agent == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
-        return agent;
+        return (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
 
     public PageResponse<BookedVisitDTO> getAllBookedVisits(int page, int size) {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (agent == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
         Page<BookedVisitDTO> visitPage = visitRepository.findByEstateAgent(agent.getId(), PageRequest.of(page, size));
         return new PageResponse<>(
             visitPage.getContent(),
@@ -108,9 +101,6 @@ public class EstateAgentService {
 
     public String acceptVisit(Long visitId) {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (agent == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
 
         BookedVisit visit = visitRepository.findById(visitId)
             .orElseThrow(() -> new BookedVisitNotFoundException("Visita non trovata con id: " + visitId));
@@ -138,9 +128,6 @@ public class EstateAgentService {
 
     public String rejectVisit(Long visitId) {
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (agent == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
 
         BookedVisit visit = visitRepository.findById(visitId)
             .orElseThrow(() -> new BookedVisitNotFoundException("Visita non trovata con id: " + visitId));
@@ -169,9 +156,6 @@ public class EstateAgentService {
     public RealEstateResponseDTO loadNewRealEstate(CreateRealEstateRequest request) throws IOException {
         // Ottiene l'agente dal SecurityContext
         EstateAgent agent = (EstateAgent) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (agent == null) {
-            throw new UnauthorizedAccessException("Utente non autenticato o sessione non valida");
-        }
 
         // Verifica che ci sia almeno un'immagine
         if (request.getImages() == null || request.getImages().length == 0) {
@@ -283,8 +267,7 @@ public class EstateAgentService {
 
         List<RealEstateResponseDTO> dtos = realEstatePage.getContent()
             .stream()
-            .map(this::mapToResponseDTO)
-            .collect(Collectors.toList());
+            .map(this::mapToResponseDTO).toList();
 
         return new PageResponse<>(
             dtos,
