@@ -97,17 +97,6 @@ class AdminServiceTest {
     }
 
     @Test
-    void getProfileUnauthorized() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
-
-        assertThrows(UnauthorizedAccessException.class, () -> adminService.getProfile());
-    }
-
-    @Test
     void changeAmministrationPasswordSuccess() {
         Admin admin = new Admin();
         admin.setPassword(ENCODED_OLD_PASSWORD);

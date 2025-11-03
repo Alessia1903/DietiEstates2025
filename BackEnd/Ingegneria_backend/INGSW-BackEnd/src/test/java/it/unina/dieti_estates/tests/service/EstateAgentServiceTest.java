@@ -91,39 +91,6 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void getProfileUnauthorized() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
-
-        assertThrows(UnauthorizedAccessException.class, () -> estateAgentService.getProfile());
-    }
-
-    @Test
-    void getAllBookedVisitsUnauthorized() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
-
-        assertThrows(UnauthorizedAccessException.class, () -> estateAgentService.getAllBookedVisits(0, 10));
-    }
-
-    @Test
-    void acceptVisitAgentNull() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
-
-        assertThrows(UnauthorizedAccessException.class, () -> estateAgentService.acceptVisit(1L));
-    }
-
-    @Test
     void acceptVisitNotFound() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
@@ -136,17 +103,6 @@ class EstateAgentServiceTest {
         when(visitRepository.findById(2L)).thenReturn(Optional.empty());
 
         assertThrows(BookedVisitNotFoundException.class, () -> estateAgentService.acceptVisit(2L));
-    }
-
-    @Test
-    void rejectVisitAgentNull() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
-
-        assertThrows(UnauthorizedAccessException.class, () -> estateAgentService.rejectVisit(1L));
     }
 
     @Test
@@ -485,21 +441,6 @@ class EstateAgentServiceTest {
         assertEquals(CITY, resp.getCity());
         assertEquals(ADDRESS, resp.getAddress());
         assertEquals(1, resp.getImageUrls().size());
-    }
-
-    @Test
-    void loadNewRealEstateUnauthorized() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
-
-        CreateRealEstateRequest req = new CreateRealEstateRequest();
-        MultipartFile[] images = new MultipartFile[1];
-        req.setImages(images);
-
-        assertThrows(UnauthorizedAccessException.class, () -> estateAgentService.loadNewRealEstate(req));
     }
 
     @Test

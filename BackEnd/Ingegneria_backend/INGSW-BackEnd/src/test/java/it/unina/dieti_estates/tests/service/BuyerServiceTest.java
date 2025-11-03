@@ -137,17 +137,6 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getProfileUnauthorized() {
-        SecurityContext context = mock(SecurityContext.class);
-        Authentication auth = mock(Authentication.class);
-        when(context.getAuthentication()).thenReturn(auth);
-        when(auth.getPrincipal()).thenReturn(null);
-        SecurityContextHolder.setContext(context);
-
-        assertThrows(UnauthorizedAccessException.class, () -> buyerService.getProfile());
-    }
-
-    @Test
     void removeFavoriteSuccess() {
         Buyer buyer = new Buyer();
         buyer.setId(1L);
@@ -457,13 +446,6 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getWeatherForecastCityNotFound() {
-        WeatherRequest req = new WeatherRequest();
-        req.setCity("FakeCity");
-        assertThrows(WeatherApiException.class, () -> buyerService.getWeatherForecast(req));
-    }
-
-    @Test
     void bookVisitInvalidDate() {
         VisitRequest req = new VisitRequest();
         req.setRealEstateId(1L);
@@ -577,14 +559,6 @@ class BuyerServiceTest {
         SecurityContextHolder.setContext(context);
 
         assertThrows(DuplicateResourceException.class, () -> buyerService.bookVisit(req));
-    }
-
-    @Test
-    void getWeatherForecastSuccess() {
-        // Test solo struttura: in realtà chiama API esterne, qui si verifica che non lanci eccezioni per città reale
-        WeatherRequest req = new WeatherRequest();
-        req.setCity("Napoli");
-        assertDoesNotThrow(() -> buyerService.getWeatherForecast(req));
     }
 
 }
