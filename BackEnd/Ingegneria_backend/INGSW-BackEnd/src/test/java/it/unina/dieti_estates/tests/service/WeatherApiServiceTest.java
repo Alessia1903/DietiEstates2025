@@ -141,4 +141,56 @@ class WeatherApiServiceTest {
         assertEquals(WEATHER_API_ERROR, exception.getMessage());
     }
 
+    @Test
+    void getWeatherForecastInvalidResponse() throws IOException {
+        
+        doReturn(GEO_RESPONSE).when(weatherApiService).makeHttpRequest(
+            contains(GEO_API_URL), 
+            eq(USER_AGENT)
+        );
+
+        doReturn("{ \"wrong_field\": {} }").when(weatherApiService).makeHttpRequest(
+            contains(API_URL), 
+            isNull()
+        );
+
+        WeatherApiException exception = assertThrows(WeatherApiException.class,
+            () -> weatherApiService.getWeatherForecast(CITY, DATE)
+        );
+        assertEquals(WEATHER_API_ERROR, exception.getMessage());
+    }
+
+    @Test
+    void getWeatherForecastDataProcessingError() throws IOException {
+        doReturn(GEO_RESPONSE).when(weatherApiService).makeHttpRequest(
+            contains(GEO_API_URL), 
+            eq(USER_AGENT)
+        );
+        
+        doReturn("{malformed_json:}").when(weatherApiService).makeHttpRequest(
+            contains(API_URL), 
+            isNull()
+        );
+
+        WeatherApiException exception = assertThrows(WeatherApiException.class,
+            () -> weatherApiService.getWeatherForecast(CITY, DATE)
+        );
+
+        assertEquals(WEATHER_API_ERROR, exception.getMessage());
+    }
+
+    @Test
+    void getCoordinatesForCityError() throws IOException {
+        doThrow(new IOException("Network error")).when(weatherApiService).makeHttpRequest(
+            contains(GEO_API_URL), 
+            eq(USER_AGENT)
+        );
+
+        WeatherApiException exception = assertThrows(WeatherApiException.class,
+            () -> weatherApiService.getCoordinatesForCity(CITY)
+        );
+
+        assertEquals(WEATHER_API_ERROR, exception.getMessage());
+    }
+
 }
