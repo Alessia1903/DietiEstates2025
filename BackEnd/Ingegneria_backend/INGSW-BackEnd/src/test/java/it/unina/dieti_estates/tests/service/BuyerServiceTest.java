@@ -62,7 +62,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void registerNewBuyerSuccess() {
+    void testRegisterNewBuyerSuccess() {
         Buyer buyer = new Buyer();
         buyer.setPassword("plain");
         when(passwordEncoder.encode("plain")).thenReturn("enc");
@@ -72,7 +72,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void loginBuyerSuccess() {
+    void testLoginBuyerSuccess() {
         LoginRequest req = new LoginRequest();
         req.setEmail("mail");
         req.setPassword("pass");
@@ -86,14 +86,14 @@ class BuyerServiceTest {
     }
 
     @Test
-    void loginBuyerInvalidCredentials() {
+    void testLoginBuyerInvalidCredentials() {
         LoginRequest req = new LoginRequest();
         when(authenticationManager.authenticate(any())).thenThrow(new RuntimeException());
         assertThrows(InvalidCredentialsException.class, () -> buyerService.loginBuyer(req));
     }
 
     @Test
-    void addFavoriteSuccess() {
+    void testaAddFavoriteSuccess() {
         Buyer buyer = new Buyer();
         Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(buyer);
@@ -109,7 +109,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void addFavoriteDuplicate() {
+    void testAddFavoriteDuplicate() {
         Buyer buyer = new Buyer();
         Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(buyer);
@@ -123,7 +123,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getProfileSuccess() {
+    void testGetProfileSuccess() {
         Buyer buyer = new Buyer();
         Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(buyer);
@@ -136,7 +136,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void removeFavoriteSuccess() {
+    void testRemoveFavoriteSuccess() {
         Buyer buyer = new Buyer();
         buyer.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -160,7 +160,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void removeFavoriteNotFound() {
+    void testRemoveFavoriteNotFound() {
         Buyer buyer = new Buyer();
         buyer.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -176,7 +176,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getFavoritesPagination() {
+    void testGetFavoritesPagination() {
         Buyer buyer = new Buyer();
         buyer.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -195,7 +195,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getFavoritesEmpty() {
+    void testGetFavoritesEmpty() {
         Buyer buyer = new Buyer();
         buyer.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -212,7 +212,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void registerBuyerWithGoogleExistingEmailThrowsException() {
+    void testRegisterBuyerWithGoogleExistingEmailThrowsException() {
         Map<String, String> body = Map.of("code", DUMMYCODE);
         when(buyerRepository.findByEmail(anyString())).thenReturn(Optional.of(new Buyer()));
         doReturn(IDTOKEN).when(buyerService).getGoogleIdTokenFromCode(anyString(), anyString());
@@ -224,7 +224,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void registerBuyerWithGoogleNewUserSuccess() {
+    void testRegisterBuyerWithGoogleNewUserSuccess() {
         Map<String, String> body = Map.of("code", DUMMYCODE);
         when(buyerRepository.findByEmail(anyString())).thenReturn(Optional.empty());
         doReturn(IDTOKEN).when(buyerService).getGoogleIdTokenFromCode(anyString(), anyString());
@@ -237,7 +237,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void registerBuyerWithGoogleInvalidTokenThrowsException() {
+    void testRegisterBuyerWithGoogleInvalidTokenThrowsException() {
         Map<String, String> body = Map.of("code", DUMMYCODE);
         doReturn(IDTOKEN).when(buyerService).getGoogleIdTokenFromCode(anyString(), anyString());
         doReturn(null).when(buyerService).verifyGoogleIdToken(anyString());
@@ -248,7 +248,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void loginBuyerWithGoogleCodeValidTokenSuccess() {
+    void testLoginBuyerWithGoogleCodeValidTokenSuccess() {
         Map<String, String> body = Map.of("code", DUMMYCODE);
         Buyer buyer = new Buyer();
         buyer.setEmail(EMAILTEST);
@@ -263,7 +263,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void loginBuyerWithGoogleCodeUserNotFoundThrowsException() {
+    void testLoginBuyerWithGoogleCodeUserNotFoundThrowsException() {
         Map<String, String> body = Map.of("code", DUMMYCODE);
         doReturn(IDTOKEN).when(buyerService).getGoogleIdTokenFromCode(anyString(), anyString());
         doReturn(mockValidGoogleIdToken("notfound@example.com")).when(buyerService).verifyGoogleIdToken(anyString());
@@ -275,7 +275,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void loginBuyerWithGoogleCodeInvalidTokenThrowsException() {
+    void testLoginBuyerWithGoogleCodeInvalidTokenThrowsException() {
         Map<String, String> body = Map.of("code", DUMMYCODE);
         doReturn(IDTOKEN).when(buyerService).getGoogleIdTokenFromCode(anyString(), anyString());
         doReturn(null).when(buyerService).verifyGoogleIdToken(anyString());
@@ -294,7 +294,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getGoogleIdTokenFromCodeSuccess() {
+    void testGetGoogleIdTokenFromCodeSuccess() {
         Map<String, String> response = new HashMap<>();
         response.put("id_token", VALID_TOKEN);
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(response, HttpStatus.OK);
@@ -310,7 +310,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getGoogleIdTokenFromCodeEmptyResponse() {
+    void testGetGoogleIdTokenFromCodeEmptyResponse() {
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(null, HttpStatus.OK);
         
         when(restTemplate.postForEntity(
@@ -325,7 +325,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getGoogleIdTokenFromCodeInvalidResponse() {
+    void testGetGoogleIdTokenFromCodeInvalidResponse() {
         Map<String, String> response = new HashMap<>(); // No id_token in response
         ResponseEntity<Map> responseEntity = new ResponseEntity<>(response, HttpStatus.OK);
         
@@ -341,7 +341,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void verifyGoogleIdTokenSuccess() {
+    void testVerifyGoogleIdTokenSuccess() {
         String idTokenString = VALID_TOKEN;
         GoogleIdToken mockToken = mock(GoogleIdToken.class);
         GoogleIdToken.Payload mockPayload = mock(GoogleIdToken.Payload.class);
@@ -355,7 +355,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void verifyGoogleIdTokenInvalid() {
+    void testVerifyGoogleIdTokenInvalid() {
         String invalidToken = "invalid_token";
         doReturn(null).when(buyerService).verifyGoogleIdToken(invalidToken);
         
@@ -364,7 +364,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void updateProfileSuccess() {
+    void testUpdateProfileSuccess() {
         Buyer buyer = new Buyer();
         buyer.setPassword("old");
         Authentication auth = mock(Authentication.class);
@@ -385,7 +385,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void updateProfileNullFields() {
+    void testUpdateProfileNullFields() {
         Buyer buyer = new Buyer();
         buyer.setFirstName("Old");
         buyer.setPassword("old");
@@ -403,7 +403,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void searchRealEstatesResults() {
+    void testSearchRealEstatesResults() {
         FavoriteRequest req = new FavoriteRequest();
         RealEstate estate = new RealEstate();
         estate.setId(1L);
@@ -416,7 +416,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void searchRealEstatesNoResults() {
+    void testSearchRealEstatesNoResults() {
         FavoriteRequest req = new FavoriteRequest();
         Page<RealEstate> page = new PageImpl<>(Collections.emptyList(), PageRequest.of(0, 10), 0);
         when(realEstateRepository.searchRealEstates(any(), any(), any(), any(), any(), any(), any())).thenReturn(page);
@@ -426,7 +426,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getHomePageEstatesSuccess() {
+    void testGetHomePageEstatesSuccess() {
         RealEstate estate = new RealEstate();
         estate.setId(1L);
         estate.setImageUrls(Collections.singletonList("url"));
@@ -438,14 +438,14 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getHomePageEstatesEmpty() {
+    void testGetHomePageEstatesEmpty() {
         when(realEstateRepository.findTop5ByOrderByIdDesc()).thenReturn(Collections.emptyList());
         List<RealEstateResponseDTO> result = buyerService.getHomePageEstates();
         assertTrue(result.isEmpty());
     }
 
     @Test
-    void bookVisitInvalidDate() {
+    void testBookVisitInvalidDate() {
         VisitRequest req = new VisitRequest();
         req.setRealEstateId(1L);
         req.setDate("invalid-date");
@@ -462,7 +462,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void bookVisitRealEstateNotFound() {
+    void testBookVisitRealEstateNotFound() {
         VisitRequest req = new VisitRequest();
         req.setRealEstateId(99L);
         req.setDate("2025-11-10");
@@ -479,7 +479,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getNotificationsForCurrentBuyerEmpty() {
+    void testGetNotificationsForCurrentBuyerEmpty() {
         Buyer buyer = new Buyer();
         Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(buyer);
@@ -495,7 +495,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void getNotificationsForCurrentBuyerWithResults() {
+    void testGetNotificationsForCurrentBuyerWithResults() {
         Buyer buyer = new Buyer();
         Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(buyer);
@@ -518,7 +518,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void bookVisitSuccess() {
+    void testBookVisitSuccess() {
         VisitRequest req = new VisitRequest();
         req.setRealEstateId(1L);
         req.setDate("2025-10-10");
@@ -540,7 +540,7 @@ class BuyerServiceTest {
     }
 
     @Test
-    void bookVisitDuplicate() {
+    void testBookVisitDuplicate() {
         VisitRequest req = new VisitRequest();
         req.setRealEstateId(1L);
         req.setDate("2025-10-10");

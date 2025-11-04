@@ -39,7 +39,7 @@ class BlobStorageServiceTest {
     }
 
     @Test
-    void uploadFileSuccess() throws IOException {
+    void testUploadFileSuccess() throws IOException {
         byte[] fileBytes = "test".getBytes();
         when(blobServiceClient.getBlobContainerClient(TEST_CONTAINER)).thenReturn(blobContainerClient);
         when(multipartFile.getOriginalFilename()).thenReturn("file.txt");
@@ -55,7 +55,7 @@ class BlobStorageServiceTest {
     }
 
     @Test
-    void uploadFileThrowsIOException() throws IOException {
+    void testUploadFileThrowsIOException() throws IOException {
         when(blobServiceClient.getBlobContainerClient(TEST_CONTAINER)).thenReturn(blobContainerClient);
         when(multipartFile.getOriginalFilename()).thenReturn("file.txt");
         when(multipartFile.getBytes()).thenThrow(new IOException("IO error"));
@@ -64,7 +64,7 @@ class BlobStorageServiceTest {
     }
 
     @Test
-    void generateFileNameFormat() {
+    void testGenerateFileNameFormat() {
         when(multipartFile.getOriginalFilename()).thenReturn("file with space.txt");
         String fileName = ReflectionTestUtils.invokeMethod(blobStorageService, "generateFileName", multipartFile);
         assertTrue(fileName.startsWith("real-estates/"));
@@ -72,7 +72,7 @@ class BlobStorageServiceTest {
     }
 
     @Test
-    void generateFileNameThrowsIfNoOriginalName() {
+    void testGenerateFileNameThrowsIfNoOriginalName() {
         when(multipartFile.getOriginalFilename()).thenReturn(null);
         assertThrows(IllegalArgumentException.class, () ->
             ReflectionTestUtils.invokeMethod(blobStorageService, "generateFileName", multipartFile)

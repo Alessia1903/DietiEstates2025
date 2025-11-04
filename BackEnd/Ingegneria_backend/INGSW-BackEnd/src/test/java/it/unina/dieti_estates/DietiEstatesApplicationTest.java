@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DietiEstatesApplicationTest {
 
     @Test
-    void mainRunsWithAllEnvVars() {
+    void testMainRunsWithAllEnvVars() {
         try (MockedStatic<Dotenv> dotenvMock = Mockito.mockStatic(Dotenv.class)) {
             Dotenv mockDotenv = Mockito.mock(Dotenv.class);
             dotenvMock.when(Dotenv::load).thenReturn(mockDotenv);
@@ -33,7 +33,7 @@ class DietiEstatesApplicationTest {
     }
 
     @Test
-    void mainThrowsIfEnvVarMissing() {
+    void testMainThrowsIfEnvVarMissing() {
         try (MockedStatic<Dotenv> dotenvMock = Mockito.mockStatic(Dotenv.class)) {
             Dotenv mockDotenv = Mockito.mock(Dotenv.class);
             dotenvMock.when(Dotenv::load).thenReturn(mockDotenv);

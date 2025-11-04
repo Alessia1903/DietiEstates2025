@@ -47,7 +47,7 @@ class WeatherApiServiceTest {
             }]""";
 
     @Test
-    void makeHttpRequestSuccess() throws IOException {
+    void testMakeHttpRequestSuccess() throws IOException {
         String urlString = "https://example.com";
         String userAgent = "TestAgent";
         String expectedResponse = "Test response";
@@ -63,7 +63,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getCoordinatesForCityNotFound() throws IOException {
+    void testGetCoordinatesForCityNotFound() throws IOException {
 
         doReturn("[]").when(weatherApiService).makeHttpRequest(
             anyString(), 
@@ -76,7 +76,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getWeatherDataSuccess() throws IOException {
+    void testGetWeatherDataSuccess() throws IOException {
 
         CoordinatesDTO coords = new CoordinatesDTO(LATITUDE, LONGITUDE);
         String expectedResponse = EXPECTED_RESPONSE;
@@ -91,7 +91,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getWeatherDataConnectionError() throws IOException {
+    void testGetWeatherDataConnectionError() throws IOException {
         CoordinatesDTO coords = new CoordinatesDTO(LATITUDE, LONGITUDE);
         
         doThrow(new IOException("Connection refused")).when(weatherApiService).makeHttpRequest(
@@ -107,7 +107,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getWeatherForecastSuccess() throws IOException {
+    void testGetWeatherForecastSuccess() throws IOException {
         
         doReturn(GEO_RESPONSE).when(weatherApiService).makeHttpRequest(
             contains(GEO_API_URL), 
@@ -128,7 +128,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getWeatherForecastCityNotFound() throws IOException {
+    void testGetWeatherForecastCityNotFound() throws IOException {
        
         doReturn("[]").when(weatherApiService).makeHttpRequest(
             contains(GEO_API_URL), 
@@ -142,7 +142,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getWeatherForecastInvalidResponse() throws IOException {
+    void testGetWeatherForecastInvalidResponse() throws IOException {
         
         doReturn(GEO_RESPONSE).when(weatherApiService).makeHttpRequest(
             contains(GEO_API_URL), 
@@ -161,7 +161,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getWeatherForecastDataProcessingError() throws IOException {
+    void testGetWeatherForecastDataProcessingError() throws IOException {
         doReturn(GEO_RESPONSE).when(weatherApiService).makeHttpRequest(
             contains(GEO_API_URL), 
             eq(USER_AGENT)
@@ -180,7 +180,7 @@ class WeatherApiServiceTest {
     }
 
     @Test
-    void getCoordinatesForCityError() throws IOException {
+    void testGetCoordinatesForCityError() throws IOException {
         doThrow(new IOException("Network error")).when(weatherApiService).makeHttpRequest(
             contains(GEO_API_URL), 
             eq(USER_AGENT)

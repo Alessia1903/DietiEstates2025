@@ -33,14 +33,14 @@ class JwtServiceTest {
     }
 
     @Test
-    void generateTokenAndExtractUsername() {
+    void testGenerateTokenAndExtractUsername() {
         String token = jwtService.generateToken(userDetails);
         String username = jwtService.extractUsername(token);
         assertEquals(USERNAME, username);
     }
 
     @Test
-    void generateTokenAndExtractRoles() {
+    void testGenerateTokenAndExtractRoles() {
         String token = jwtService.generateToken(userDetails);
         Collection<? extends GrantedAuthority> roles = jwtService.extractRoles(token);
         Set<String> roleNames = new HashSet<>();
@@ -52,20 +52,20 @@ class JwtServiceTest {
     }
 
     @Test
-    void isTokenValidWithCorrectUser() {
+    void testIsTokenValidWithCorrectUser() {
         String token = jwtService.generateToken(userDetails);
         assertTrue(jwtService.isTokenValid(token, userDetails));
     }
 
     @Test
-    void isTokenValidWithWrongUser() {
+    void testIsTokenValidWithWrongUser() {
         String token = jwtService.generateToken(userDetails);
         UserDetails otherUser = User.withUsername("otheruser").password("password").roles("USER").build();
         assertFalse(jwtService.isTokenValid(token, otherUser));
     }
 
     @Test
-    void extractClaimCustom() {
+    void testExtractClaimCustom() {
         Map<String, Object> claims = new HashMap<>();
         claims.put("custom", "value");
         String token = jwtService.generateToken(claims, userDetails);
@@ -74,7 +74,7 @@ class JwtServiceTest {
     }
 
     @Test
-    void extractRolesReturnsEmptyListIfNoRolesClaim() {
+    void testExtractRolesReturnsEmptyListIfNoRolesClaim() {
         // Genera un token senza claim "roles"
         String token = io.jsonwebtoken.Jwts.builder()
                 .setSubject(USERNAME)
@@ -90,7 +90,7 @@ class JwtServiceTest {
     }
 
     @Test
-    void isTokenValidWithExpiredToken() {
+    void testIsTokenValidWithExpiredToken() {
         // Genera un token già scaduto impostando expiration nel passato
         Map<String, Object> claims = new HashMap<>();
         claims.put("roles", Arrays.asList("ROLE_USER", "ROLE_ADMIN"));
@@ -107,14 +107,14 @@ class JwtServiceTest {
     }
 
     @Test
-    void extractClaimNotPresentReturnsNull() {
+    void testExtractClaimNotPresentReturnsNull() {
         String token = jwtService.generateToken(userDetails);
         String notPresent = jwtService.extractClaim(token, c -> c.get("notPresent", String.class));
         assertNull(notPresent);
     }
 
     @Test
-    void invalidSignatureThrowsException() {
+    void testInvalidSignatureThrowsException() {
         JwtService otherService = new JwtService();
         ReflectionTestUtils.setField(otherService, "secretKey", "YW5vdGhlcnNlY3JldGtleWZvcnRlc3RpbmcxMjM0NTY3ODkwMTIzNDU2"); // base64 di "anothersecretkeyfortesting1234567890123456"
         String token = jwtService.generateToken(userDetails);

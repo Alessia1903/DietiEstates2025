@@ -41,7 +41,7 @@ class UserServiceTest {
     }
 
     @Test
-    void loadUserByUsernameExistingUserReturnsUser() {
+    void testLoadUserByUsernameExistingUserReturnsUser() {
         User user = new User();
         user.setEmail(EXISTING_EMAIL);
         when(userRepository.findByEmail(EXISTING_EMAIL)).thenReturn(Optional.of(user));
@@ -50,14 +50,14 @@ class UserServiceTest {
     }
 
     @Test
-    void loadUserByUsernameNonExistingUserThrowsException() {
+    void testLoadUserByUsernameNonExistingUserThrowsException() {
         when(userRepository.findByEmail(NON_EXISTING_EMAIL)).thenReturn(Optional.empty());
 
         assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(NON_EXISTING_EMAIL));
     }
 
     @Test
-    void loginUserValidCredentialsReturnsJwt() {
+    void testLoginUserValidCredentialsReturnsJwt() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail(LOGIN_EMAIL);
         loginRequest.setPassword("password");
@@ -75,7 +75,7 @@ class UserServiceTest {
     }
 
     @Test
-    void loginUserInvalidCredentialsThrowsException() {
+    void testLoginUserInvalidCredentialsThrowsException() {
         LoginRequest loginRequest = new LoginRequest();
         loginRequest.setEmail(LOGIN_EMAIL);
         loginRequest.setPassword("wrongpassword");

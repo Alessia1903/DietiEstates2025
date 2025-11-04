@@ -57,7 +57,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void loginAdminSuccess() {
+    void testLoginAdminSuccess() {
         LoginRequest req = new LoginRequest();
         req.setEmail(EMAIL_ADMIN);
         req.setPassword("pass");
@@ -73,7 +73,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void loginAdminInvalidCredentials() {
+    void testLoginAdminInvalidCredentials() {
         LoginRequest req = new LoginRequest();
         req.setEmail(EMAIL_ADMIN);
         req.setPassword(WRONG_PASSWORD);
@@ -83,7 +83,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void getProfileSuccess() {
+    void testGetProfileSuccess() {
         Admin admin = new Admin();
         Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(admin);
@@ -96,7 +96,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void changeAmministrationPasswordSuccess() {
+    void testChangeAmministrationPasswordSuccess() {
         Admin admin = new Admin();
         admin.setPassword(ENCODED_OLD_PASSWORD);
         ChangePasswordRequest req = new ChangePasswordRequest();
@@ -119,7 +119,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void changeAmministrationPasswordWrongCurrent() {
+    void testChangeAmministrationPasswordWrongCurrent() {
         Admin admin = new Admin();
         admin.setPassword(ENCODED_OLD_PASSWORD);
         ChangePasswordRequest req = new ChangePasswordRequest();
@@ -138,7 +138,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void createAdminAccountDuplicate() {
+    void testCreateAdminAccountDuplicate() {
         CreateAdminRequest req = new CreateAdminRequest();
         req.setEmail(EMAIL_ADMIN);
         when(adminRepository.findByEmail(EMAIL_ADMIN)).thenReturn(Optional.of(new Admin()));
@@ -147,7 +147,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void createAdminAccountSuccess() throws Exception {
+    void testCreateAdminAccountSuccess() throws Exception {
         CreateAdminRequest req = new CreateAdminRequest();
         req.setEmail("newadmin@example.com");
         req.setFirstName("Luca");
@@ -175,7 +175,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void createEstateAgentAccountDuplicate() {
+    void testCreateEstateAgentAccountDuplicate() {
         CreateEstateAgentRequest req = new CreateEstateAgentRequest();
         req.setEmail("agent@example.com");
         when(agentRepository.findByEmail("agent@example.com")).thenReturn(Optional.of(new EstateAgent()));
@@ -184,7 +184,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void createEstateAgentAccountSuccess() throws Exception {
+    void testCreateEstateAgentAccountSuccess() throws Exception {
         CreateEstateAgentRequest req = new CreateEstateAgentRequest();
         req.setEmail("newagent@example.com");
         req.setFirstName("Nome");
@@ -206,7 +206,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void createAgencyDuplicate() {
+    void testCreateAgencyDuplicate() {
         CreateAgencyRequest req = new CreateAgencyRequest();
         req.setVatNumber("VAT123");
         when(agencyRepository.existsByVatNumber("VAT123")).thenReturn(true);
@@ -215,7 +215,7 @@ class AdminServiceTest {
     }
 
     @Test
-    void createAgencySuccess() throws Exception {
+    void testCreateAgencySuccess() throws Exception {
         CreateAgencyRequest req = new CreateAgencyRequest();
         req.setVatNumber("VAT999");
         req.setAdminEmail("admin@agency.com");

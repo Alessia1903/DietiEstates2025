@@ -52,7 +52,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loginAgentSuccess() {
+    void testLoginAgentSuccess() {
         LoginRequest req = new LoginRequest();
         req.setEmail("agent@example.com");
         req.setPassword("pass");
@@ -68,7 +68,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loginAgentInvalidCredentials() {
+    void testLoginAgentInvalidCredentials() {
         LoginRequest req = new LoginRequest();
         req.setEmail("agent@example.com");
         req.setPassword("wrong");
@@ -78,7 +78,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void getProfileSuccess() {
+    void testGetProfileSuccess() {
         EstateAgent agent = new EstateAgent();
         Authentication auth = mock(Authentication.class);
         when(auth.getPrincipal()).thenReturn(agent);
@@ -91,7 +91,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void acceptVisitNotFound() {
+    void testAcceptVisitNotFound() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -106,7 +106,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void rejectVisitNotFound() {
+    void testRejectVisitNotFound() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -121,7 +121,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loadNewRealEstateNoImages() {
+    void testLoadNewRealEstateNoImages() {
         CreateRealEstateRequest req = new CreateRealEstateRequest();
         req.setImages(null);
 
@@ -136,7 +136,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loadNewRealEstateTooManyImages() {
+    void testLoadNewRealEstateTooManyImages() {
         CreateRealEstateRequest req = new CreateRealEstateRequest();
         MultipartFile[] images = new MultipartFile[8];
         req.setImages(images);
@@ -152,7 +152,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void updateProfileSuccess() {
+    void testUpdateProfileSuccess() {
         EstateAgent agent = new EstateAgent();
         agent.setFirstName("Old");
         agent.setPassword("oldpass");
@@ -176,7 +176,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void getAllBookedVisitsSuccess() {
+    void testGetAllBookedVisitsSuccess() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -202,7 +202,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void acceptVisitSuccess() {
+    void testAcceptVisitSuccess() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -233,7 +233,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void acceptVisitUnauthorized() {
+    void testAcceptVisitUnauthorized() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -254,7 +254,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void rejectVisitSuccess() {
+    void testRejectVisitSuccess() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -285,7 +285,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void rejectVisitUnauthorized() {
+    void testRejectVisitUnauthorized() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -306,7 +306,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loadNewRealEstateNoImageUploaded() throws IOException {
+    void testLoadNewRealEstateNoImageUploaded() throws IOException {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -329,7 +329,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loadNewRealEstateUploadFailed() throws IOException {
+    void testLoadNewRealEstateUploadFailed() throws IOException {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -351,7 +351,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loadNewRealEstateSendsNotificationsToFavorites() throws IOException {
+    void testLoadNewRealEstateSendsNotificationsToFavorites() throws IOException {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -400,7 +400,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void loadNewRealEstateSuccess() throws IOException {
+    void testLoadNewRealEstateSuccess() throws IOException {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
@@ -444,7 +444,7 @@ class EstateAgentServiceTest {
     }
 
     @Test
-    void getMyPropertiesSuccess() {
+    void testGetMyPropertiesSuccess() {
         EstateAgent agent = new EstateAgent();
         agent.setId(1L);
         Authentication auth = mock(Authentication.class);
