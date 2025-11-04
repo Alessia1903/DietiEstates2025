@@ -50,7 +50,7 @@ const HomeAdmin = () => {
             </li>
           </ul>
           <div className="admin-info-note mt-8">
-            <strong>Nota:</strong> la password di amministrazione dovrà essere cambiata ogni volta che si effettua l'accesso.
+            <strong>Nota:</strong> la password di amministrazione può essere cambiata ogni volta nella sezione del profilo.
           </div>
         </div>
 
