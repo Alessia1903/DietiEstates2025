@@ -46,16 +46,6 @@ const RegistrazioneAgenzia = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (
-      !nomeAgenzia.trim() ||
-      !partitaIVA.trim() ||
-      !nomeAdmin.trim() ||
-      !cognomeAdmin.trim() ||
-      !emailAdmin.trim()
-    ) {
-      toast.error("⚠ Tutti i campi sono obbligatori!");
-      return;
-    }
 
     if (!validaPartitaIVA(partitaIVA)) {
       toast.error("⚠ La partita IVA inserita non è valida");
@@ -136,7 +126,7 @@ const RegistrazioneAgenzia = () => {
         </div>
 
         {/* Form */}
-        <form className="reg-agenzia-form" onSubmit={handleSubmit}>
+        <form className="reg-agenzia-form">
           <div className="reg-agenzia-form-group">
             <label htmlFor="nomeAgenzia">Nome dell’Agenzia</label>
             <input
@@ -192,10 +182,26 @@ const RegistrazioneAgenzia = () => {
               autoComplete="off"
             />
           </div>
-          <button type="submit" className="reg-agenzia-button">
-            REGISTRA
-          </button>
         </form>
+        <button 
+          type="button" 
+          className="reg-agenzia-button"
+          onClick={() => {
+            if (
+              !nomeAgenzia.trim() ||
+              !partitaIVA.trim() ||
+              !nomeAdmin.trim() ||
+              !cognomeAdmin.trim() ||
+              !emailAdmin.trim()
+            ) {
+              toast.error("⚠ Tutti i campi sono obbligatori!");
+              return;
+            }
+            handleSubmit({preventDefault: () => {}});
+          }}
+        >
+          REGISTRA
+        </button>
       </div>
 
       {/* Modale di Conferma */}

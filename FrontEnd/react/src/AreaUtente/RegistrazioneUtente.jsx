@@ -36,7 +36,7 @@ const RegistrazioneUtente = () => {
       !password ||
       !confirmPassword
     ) {
-      toast.error("Tutti i campi sono obbligatori.");
+      toast.error("⚠ Tutti i campi sono obbligatori!");
       return;
     }
 

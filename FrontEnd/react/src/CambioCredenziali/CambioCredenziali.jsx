@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import Navbar from "../components/Navbar/Navbar";
+import "../components/Navbar/Navbar.css";
 import "./CambioCredenziali.css";
 
 const validatePassword = (password) => {
@@ -21,21 +23,6 @@ const CambioCredenziali = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!currentPassword.trim()) {
-      toast.error("Inserisci la password attuale.");
-      return;
-    }
-    if (newPassword !== confirmPassword) {
-      toast.error("Le password non coincidono");
-      return;
-    }
-    if (!validatePassword(newPassword)) {
-      toast.error(
-        "La password deve avere almeno 8 caratteri, una maiuscola, una minuscola e un numero."
-      );
-      return;
-    }
 
     try {
       const token = localStorage.getItem("jwtToken");
@@ -73,25 +60,13 @@ const CambioCredenziali = () => {
 
   return (
     <div className="flex flex-col items-center p-8" style={{ fontFamily: "'Lexend', sans-serif" }}>
-      <div className="header-container">
-        <div className="logo-title cursor-pointer" id="logo-title" onClick={handleLogoClick}>
-          <img
-            src="https://github.com/Alessia1903/DietiEstates2025/blob/master/Photos/LenteObl-removebg-preview.png?raw=true"
-            alt="Logo DietiEstates"
-            className="logo"
-          />
-          <div>
-            <h1 className="title custom-text-color">DîetîEstates25</h1>
-            <p className="subtitle custom-text-color">La casa che vuoi, quando vuoi</p>
-          </div>
-        </div>
-      </div>
-
+      <Navbar role="admin" />
+      
       <div className="container-outside">
         <div className="container-inside">
-          <h2>Complimenti, hai correttamente eseguito il tuo primo accesso!</h2>
+          <h2>Modifica Password Amministratore</h2>
           <p className="info-password">
-            Per ragioni di sicurezza è fondamentale modificare la password prima di poter avere libero accesso al tuo account. La nuova password deve rispettare i seguenti requisiti:
+            In questa sezione puoi modificare la tua password di amministratore in qualsiasi momento per garantire la sicurezza del tuo account. La nuova password deve rispettare i seguenti requisiti:
           </p>
           <ul>
             <li>Minimo 8 caratteri</li>
@@ -103,7 +78,7 @@ const CambioCredenziali = () => {
       </div>
 
       <div className="form-container">
-        <form className="changePasswordForm flex-col" onSubmit={handleSubmit}>
+        <form className="changePasswordForm flex-col">
           <div className="form-group">
             <label htmlFor="currentPassword">Password Attuale:</label>
             <input
@@ -134,9 +109,29 @@ const CambioCredenziali = () => {
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
-          <button className="registrabutton mx-auto" type="submit">
-            SALVA PASSWORD
-          </button>
+          <button 
+          className="registrabutton mx-auto" 
+          type="button"
+          onClick={() => {
+            if (!currentPassword.trim() || !newPassword.trim() || !confirmPassword.trim()) {
+              toast.error("⚠ Tutti i campi sono obbligatori!");
+              return;
+            }
+            if (newPassword !== confirmPassword) {
+              toast.error("Le password non coincidono");
+              return;
+            }
+            if (!validatePassword(newPassword)) {
+              toast.error(
+                "La password deve avere almeno 8 caratteri, una maiuscola, una minuscola e un numero."
+              );
+              return;
+            }
+            handleSubmit({preventDefault: () => {}});
+          }}
+        >
+          SALVA PASSWORD
+        </button>
         </form>
       </div>
 

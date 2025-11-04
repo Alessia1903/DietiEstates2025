@@ -150,7 +150,7 @@ const AggiungiImmobile = () => {
       <Navbar role="agent" />
 
       <div className="aggiungiimmobile-container-info">
-        <form className="aggiungiimmobile-real-estate-form" onSubmit={handleSubmit}>
+        <form className="aggiungiimmobile-real-estate-form">
           <div className="aggiungiimmobile-upload-box" onClick={() => document.getElementById("aggiungiimmobile-file-upload").click()}>
           <svg xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 150 150" fill="none">
             <g clipPath="url(#clip0_20_281)">
@@ -253,8 +253,19 @@ const AggiungiImmobile = () => {
           </fieldset>
 
 
-          <button type="submit" className="aggiungiimmobile-accesso px-6 py-2 mt-6 rounded-md">PROSEGUI</button>
         </form>
+        <button 
+          type="button" 
+          className="aggiungiimmobile-accesso px-6 py-2 mt-6 rounded-md"
+          onClick={() => {
+            if (!validate()) {
+              return;
+            }
+            handleSubmit({preventDefault: () => {}});
+          }}
+        >
+          PROSEGUI
+        </button>
       </div>
 
       {/* Modale di Avviso */}

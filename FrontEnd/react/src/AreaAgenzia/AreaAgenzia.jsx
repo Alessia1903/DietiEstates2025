@@ -11,17 +11,8 @@ const AreaAgenzia = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogoClick = () => {
-    navigate("/");
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (!email.trim() || !password.trim()) {
-      toast.error("Inserisci email e password.");
-      return;
-    }
 
     try {
       // Prova login admin
@@ -32,7 +23,7 @@ const AreaAgenzia = () => {
       // Se va a buon fine, salva token e vai a home admin
       localStorage.setItem("jwtToken", adminResp.data);
       localStorage.setItem("role", "admin");
-      navigate("/cambio-credenziali");
+      navigate("/home-admin");
       return;
     } catch (errAdmin) {
       // Se errore, prova login estate agent
@@ -91,7 +82,7 @@ const AreaAgenzia = () => {
 
         {/* Form di Accesso */}
         <div className="login-box-agenzia">
-          <form id="loginForm" className="flex flex-col gap-0 justify-between h-full w-full" onSubmit={handleSubmit}>
+          <form id="loginForm" className="flex flex-col gap-0 justify-between h-full w-full">
             <div className="flex flex-col gap-0 w-full">
               <input
                 type="email"
@@ -112,12 +103,22 @@ const AreaAgenzia = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <div className="flex justify-center mt-2">
-              <button type="submit" className="btn-custom">
-                ACCEDI
-              </button>
-            </div>
           </form>
+          <div className="flex justify-center mt-2">
+            <button 
+              type="button" 
+              className="btn-custom"
+              onClick={() => {
+                if (!email || !password) {
+                  toast.error("⚠ Tutti i campi sono obbligatori!");
+                  return;
+                }
+                handleSubmit({preventDefault: () => {}});
+              }}
+            >
+              ACCEDI
+            </button>
+          </div>
         </div>
       </div>
     </div>

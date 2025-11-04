@@ -70,7 +70,13 @@ const ProfiloAdmin = () => {
             <div className="field"><strong>Partita IVA:</strong> <span>{admin.partitaIVA}</span></div>
           </>
         ) : null}
-        <div style={{ marginTop: "24px", textAlign: "right" }}>
+        <div className="edit-action">
+          <button
+            className="edit-btn"
+            onClick={() => navigate("/cambio-credenziali")}
+          >
+            Modifica Password
+          </button>
           <button
             className="logout-btn"
             onClick={() => {

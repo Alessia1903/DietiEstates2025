@@ -222,6 +222,47 @@ span {
     }
 }
 
+.edit-action {
+    display: flex;
+    gap: 1rem;
+    margin-top: 2rem;
+    justify-content: center;
+}
+
+.edit-btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    background-color: #06D6A0;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.edit-btn:hover {
+    background-color: #04b889;
+    transform: translateY(-2px);
+}
+
+@media screen and (max-width: 630px) {
+    .container-profilo {
+        width: 98%;
+        padding: 15px;
+        max-width: 98vw;
+        min-width: 0;
+    }
+
+    .edit-action {
+        flex-direction: column;
+    }
+
+    .edit-btn,
+    .logout-btn {
+        width: 100%;
+    }
+}
+
 @media screen and (max-width: 370px) {
     .container-profilo {
         width: 100%;
