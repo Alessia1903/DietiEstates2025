@@ -7,7 +7,6 @@ import it.unina.dieti_estates.service.*;
 import it.unina.dieti_estates.exception.auth.*;
 import it.unina.dieti_estates.exception.validation.*;
 import it.unina.dieti_estates.exception.resource.*;
-import it.unina.dieti_estates.exception.business.*;
 import org.junit.jupiter.api.*;
 import org.mockito.*;
 import org.springframework.data.domain.*;

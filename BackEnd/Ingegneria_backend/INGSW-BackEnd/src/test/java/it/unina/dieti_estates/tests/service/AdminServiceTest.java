@@ -2,7 +2,6 @@ package it.unina.dieti_estates.tests.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unina.dieti_estates.exception.auth.InvalidCredentialsException;
-import it.unina.dieti_estates.exception.auth.UnauthorizedAccessException;
 import it.unina.dieti_estates.exception.validation.DuplicateResourceException;
 import it.unina.dieti_estates.model.Admin;
 import it.unina.dieti_estates.model.Agency;
