@@ -19,7 +19,7 @@ class EstateAgentRepositoryTest {
 
     @Test
     @DisplayName("findByEmail returns agent when present")
-    void findByEmailReturnsAgent() {
+    void testFindByEmailReturnsAgent() {
         EstateAgent agent = new EstateAgent(
             "agent@example.com",
             "password",
@@ -39,7 +39,7 @@ class EstateAgentRepositoryTest {
 
     @Test
     @DisplayName("findByEmail returns empty when not present")
-    void findByEmailReturnsEmpty() {
+    void testFindByEmailReturnsEmpty() {
         Optional<EstateAgent> found = estateAgentRepository.findByEmail("notfound@example.com");
         assertThat(found).isNotPresent();
     }

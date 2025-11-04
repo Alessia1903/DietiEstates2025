@@ -67,7 +67,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("findByAgentId returns real estates for agent")
-    void findByAgentIdReturnsResults() {
+    void testFindByAgentIdReturnsResults() {
         EstateAgent agent = createAgent("agent@example.com");
         createRealEstate(agent, CITY, CONTRACT_TYPE, "A", 3, 200000.0);
 
@@ -77,7 +77,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("findByAgentId returns empty for agent with no real estates")
-    void findByAgentIdReturnsEmpty() {
+    void testFindByAgentIdReturnsEmpty() {
         EstateAgent agent = createAgent("agent2@example.com");
         Page<RealEstate> page = realEstateRepository.findByAgentId(agent.getId(), PageRequest.of(0, 10));
         assertThat(page.getContent()).isEmpty();
@@ -85,7 +85,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("searchRealEstates returns results with all filters")
-    void searchRealEstatesAllFilters() {
+    void testSearchRealEstatesAllFilters() {
         EstateAgent agent = createAgent("agent3@example.com");
         createRealEstate(agent, CITY, CONTRACT_TYPE, "A", 3, 200000.0);
 
@@ -96,7 +96,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("searchRealEstates returns empty with unmatched filters")
-    void searchRealEstatesNoResults() {
+    void testSearchRealEstatesNoResults() {
         EstateAgent agent = createAgent("agent4@example.com");
         createRealEstate(agent, "Roma", "in affitto", "B", 2, 100000.0);
 
@@ -107,7 +107,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("searchRealEstates returns all for city only")
-    void searchRealEstatesCityOnly() {
+    void testSearchRealEstatesCityOnly() {
         EstateAgent agent = createAgent("agent5@example.com");
         createRealEstate(agent, CITY, CONTRACT_TYPE, "A", 3, 200000.0);
 
@@ -118,7 +118,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("findTop5ByOrderByIdDesc returns latest 5 estates")
-    void findTop5ByOrderByIdDescReturnsLatestFive() {
+    void testFindTop5ByOrderByIdDescReturnsLatestFive() {
         EstateAgent agent = createAgent("agent6@example.com");
         for (int i = 1; i <= 7; i++) {
             createRealEstate(agent, "City" + i, CONTRACT_TYPE, "A", 3, 200000.0 + i);
@@ -134,7 +134,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("findTop5ByOrderByIdDesc returns all estates when less than 5")
-    void findTop5ByOrderByIdDescReturnsLessThanFive() {
+    void testFindTop5ByOrderByIdDescReturnsLessThanFive() {
         EstateAgent agent = createAgent("agent7@example.com");
         createRealEstate(agent, "City1", CONTRACT_TYPE, "A", 3, 200000.0);
         createRealEstate(agent, "City2", CONTRACT_TYPE, "A", 3, 200000.0);
@@ -145,7 +145,7 @@ class RealEstateRepositoryTest {
 
     @Test
     @DisplayName("findTop5ByOrderByIdDesc returns empty list for empty database")
-    void findTop5ByOrderByIdDescReturnsEmpty() {
+    void testFindTop5ByOrderByIdDescReturnsEmpty() {
         List<RealEstate> latest = realEstateRepository.findTop5ByOrderByIdDesc();
         assertThat(latest).isEmpty();
     }

@@ -20,7 +20,7 @@ class BuyerRepositoryTest {
 
     @Test
     @DisplayName("findByEmail returns Buyer when present")
-    void findByEmailReturnsBuyer() {
+    void testFindByEmailReturnsBuyer() {
         Buyer buyer = new Buyer(
             "test@example.com",
             "password",
@@ -37,7 +37,7 @@ class BuyerRepositoryTest {
 
     @Test
     @DisplayName("findByEmail returns empty when not present")
-    void findByEmailReturnsEmpty() {
+    void testFindByEmailReturnsEmpty() {
         Optional<Buyer> found = buyerRepository.findByEmail("notfound@example.com");
         assertThat(found).isNotPresent();
     }

@@ -58,7 +58,7 @@ class EstateAgentControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void loginAgentSuccess() throws Exception {
+    void testLoginAgentSuccess() throws Exception {
         Mockito.when(agentService.loginAgent(any(LoginRequest.class))).thenReturn("token");
         LoginRequest req = new LoginRequest();
         req.setEmail("agent@mail.com");
@@ -71,7 +71,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void loginAgentInvalidCredentials() throws Exception {
+    void testLoginAgentInvalidCredentials() throws Exception {
         Mockito.when(agentService.loginAgent(any(LoginRequest.class)))
                 .thenThrow(new InvalidCredentialsException("Credenziali non valide"));
         LoginRequest req = new LoginRequest();
@@ -87,7 +87,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void getProfileSuccess() throws Exception {
+    void testGetProfileSuccess() throws Exception {
         EstateAgent agent = new EstateAgent();
         Mockito.when(agentService.getProfile()).thenReturn(agent);
         mockMvc.perform(get(PROFILEPATH))
@@ -95,7 +95,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void getProfileUnauthorized() throws Exception {
+    void testGetProfileUnauthorized() throws Exception {
         Mockito.when(agentService.getProfile())
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         mockMvc.perform(get(PROFILEPATH))
@@ -104,7 +104,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void getAllBookedVisitsSuccess() throws Exception {
+    void testGetAllBookedVisitsSuccess() throws Exception {
         var visit = new BookedVisitDTO(
             1L, "Immobile", new Timestamp(System.currentTimeMillis()), "Cliente", "Stato"
         );
@@ -120,7 +120,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void getAllBookedVisitsEmpty() throws Exception {
+    void testGetAllBookedVisitsEmpty() throws Exception {
         var resp = new PageResponse<BookedVisitDTO>(java.util.Collections.emptyList(), 0, 5, 0, false);
         Mockito.when(agentService.getAllBookedVisits(0, 5)).thenReturn(resp);
         mockMvc.perform(get(BOOKEDVISITPATH)
@@ -132,7 +132,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void getAllBookedVisitsUnauthorized() throws Exception {
+    void testGetAllBookedVisitsUnauthorized() throws Exception {
         Mockito.when(agentService.getAllBookedVisits(0, 5))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         mockMvc.perform(get(BOOKEDVISITPATH)
@@ -143,7 +143,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void acceptVisitSuccess() throws Exception {
+    void testAcceptVisitSuccess() throws Exception {
         Mockito.when(agentService.acceptVisit(1L)).thenReturn("Visita accettata con successo");
         VisitActionRequest req = new VisitActionRequest();
         req.setVisitId(1L);
@@ -156,7 +156,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void acceptVisitNotFound() throws Exception {
+    void testAcceptVisitNotFound() throws Exception {
         Mockito.when(agentService.acceptVisit(99L))
                 .thenThrow(new BookedVisitNotFoundException(VISITNOTFOUNDMESSAGE));
         VisitActionRequest req = new VisitActionRequest();
@@ -171,7 +171,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void acceptVisitUnauthorizedAgent() throws Exception {
+    void testAcceptVisitUnauthorizedAgent() throws Exception {
         Mockito.when(agentService.acceptVisit(2L))
                 .thenThrow(new UnauthorizedAccessException(MANAGEOWNVISITSMESSAGE));
         VisitActionRequest req = new VisitActionRequest();
@@ -185,7 +185,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void acceptVisitNotAuthenticated() throws Exception {
+    void testAcceptVisitNotAuthenticated() throws Exception {
         Mockito.when(agentService.acceptVisit(3L))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         VisitActionRequest req = new VisitActionRequest();
@@ -198,7 +198,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void rejectVisitSuccess() throws Exception {
+    void testRejectVisitSuccess() throws Exception {
         Mockito.when(agentService.rejectVisit(1L)).thenReturn("Visita rifiutata con successo");
         VisitActionRequest req = new VisitActionRequest();
         req.setVisitId(1L);
@@ -211,7 +211,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void rejectVisitNotFound() throws Exception {
+    void testRejectVisitNotFound() throws Exception {
         Mockito.when(agentService.rejectVisit(99L))
                 .thenThrow(new BookedVisitNotFoundException(VISITNOTFOUNDMESSAGE));
         VisitActionRequest req = new VisitActionRequest();
@@ -226,7 +226,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void rejectVisitUnauthorizedAgent() throws Exception {
+    void testRejectVisitUnauthorizedAgent() throws Exception {
         Mockito.when(agentService.rejectVisit(2L))
                 .thenThrow(new UnauthorizedAccessException(MANAGEOWNVISITSMESSAGE));
         VisitActionRequest req = new VisitActionRequest();
@@ -240,7 +240,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void rejectVisitNotAuthenticated() throws Exception {
+    void testRejectVisitNotAuthenticated() throws Exception {
         Mockito.when(agentService.rejectVisit(3L))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         VisitActionRequest req = new VisitActionRequest();
@@ -253,7 +253,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void loadNewRealEstateSuccess() throws Exception {
+    void testLoadNewRealEstateSuccess() throws Exception {
         var resp = new RealEstateResponseDTO();
         Mockito.when(agentService.loadNewRealEstate(any(CreateRealEstateRequest.class))).thenReturn(resp);
         CreateRealEstateRequest req = new CreateRealEstateRequest();
@@ -266,7 +266,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void loadNewRealEstateNoPhoto() throws Exception {
+    void testLoadNewRealEstateNoPhoto() throws Exception {
         Mockito.when(agentService.loadNewRealEstate(any(CreateRealEstateRequest.class)))
                 .thenThrow(new InvalidRealEstateDataException("Devi caricare almeno una foto!"));
         CreateRealEstateRequest req = new CreateRealEstateRequest();
@@ -280,7 +280,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void loadNewRealEstateTooManyPhotos() throws Exception {
+    void testLoadNewRealEstateTooManyPhotos() throws Exception {
         Mockito.when(agentService.loadNewRealEstate(any(CreateRealEstateRequest.class)))
                 .thenThrow(new InvalidRealEstateDataException("Puoi caricare al massimo 7 foto!"));
         CreateRealEstateRequest req = new CreateRealEstateRequest();
@@ -294,7 +294,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void loadNewRealEstateUploadError() throws Exception {
+    void testLoadNewRealEstateUploadError() throws Exception {
         Mockito.when(agentService.loadNewRealEstate(any(CreateRealEstateRequest.class)))
                 .thenThrow(new FileStorageException("Nessuna immagine è stata caricata correttamente"));
         CreateRealEstateRequest req = new CreateRealEstateRequest();
@@ -307,7 +307,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void loadNewRealEstateNotAuthenticated() throws Exception {
+    void testLoadNewRealEstateNotAuthenticated() throws Exception {
         Mockito.when(agentService.loadNewRealEstate(any(CreateRealEstateRequest.class)))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         CreateRealEstateRequest req = new CreateRealEstateRequest();
@@ -319,7 +319,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void getMyPropertiesSuccess() throws Exception {
+    void testGetMyPropertiesSuccess() throws Exception {
         var resp = new PageResponse<RealEstateResponseDTO>(
             java.util.List.of(new RealEstateResponseDTO()), 0, 5, 1, false);
         Mockito.when(agentService.getMyProperties(0, 5)).thenReturn(resp);
@@ -333,7 +333,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void getMyPropertiesEmpty() throws Exception {
+    void testGetMyPropertiesEmpty() throws Exception {
         var resp = new PageResponse<RealEstateResponseDTO>(
             java.util.Collections.emptyList(), 0, 5, 0, false);
         Mockito.when(agentService.getMyProperties(0, 5)).thenReturn(resp);
@@ -346,7 +346,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void getMyPropertiesUnauthorized() throws Exception {
+    void testGetMyPropertiesUnauthorized() throws Exception {
         Mockito.when(agentService.getMyProperties(0, 5))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         mockMvc.perform(get(MYPROPERTIESPATH)
@@ -357,7 +357,7 @@ class EstateAgentControllerTest {
 
     @Test
     @WithMockUser(roles = "AGENT")
-    void updateProfileSuccess() throws Exception {
+    void testUpdateProfileSuccess() throws Exception {
         EstateAgent updated = new EstateAgent();
         updated.setFirstName("Mario");
         Mockito.doNothing().when(agentService).updateProfile(any(EstateAgent.class));
@@ -369,7 +369,7 @@ class EstateAgentControllerTest {
     }
 
     @Test
-    void updateProfileUnauthorized() throws Exception {
+    void testUpdateProfileUnauthorized() throws Exception {
         Mockito.doThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE))
                 .when(agentService).updateProfile(any(EstateAgent.class));
         EstateAgent updated = new EstateAgent();

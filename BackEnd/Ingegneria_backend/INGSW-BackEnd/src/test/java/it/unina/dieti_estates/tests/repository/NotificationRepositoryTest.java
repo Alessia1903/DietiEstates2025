@@ -46,7 +46,7 @@ class NotificationRepositoryTest {
 
     @Test
     @DisplayName("findByBuyer returns notifications for buyer")
-    void findByBuyerReturnsNotifications() {
+    void testFindByBuyerReturnsNotifications() {
         Buyer buyer = createBuyer("buyer@example.com");
         createNotification(buyer, "Nuova notifica");
 
@@ -57,7 +57,7 @@ class NotificationRepositoryTest {
 
     @Test
     @DisplayName("findByBuyer returns empty for buyer with no notifications")
-    void findByBuyerReturnsEmpty() {
+    void testFindByBuyerReturnsEmpty() {
         Buyer buyer = createBuyer("buyer2@example.com");
         Page<Notification> page = notificationRepository.findByBuyer(buyer, PageRequest.of(0, 10));
         assertThat(page.getContent()).isEmpty();

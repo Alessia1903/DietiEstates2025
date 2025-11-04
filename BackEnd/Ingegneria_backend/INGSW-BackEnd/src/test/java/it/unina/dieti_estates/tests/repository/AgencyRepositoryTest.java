@@ -18,7 +18,7 @@ class AgencyRepositoryTest {
 
     @Test
     @DisplayName("existsByVatNumber returns true when Agency exists")
-    void existsByVatNumberReturnsTrue() {
+    void testExistsByVatNumberReturnsTrue() {
         Admin admin = new Admin(
             "agencyadmin@example.com",
             "password",
@@ -39,7 +39,7 @@ class AgencyRepositoryTest {
 
     @Test
     @DisplayName("existsByVatNumber returns false when Agency does not exist")
-    void existsByVatNumberReturnsFalse() {
+    void testExistsByVatNumberReturnsFalse() {
         boolean exists = agencyRepository.existsByVatNumber("00000000000");
         assertThat(exists).isFalse();
     }

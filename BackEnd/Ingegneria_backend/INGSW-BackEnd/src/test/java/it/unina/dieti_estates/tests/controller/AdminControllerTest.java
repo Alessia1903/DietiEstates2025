@@ -44,7 +44,7 @@ class AdminControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void loginAdminSuccess() throws Exception {
+    void testLoginAdminSuccess() throws Exception {
         Mockito.when(adminService.loginAdmin(any(LoginRequest.class))).thenReturn("token");
         LoginRequest req = new LoginRequest();
         req.setEmail("admin@mail.com");
@@ -57,7 +57,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void loginAdminInvalidCredentials() throws Exception {
+    void testLoginAdminInvalidCredentials() throws Exception {
         Mockito.when(adminService.loginAdmin(any(LoginRequest.class)))
                 .thenThrow(new InvalidCredentialsException("Credenziali non valide"));
         LoginRequest req = new LoginRequest();
@@ -72,7 +72,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void createAgencySuccess() throws Exception {
+    void testCreateAgencySuccess() throws Exception {
         QRCodeResponse resp = new QRCodeResponse();
         Mockito.when(adminService.createAgency(any(CreateAgencyRequest.class))).thenReturn(resp);
         CreateAgencyRequest req = new CreateAgencyRequest();
@@ -83,7 +83,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void createAgencyDuplicate() throws Exception {
+    void testCreateAgencyDuplicate() throws Exception {
         Mockito.when(adminService.createAgency(any(CreateAgencyRequest.class)))
                 .thenThrow(new DuplicateResourceException("Agenzia già esistente"));
         CreateAgencyRequest req = new CreateAgencyRequest();
@@ -97,7 +97,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void createAdminAccountDuplicate() throws Exception {
+    void testCreateAdminAccountDuplicate() throws Exception {
         Mockito.when(adminService.createAdminAccount(any(CreateAdminRequest.class)))
                 .thenThrow(new DuplicateResourceException("Admin già esistente"));
         CreateAdminRequest req = new CreateAdminRequest();
@@ -110,7 +110,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void createAdminAccountUnauthorized() throws Exception {
+    void testCreateAdminAccountUnauthorized() throws Exception {
         CreateAdminRequest req = new CreateAdminRequest();
         mockMvc.perform(post(CREATEADMINPATH)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -120,7 +120,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void createAdminAccountSuccess() throws Exception {
+    void testCreateAdminAccountSuccess() throws Exception {
         QRCodeResponse resp = new QRCodeResponse();
         Mockito.when(adminService.createAdminAccount(any(CreateAdminRequest.class))).thenReturn(resp);
         CreateAdminRequest req = new CreateAdminRequest();
@@ -132,7 +132,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void createEstateAgentAccountDuplicate() throws Exception {
+    void testCreateEstateAgentAccountDuplicate() throws Exception {
         Mockito.when(adminService.createEstateAgentAccount(any(CreateEstateAgentRequest.class)))
                 .thenThrow(new DuplicateResourceException("Agente già esistente"));
         CreateEstateAgentRequest req = new CreateEstateAgentRequest();
@@ -145,7 +145,7 @@ class AdminControllerTest {
     }
 
     @Test
-    void createEstateAgentAccountUnauthorized() throws Exception {
+    void testCreateEstateAgentAccountUnauthorized() throws Exception {
         CreateEstateAgentRequest req = new CreateEstateAgentRequest();
         mockMvc.perform(post(CREATEESTATEAGENTPATH)
                 .contentType(MediaType.APPLICATION_JSON)
@@ -155,7 +155,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void createEstateAgentAccountSuccess() throws Exception {
+    void testCreateEstateAgentAccountSuccess() throws Exception {
         QRCodeResponse resp = new QRCodeResponse();
         Mockito.when(adminService.createEstateAgentAccount(any(CreateEstateAgentRequest.class))).thenReturn(resp);
         CreateEstateAgentRequest req = new CreateEstateAgentRequest();
@@ -167,7 +167,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void changeAmministrationPasswordUnauthorized() throws Exception {
+    void testChangeAmministrationPasswordUnauthorized() throws Exception {
         Mockito.doThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE))
                 .when(adminService).changeAmministrationPassword(any(ChangePasswordRequest.class));
         ChangePasswordRequest req = new ChangePasswordRequest();
@@ -183,7 +183,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void changeAmministrationPasswordInvalidCredentials() throws Exception {
+    void testChangeAmministrationPasswordInvalidCredentials() throws Exception {
         Mockito.doThrow(new InvalidCredentialsException("La password attuale non è corretta"))
                 .when(adminService).changeAmministrationPassword(any(ChangePasswordRequest.class));
         ChangePasswordRequest req = new ChangePasswordRequest();
@@ -199,7 +199,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void changeAmministrationPasswordSuccess() throws Exception {
+    void testChangeAmministrationPasswordSuccess() throws Exception {
         ChangePasswordRequest req = new ChangePasswordRequest();
         req.setCurrentPassword("old");
         req.setNewPassword("new");
@@ -212,7 +212,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void getProfileSuccess() throws Exception {
+    void testGetProfileSuccess() throws Exception {
         Admin admin = new Admin();
         Mockito.when(adminService.getProfile()).thenReturn(admin);
         mockMvc.perform(get("/api/admins/profile"))
@@ -221,7 +221,7 @@ class AdminControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
-    void getProfileUnauthorized() throws Exception {
+    void testGetProfileUnauthorized() throws Exception {
         Mockito.when(adminService.getProfile())
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         mockMvc.perform(get("/api/admins/profile"))

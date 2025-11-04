@@ -50,7 +50,7 @@ class FavoriteSearchRepositoryTest {
 
     @Test
     @DisplayName("findByBuyerId returns favorites for buyer")
-    void findByBuyerIdReturnsFavorites() {
+    void testFindByBuyerIdReturnsFavorites() {
         Buyer buyer = createBuyer("buyer@example.com");
         createFavorite(buyer, "Napoli", "in vendita", "A", 3, 100000.0, 300000.0);
 
@@ -60,7 +60,7 @@ class FavoriteSearchRepositoryTest {
 
     @Test
     @DisplayName("findByBuyerId returns empty for buyer with no favorites")
-    void findByBuyerIdReturnsEmpty() {
+    void testFindByBuyerIdReturnsEmpty() {
         Buyer buyer = createBuyer("buyer2@example.com");
         Page<FavoriteSearch> page = favoriteSearchRepository.findByBuyerId(buyer.getId(), PageRequest.of(0, 10));
         assertThat(page.getContent()).isEmpty();
@@ -68,7 +68,7 @@ class FavoriteSearchRepositoryTest {
 
     @Test
     @DisplayName("findMatchingFavorites returns matching favorites")
-    void findMatchingFavoritesReturnsResults() {
+    void testFindMatchingFavoritesReturnsResults() {
         Buyer buyer = createBuyer("buyer3@example.com");
         createFavorite(buyer, "Napoli", "in vendita", "A", 3, 100000.0, 300000.0);
 
@@ -78,7 +78,7 @@ class FavoriteSearchRepositoryTest {
 
     @Test
     @DisplayName("findMatchingFavorites returns empty when no match")
-    void findMatchingFavoritesReturnsEmpty() {
+    void testFindMatchingFavoritesReturnsEmpty() {
         Buyer buyer = createBuyer("buyer4@example.com");
         createFavorite(buyer, "Roma", "in affitto", "B", 2, 50000.0, 100000.0);
 
@@ -88,7 +88,7 @@ class FavoriteSearchRepositoryTest {
 
     @Test
     @DisplayName("existsByBuyerAndRequest returns true when favorite exists")
-    void existsByBuyerAndRequestTrue() {
+    void testExistsByBuyerAndRequestTrue() {
         Buyer buyer = createBuyer("buyer5@example.com");
         createFavorite(buyer, "Napoli", "in vendita", "A", 3, 100000.0, 300000.0);
 
@@ -105,7 +105,7 @@ class FavoriteSearchRepositoryTest {
 
     @Test
     @DisplayName("existsByBuyerAndRequest returns false when favorite does not exist")
-    void existsByBuyerAndRequestFalse() {
+    void testExistsByBuyerAndRequestFalse() {
         Buyer buyer = createBuyer("buyer6@example.com");
         createFavorite(buyer, "Roma", "in affitto", "B", 2, 50000.0, 100000.0);
 

@@ -25,13 +25,13 @@ class JwtAuthenticationFilterTest {
     private JwtService jwtService;
 
     @Test
-    void requestWithoutJwtShouldBeUnauthorized() throws Exception {
+    void testRequestWithoutJwtShouldBeUnauthorized() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void requestWithInvalidJwtShouldBeUnauthorized() throws Exception {
+    void testRequestWithInvalidJwtShouldBeUnauthorized() throws Exception {
         Mockito.when(jwtService.isTokenValid(Mockito.anyString(), Mockito.any()))
                 .thenReturn(false);
 
@@ -42,7 +42,7 @@ class JwtAuthenticationFilterTest {
 
     @Test
     @WithMockUser
-    void requestWithValidJwtShouldBeAuthorized() throws Exception {
+    void testRequestWithValidJwtShouldBeAuthorized() throws Exception {
         Mockito.when(jwtService.isTokenValid(Mockito.anyString(), Mockito.any()))
                 .thenReturn(true);
 

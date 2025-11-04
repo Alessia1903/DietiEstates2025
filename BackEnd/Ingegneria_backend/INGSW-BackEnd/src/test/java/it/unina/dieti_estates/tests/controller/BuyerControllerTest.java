@@ -70,7 +70,7 @@ class BuyerControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void registerBuyerSuccess() throws Exception {
+    void testRegisterBuyerSuccess() throws Exception {
         Buyer buyer = new Buyer();
         buyer.setEmail(EMAILTEST);
         buyer.setPassword(PASSWORDTEST);
@@ -85,7 +85,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void registerBuyerAlreadyExists() throws Exception {
+    void testRegisterBuyerAlreadyExists() throws Exception {
         Buyer buyer = new Buyer();
         buyer.setEmail(EMAILTEST);
         buyer.setPassword(PASSWORDTEST);
@@ -100,7 +100,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void loginBuyerSuccess() throws Exception {
+    void testLoginBuyerSuccess() throws Exception {
         LoginRequest req = new LoginRequest();
         req.setEmail(EMAILTEST);
         req.setPassword(PASSWORDTEST);
@@ -115,7 +115,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void loginBuyerInvalidCredentials() throws Exception {
+    void testLoginBuyerInvalidCredentials() throws Exception {
         LoginRequest req = new LoginRequest();
         req.setEmail(EMAILTEST);
         req.setPassword("wrong");
@@ -131,7 +131,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void getProfileSuccess() throws Exception {
+    void testGetProfileSuccess() throws Exception {
         Buyer buyer = new Buyer();
         buyer.setEmail(EMAILTEST);
         Mockito.when(buyerService.getProfile()).thenReturn(buyer);
@@ -141,7 +141,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void getProfileUnauthorized() throws Exception {
+    void testGetProfileUnauthorized() throws Exception {
         Mockito.when(buyerService.getProfile())
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
 
@@ -151,7 +151,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void updateProfileSuccess() throws Exception {
+    void testUpdateProfileSuccess() throws Exception {
         Buyer updated = new Buyer();
         updated.setFirstName("Mario");
         Mockito.doNothing().when(buyerService).updateProfile(any(Buyer.class));
@@ -163,7 +163,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void updateProfileUnauthorized() throws Exception {
+    void testUpdateProfileUnauthorized() throws Exception {
         Mockito.doThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE))
                 .when(buyerService).updateProfile(any(Buyer.class));
         Buyer updated = new Buyer();
@@ -176,7 +176,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void addFavoriteSuccess() throws Exception {
+    void testAddFavoriteSuccess() throws Exception {
         var req = new FavoriteRequest();
         req.setCity(CITY);
         Mockito.when(buyerService.addFavorite(any(FavoriteRequest.class)))
@@ -189,7 +189,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void addFavoriteUnauthorized() throws Exception {
+    void testAddFavoriteUnauthorized() throws Exception {
         Mockito.when(buyerService.addFavorite(any(FavoriteRequest.class)))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         var req = new FavoriteRequest();
@@ -202,7 +202,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void addFavoriteDuplicate() throws Exception {
+    void testAddFavoriteDuplicate() throws Exception {
         var req = new FavoriteRequest();
         req.setCity(CITY);
         Mockito.when(buyerService.addFavorite(any(FavoriteRequest.class)))
@@ -216,7 +216,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void removeFavoriteSuccess() throws Exception {
+    void testRemoveFavoriteSuccess() throws Exception {
         var req = new FavoriteSearchDeleteRequest();
         req.setFavoriteSearchId(1L);
         Mockito.when(buyerService.removeFavorite(any(FavoriteSearchDeleteRequest.class)))
@@ -229,7 +229,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void removeFavoriteUnauthorized() throws Exception {
+    void testRemoveFavoriteUnauthorized() throws Exception {
         Mockito.when(buyerService.removeFavorite(any(FavoriteSearchDeleteRequest.class)))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         var req = new FavoriteSearchDeleteRequest();
@@ -242,7 +242,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void removeFavoriteNotFound() throws Exception {
+    void testRemoveFavoriteNotFound() throws Exception {
         var req = new FavoriteSearchDeleteRequest();
         req.setFavoriteSearchId(999L);
         Mockito.when(buyerService.removeFavorite(any(FavoriteSearchDeleteRequest.class)))
@@ -256,7 +256,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void getFavoritesSuccess() throws Exception {
+    void testGetFavoritesSuccess() throws Exception {
         var resp = new PageResponse<FavoriteSearchResponse>(
             List.of(new FavoriteSearchResponse()), 0, 5, 1, false);
         Mockito.when(buyerService.getFavorites(0, 5)).thenReturn(resp);
@@ -270,7 +270,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void getFavoritesEmpty() throws Exception {
+    void testGetFavoritesEmpty() throws Exception {
         var resp = new PageResponse<FavoriteSearchResponse>(
             Collections.emptyList(), 0, 5, 0, false);
         Mockito.when(buyerService.getFavorites(0, 5)).thenReturn(resp);
@@ -283,7 +283,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void getFavoritesUnauthorized() throws Exception {
+    void testGetFavoritesUnauthorized() throws Exception {
         Mockito.when(buyerService.getFavorites(0, 5))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         mockMvc.perform(get(FAVORITESPATH)
@@ -293,7 +293,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void searchRealEstatesSuccess() throws Exception {
+    void testSearchRealEstatesSuccess() throws Exception {
         var req = new FavoriteRequest();
         var resp = new PageResponse<RealEstateResponseDTO>(
             List.of(new RealEstateResponseDTO()), 0, 5, 1, false);
@@ -310,7 +310,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void searchRealEstatesNoResults() throws Exception {
+    void testSearchRealEstatesNoResults() throws Exception {
         var req = new FavoriteRequest();
         var resp = new PageResponse<RealEstateResponseDTO>(
             Collections.emptyList(), 0, 5, 0, false);
@@ -328,7 +328,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void getWeatherSuccess() throws Exception {
+    void testGetWeatherSuccess() throws Exception {
         var req = new WeatherRequest();
         req.setCity(CITY);
         Mockito.when(buyerService.getWeatherForecast(any(WeatherRequest.class)))
@@ -341,7 +341,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void getWeatherCityNotFound() throws Exception {
+    void testGetWeatherCityNotFound() throws Exception {
         var req = new WeatherRequest();
         req.setCity("Atlantide");
         Mockito.when(buyerService.getWeatherForecast(any(WeatherRequest.class)))
@@ -353,7 +353,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void getWeatherApiError() throws Exception {
+    void testGetWeatherApiError() throws Exception {
         var req = new WeatherRequest();
         req.setCity(CITY);
         Mockito.when(buyerService.getWeatherForecast(any(WeatherRequest.class)))
@@ -366,7 +366,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void bookVisitSuccess() throws Exception {
+    void testBookVisitSuccess() throws Exception {
         var req = new VisitRequest();
         Mockito.doNothing().when(buyerService).bookVisit(any(VisitRequest.class));
         mockMvc.perform(post(BOOKVISITPATH)
@@ -377,7 +377,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void bookVisitDuplicate() throws Exception {
+    void testBookVisitDuplicate() throws Exception {
         var req = new VisitRequest();
         Mockito.doThrow(new DuplicateResourceException("Visita già prenotata")).when(buyerService).bookVisit(any(VisitRequest.class));
         mockMvc.perform(post(BOOKVISITPATH)
@@ -389,7 +389,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void bookVisitRealEstateNotFound() throws Exception {
+    void testBookVisitRealEstateNotFound() throws Exception {
         var req = new VisitRequest();
         Mockito.doThrow(new RealEstateNotFoundException("Immobile non trovato")).when(buyerService).bookVisit(any(VisitRequest.class));
         mockMvc.perform(post(BOOKVISITPATH)
@@ -400,7 +400,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void bookVisitUnauthorized() throws Exception {
+    void testBookVisitUnauthorized() throws Exception {
         var req = new VisitRequest();
         Mockito.doThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE)).when(buyerService).bookVisit(any(VisitRequest.class));
         mockMvc.perform(post(BOOKVISITPATH)
@@ -411,7 +411,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void getNotificationsSuccess() throws Exception {
+    void testGetNotificationsSuccess() throws Exception {
         var notification = new NotificationDTO(
             1L, "Titolo", "Messaggio", "INFO", java.time.LocalDateTime.now(), "buyer@mail.com");
         var resp = new PageResponse<NotificationDTO>(
@@ -427,7 +427,7 @@ class BuyerControllerTest {
 
     @Test
     @WithMockUser(roles = "BUYER")
-    void getNotificationsEmpty() throws Exception {
+    void testGetNotificationsEmpty() throws Exception {
         var resp = new PageResponse<NotificationDTO>(
             Collections.emptyList(), 0, 5, 0, false);
         Mockito.when(buyerService.getNotificationsForCurrentBuyer(0, 5)).thenReturn(resp);
@@ -440,7 +440,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void getNotificationsUnauthorized() throws Exception {
+    void testGetNotificationsUnauthorized() throws Exception {
         Mockito.when(buyerService.getNotificationsForCurrentBuyer(0, 5))
                 .thenThrow(new UnauthorizedAccessException(UNAUTHORIZEDMESSAGE));
         mockMvc.perform(get(NOTIFICATIONSPATH)
@@ -450,7 +450,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void loginBuyerWithGoogleSuccess() throws Exception {
+    void testLoginBuyerWithGoogleSuccess() throws Exception {
         var body = Collections.singletonMap("code", DUMMYCODE);
         Mockito.when(buyerService.loginBuyerWithGoogleCode(any())).thenReturn("jwt-token");
         mockMvc.perform(post(GOOGLELOGINPATH)
@@ -461,7 +461,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void loginBuyerWithGoogleInvalidCredentials() throws Exception {
+    void testLoginBuyerWithGoogleInvalidCredentials() throws Exception {
         var body = Collections.singletonMap("code", DUMMYCODE);
         Mockito.when(buyerService.loginBuyerWithGoogleCode(any()))
                 .thenThrow(new InvalidCredentialsException("ID token Google non valido"));
@@ -473,7 +473,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void loginBuyerWithGoogleUserNotFound() throws Exception {
+    void testLoginBuyerWithGoogleUserNotFound() throws Exception {
         var body = Collections.singletonMap("code", DUMMYCODE);
         Mockito.when(buyerService.loginBuyerWithGoogleCode(any()))
                 .thenThrow(new it.unina.dieti_estates.exception.auth.UserNotFoundException("Buyer non trovato per email Google"));
@@ -485,7 +485,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void registerBuyerWithGoogleSuccess() throws Exception {
+    void testRegisterBuyerWithGoogleSuccess() throws Exception {
         var body = Collections.singletonMap("code", DUMMYCODE);
         RegistrationResponse resp = new RegistrationResponse("Registrazione Google andata a buon fine");
         Mockito.when(buyerService.registerBuyerWithGoogle(any())).thenReturn(resp);
@@ -497,7 +497,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void registerBuyerWithGoogleInvalidCredentials() throws Exception {
+    void testRegisterBuyerWithGoogleInvalidCredentials() throws Exception {
         var body = Collections.singletonMap("code", DUMMYCODE);
         Mockito.when(buyerService.registerBuyerWithGoogle(any()))
                 .thenThrow(new InvalidCredentialsException("Buyer già registrato con questa email Google"));
@@ -509,7 +509,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void registerBuyerWithGoogleDuplicate() throws Exception {
+    void testRegisterBuyerWithGoogleDuplicate() throws Exception {
         var body = Collections.singletonMap("code", DUMMYCODE);
         Mockito.when(buyerService.registerBuyerWithGoogle(any()))
                 .thenThrow(new DuplicateResourceException(EMAILALREADYREGISTERED));
@@ -521,7 +521,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void getHomePageEstatesSuccess() throws Exception {
+    void testGetHomePageEstatesSuccess() throws Exception {
         RealEstateResponseDTO estate1 = new RealEstateResponseDTO();
         estate1.setId(1L);
         RealEstateResponseDTO estate2 = new RealEstateResponseDTO();
@@ -538,7 +538,7 @@ class BuyerControllerTest {
     }
 
     @Test
-    void getHomePageEstatesEmpty() throws Exception {
+    void testGetHomePageEstatesEmpty() throws Exception {
         Mockito.when(buyerService.getHomePageEstates()).thenReturn(Collections.emptyList());
 
         mockMvc.perform(get("/api/buyers/homepage"))

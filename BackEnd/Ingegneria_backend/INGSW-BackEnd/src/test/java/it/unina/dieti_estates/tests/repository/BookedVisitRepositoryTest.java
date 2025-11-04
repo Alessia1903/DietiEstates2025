@@ -81,7 +81,7 @@ class BookedVisitRepositoryTest {
 
     @Test
     @DisplayName("findByEstateAgent returns results when visits exist")
-    void findByEstateAgentWithResults() {
+    void testFindByEstateAgentWithResults() {
         EstateAgent agent = createAgent("agent@example.com");
         Buyer buyer = createBuyer("buyer@example.com");
         RealEstate realEstate = createRealEstate(agent, "Via Roma 1");
@@ -101,7 +101,7 @@ class BookedVisitRepositoryTest {
 
     @Test
     @DisplayName("findByEstateAgent returns empty when no visits exist")
-    void findByEstateAgentNoResults() {
+    void testFindByEstateAgentNoResults() {
         EstateAgent agent = createAgent("agent2@example.com");
         Page<BookedVisitDTO> page = bookedVisitRepository.findByEstateAgent(agent.getId(), PageRequest.of(0, 10));
         assertThat(page.getContent()).isEmpty();
@@ -109,7 +109,7 @@ class BookedVisitRepositoryTest {
 
     @Test
     @DisplayName("existsByEstateAndRequestDate returns true when visit exists")
-    void existsByEstateAndRequestDateTrue() {
+    void testExistsByEstateAndRequestDateTrue() {
         EstateAgent agent = createAgent("agent3@example.com");
         Buyer buyer = createBuyer("buyer3@example.com");
         RealEstate realEstate = createRealEstate(agent, "Via Firenze 3");
@@ -130,7 +130,7 @@ class BookedVisitRepositoryTest {
 
     @Test
     @DisplayName("existsByEstateAndRequestDate returns false when no visit exists")
-    void existsByEstateAndRequestDateFalse() {
+    void testExistsByEstateAndRequestDateFalse() {
         EstateAgent agent = createAgent("agent4@example.com");
         RealEstate realEstate = createRealEstate(agent, "Via Torino 4");
 

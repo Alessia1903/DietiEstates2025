@@ -34,7 +34,7 @@ class UserRepositoryTest {
 
     @Test
     @DisplayName("findByEmail returns empty when not present")
-    void findByEmailReturnsEmpty() {
+    void testFindByEmailReturnsEmpty() {
         Optional<User> found = userRepository.findByEmail("notfound@example.com");
         assertThat(found).isNotPresent();
     }

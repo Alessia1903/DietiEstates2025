@@ -19,7 +19,7 @@ class AdminRepositoryTest {
 
     @Test
     @DisplayName("findByEmail returns Admin when present")
-    void findByEmailReturnsAdmin() {
+    void testFindByEmailReturnsAdmin() {
         Admin admin = new Admin(
             "admin@example.com",
             "password",
@@ -37,7 +37,7 @@ class AdminRepositoryTest {
 
     @Test
     @DisplayName("findByEmail returns empty when not present")
-    void findByEmailReturnsEmpty() {
+    void testFindByEmailReturnsEmpty() {
         Optional<Admin> found = adminRepository.findByEmail("notfound@example.com");
         assertThat(found).isNotPresent();
     }
