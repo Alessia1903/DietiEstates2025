@@ -50,7 +50,7 @@ const HomeAdmin = () => {
             </li>
           </ul>
           <div className="admin-info-note mt-8">
-            <strong>Nota:</strong> la password di amministrazione può essere cambiata ogni volta nella sezione del profilo.
+            <strong>Nota:</strong> la password di amministrazione può essere cambiata in qualsiasi momento nell'area profilo.
           </div>
         </div>
 
@@ -60,13 +60,27 @@ const HomeAdmin = () => {
           <div className="admin-register-box" onClick={() => navigate("/aggiungi-agente")} style={{ cursor: "pointer" }}>
             <div className="admin-agency-icon-container">
               {/* Icona edificio */}
-              <svg className="admin-building-icon" xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 300 300" fill="none">
-                <g clipPath="url(#clip0_11_444)">
-                  <path d="M150 87.5V62.5C150 48.75 138.75 37.5 125 37.5H50C36.25 37.5 25 48.75 25 62.5V237.5C25 251.25 36.25 262.5 50 262.5H250C263.75 262.5 275 251.25 275 237.5V112.5C275 98.75 263.75 87.5 250 87.5H150ZM75 237.5H50V212.5H75V237.5ZM75 187.5H50V162.5H75V187.5ZM75 137.5H50V112.5H75V137.5ZM75 87.5H50V62.5H75V87.5ZM125 237.5H100V212.5H125V237.5ZM125 187.5H100V162.5H125V187.5ZM125 137.5H100V112.5H125V137.5ZM125 87.5H100V62.5H125V87.5ZM237.5 237.5H150V212.5H175V187.5H150V162.5H175V137.5H150V112.5H237.5C244.375 112.5 250 118.125 250 125V225C250 231.875 244.375 237.5 237.5 237.5ZM225 137.5H200V162.5H225V137.5ZM225 187.5H200V212.5H225V187.5Z" fill="#073B4C"/>
+              <svg
+                className="admin-building-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="150"
+                height="150"
+                viewBox="0 0 18 18"
+                fill="none"
+              >
+                <g clipPath="url(#clip0_18_18)">
+                  <path
+                    d="M17 0H9C8.45 0 8 0.45 8 1V2.61C8 2.61 8 2.61 8.01 2.62L13.01 7.12C13.64 7.68 14 8.5 14 9.35V10H16V12H14V14H16V16H14V18H17C17.55 18 18 17.55 18 17V1C18 0.45 17.55 0 17 0ZM12 4H10V2H12V4ZM16 8H14V6H16V8ZM16 4H14V2H16V4Z"
+                    fill="#073B4C"
+                  />
+                  <path
+                    d="M12 17V9.34998C12 9.06998 11.88 8.79998 11.67 8.60998L6.67 4.10998C6.48 3.92998 6.24 3.84998 6 3.84998C5.76 3.84998 5.52 3.93998 5.33 4.10998L0.33 8.60998C0.12 8.78998 0 9.05998 0 9.34998V17C0 17.55 0.45 18 1 18H3C3.55 18 4 17.55 4 17V13H8V17C8 17.55 8.45 18 9 18H11C11.55 18 12 17.55 12 17Z"
+                    fill="#073B4C"
+                  />
                 </g>
                 <defs>
-                  <clipPath id="clip0_11_444">
-                    <rect width="300" height="300" fill="white"/>
+                  <clipPath id="clip0_18_18">
+                    <rect width="18" height="18" fill="white" />
                   </clipPath>
                 </defs>
               </svg>
@@ -86,20 +100,48 @@ const HomeAdmin = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-center text-2xl font-semibold mt-4">CREA ACCOUNT AGENTE</p>
+            <p className="text-center text-2xl font-semibold mt-4">AGGIUNGI AGENTE IMMOBILIARE</p>
           </div>
 
           {/* Crea Account Admin */}
           <div className="admin-register-box" onClick={() => navigate("/aggiungi-collaboratore")} style={{ cursor: "pointer" }}>
             <div className="admin-agency-icon-container">
               {/* Icona edificio */}
-              <svg className="admin-building-icon" xmlns="http://www.w3.org/2000/svg" width="150" height="150" viewBox="0 0 300 300" fill="none">
-                <g clipPath="url(#clip0_11_444)">
-                  <path d="M150 87.5V62.5C150 48.75 138.75 37.5 125 37.5H50C36.25 37.5 25 48.75 25 62.5V237.5C25 251.25 36.25 262.5 50 262.5H250C263.75 262.5 275 251.25 275 237.5V112.5C275 98.75 263.75 87.5 250 87.5H150ZM75 237.5H50V212.5H75V237.5ZM75 187.5H50V162.5H75V187.5ZM75 137.5H50V112.5H75V137.5ZM75 87.5H50V62.5H75V87.5ZM125 237.5H100V212.5H125V237.5ZM125 187.5H100V162.5H125V187.5ZM125 137.5H100V112.5H125V137.5ZM125 87.5H100V62.5H125V87.5ZM237.5 237.5H150V212.5H175V187.5H150V162.5H175V137.5H150V112.5H237.5C244.375 112.5 250 118.125 250 125V225C250 231.875 244.375 237.5 237.5 237.5ZM225 137.5H200V162.5H225V137.5ZM225 187.5H200V212.5H225V187.5Z" fill="#073B4C"/>
+              <svg
+                className="admin-building-icon"
+                xmlns="http://www.w3.org/2000/svg"
+                width="150"
+                height="150"
+                viewBox="0 0 22 16"
+                fill="none"
+              >
+                <g clipPath="url(#clip0_22_16)">
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M15.6699 9.13C17.0399 10.06 17.9999 11.32 17.9999 13V16H20.9999C21.5499 16 21.9999 15.55 21.9999 15V13C21.9999 10.82 18.4299 9.53 15.6699 9.13Z"
+                    fill="#073B4C"
+                  />
+                  <path
+                    d="M8 8C10.2091 8 12 6.20914 12 4C12 1.79086 10.2091 0 8 0C5.79086 0 4 1.79086 4 4C4 6.20914 5.79086 8 8 8Z"
+                    fill="#073B4C"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M13.9999 8C16.2099 8 17.9999 6.21 17.9999 4C17.9999 1.79 16.2099 0 13.9999 0C13.5299 0 13.0899 0.0999998 12.6699 0.24C13.4999 1.27 13.9999 2.58 13.9999 4C13.9999 5.42 13.4999 6.73 12.6699 7.76C13.0899 7.9 13.5299 8 13.9999 8Z"
+                    fill="#073B4C"
+                  />
+                  <path
+                    fillRule="evenodd"
+                    clipRule="evenodd"
+                    d="M8 9C5.33 9 0 10.34 0 13V15C0 15.55 0.45 16 1 16H15C15.55 16 16 15.55 16 15V13C16 10.34 10.67 9 8 9Z"
+                    fill="#073B4C"
+                  />
                 </g>
                 <defs>
-                  <clipPath id="clip0_11_444">
-                    <rect width="300" height="300" fill="white"/>
+                  <clipPath id="clip0_22_16">
+                    <rect width="22" height="16" fill="white" />
                   </clipPath>
                 </defs>
               </svg>
@@ -119,7 +161,7 @@ const HomeAdmin = () => {
                 </svg>
               </div>
             </div>
-            <p className="text-center text-2xl font-semibold mt-4">CREA ACCOUNT COLLABORATORE</p>
+            <p className="text-center text-2xl font-semibold mt-4">AGGIUNGI COLLABORATORE</p>
           </div>
 
         </div>

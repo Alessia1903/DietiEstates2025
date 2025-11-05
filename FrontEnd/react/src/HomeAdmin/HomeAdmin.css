@@ -49,12 +49,18 @@
 
 .admin-info-note {
   font-size: 1rem;
-  color: #d6ca28;
-  background: #fff8f8;
+  color: #073b4c;
+  background: #fbff94;
   border-left: 4px solid #d6ca28;
   padding: 12px 18px;
   border-radius: 8px;
   margin-top: 18px;
+}
+
+.admin-building-icon {
+    height: 95%;
+    width: 75%;
+    display: block;
 }
 
 .admin-actions-cards {
